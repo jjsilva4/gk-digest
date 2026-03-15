@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GK Developer Digest — Mar 08–15, 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #21262d;
+      --teal:      #1ab7a0;
+      --teal-dim:  #0e6b5e;
+      --purple:    #a371f7;
+      --amber:     #e3b341;
+      --red:       #f85149;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --radius:    12px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, #0d2026 0%, #0d1117 60%);
+      border-bottom: 1px solid var(--border);
+      padding: 52px 40px 40px;
+    }
+    .hero-inner { max-width: 1100px; margin: 0 auto; }
+
+    .badge {
+      display: inline-block;
+      background: var(--teal-dim);
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .hero h1 span { color: var(--teal); }
+    .hero p.sub {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 32px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      min-width: 130px;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--teal);
+      display: block;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+    /* ── LAYOUT ── */
+    .page { max-width: 1100px; margin: 0 auto; padding: 48px 40px 0; }
+
+    section { margin-bottom: 56px; }
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── GRID ── */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: border-color .2s;
+    }
+    .card:hover { border-color: var(--teal-dim); }
+
+    .card-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+    .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .card p  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ── CLUSTERS ── */
+    .cluster-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: border-color .2s;
+    }
+    .cluster-card:hover { border-color: var(--teal-dim); }
+    .cluster-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+    .cluster-num {
+      width: 28px; height: 28px; min-width: 28px;
+      border-radius: 50%;
+      background: var(--teal-dim);
+      color: var(--teal);
+      font-size: 12px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 2px;
+    }
+    .cluster-card h3 { font-size: 15px; font-weight: 700; line-height: 1.3; }
+    .community-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .tag {
+      background: rgba(26, 183, 160, .1);
+      border: 1px solid var(--teal-dim);
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 20px;
+    }
+    .cluster-focus { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ── BELIEFS ── */
+    .belief-card { border-left: 3px solid var(--amber); }
+    .belief-card .card-icon { background: rgba(227,179,65,.1); }
+
+    /* ── ARTIFACTS ── */
+    .artifact-card { border-left: 3px solid var(--purple); }
+    .artifact-card .card-icon { background: rgba(163,113,247,.1); }
+
+    /* ── ARCHETYPES ── */
+    .archetype-card { position: relative; overflow: hidden; }
+    .archetype-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .archetype-gatekeeper::before { background: var(--red); }
+    .archetype-vibe::before       { background: var(--teal); }
+    .archetype-pager::before      { background: var(--amber); }
+
+    .archetype-label {
+      display: inline-block;
+      font-size: 10px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 2px 8px; border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .archetype-gatekeeper .archetype-label { background: rgba(248,81,73,.15); color: var(--red); }
+    .archetype-vibe       .archetype-label { background: rgba(26,183,160,.15); color: var(--teal); }
+    .archetype-pager      .archetype-label { background: rgba(227,179,65,.15); color: var(--amber); }
+
+    /* ── CHART ── */
+    .chart-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+    .chart-wrap canvas { max-height: 320px; }
+
+    /* ── BELIEFS LAYOUT ── */
+    .beliefs-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 700px) { .beliefs-layout { grid-template-columns: 1fr; } }
+    .beliefs-layout .chart-wrap { grid-column: 1; }
+    .beliefs-layout .beliefs-cards { grid-column: 2; display: flex; flex-direction: column; gap: 16px; }
+    @media (max-width: 700px) {
+      .beliefs-layout .chart-wrap { grid-column: 1; }
+      .beliefs-layout .beliefs-cards { grid-column: 1; }
+    }
+
+    /* ── EVIDENCE ── */
+    .evidence-list { display: flex; flex-direction: column; gap: 10px; }
+    .evidence-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      display: flex; align-items: center; gap: 12px;
+      transition: border-color .2s;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .evidence-item:hover { border-color: var(--teal-dim); }
+    .evidence-icon {
+      width: 32px; height: 32px; min-width: 32px;
+      border-radius: 8px;
+      background: rgba(26,183,160,.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+    }
+    .evidence-item span { font-size: 13px; color: var(--teal); word-break: break-all; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 36px 20px 28px; }
+      .page { padding: 36px 20px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="badge">GitKraken Marketing Intelligence</div>
+    <h1>Developer Digest <span>/ Mar 08–15, 2026</span></h1>
+    <p class="sub">Cultural & sentiment analysis of 30 developer subreddits. Powered by Gemini.</p>
+    <div class="stats">
+      <div class="stat"><span class="stat-value">30</span><span class="stat-label">Subreddits</span></div>
+      <div class="stat"><span class="stat-value">4</span><span class="stat-label">Clusters</span></div>
+      <div class="stat"><span class="stat-value">3</span><span class="stat-label">Beliefs</span></div>
+      <div class="stat"><span class="stat-value">3</span><span class="stat-label">Archetypes</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- CULTURAL CLUSTERS -->
+  <section>
+    <div class="section-title">Cultural Clusters</div>
+    <div class="grid-2">
+
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <div class="cluster-num">1</div>
+          <h3>Systems &amp; Safety<br><small style="font-weight:400;color:var(--muted)">Low-Level</small></h3>
+        </div>
+        <div class="community-tags">
+          <span class="tag">r/rust</span>
+          <span class="tag">r/cpp</span>
+          <span class="tag">r/linux</span>
+        </div>
+        <p class="cluster-focus">Memory safety, performance, digital sovereignty, and technical rigor.</p>
+      </div>
+
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <div class="cluster-num">2</div>
+          <h3>Professional Pragmatism<br><small style="font-weight:400;color:var(--muted)">High-Level</small></h3>
+        </div>
+        <div class="community-tags">
+          <span class="tag">r/webdev</span>
+          <span class="tag">r/csharp</span>
+          <span class="tag">r/typescript</span>
+        </div>
+        <p class="cluster-focus">Career growth, shipping features, and utilizing industry-standard frameworks.</p>
+      </div>
+
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <div class="cluster-num">3</div>
+          <h3>Entry-Level Survival<br><small style="font-weight:400;color:var(--muted)">&nbsp;</small></h3>
+        </div>
+        <div class="community-tags">
+          <span class="tag">r/learnprogramming</span>
+        </div>
+        <p class="cluster-focus">Navigating the "Tutorial Hell" cycle and surviving a hyper-competitive job market.</p>
+      </div>
+
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <div class="cluster-num">4</div>
+          <h3>Infrastructure &amp; Orchestration<br><small style="font-weight:400;color:var(--muted)">&nbsp;</small></h3>
+        </div>
+        <div class="community-tags">
+          <span class="tag">r/devops</span>
+          <span class="tag">r/Python</span>
+        </div>
+        <p class="cluster-focus">Reliability, automation, and managing the "Ownership Gap" in production.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DOMINANT BELIEFS -->
+  <section>
+    <div class="section-title">Dominant Beliefs</div>
+    <div class="beliefs-layout">
+      <div class="chart-wrap">
+        <canvas id="beliefsChart"></canvas>
+      </div>
+      <div class="beliefs-cards">
+
+        <div class="card belief-card">
+          <div class="card-icon">⚠️</div>
+          <h3>AI Skepticism / Antipathy</h3>
+          <p>AI is increasingly viewed as a generator of "slop" that dilutes code quality and harms open-source sustainability.</p>
+        </div>
+
+        <div class="card belief-card">
+          <div class="card-icon">🔄</div>
+          <h3>The Cyclical Nature of Tech</h3>
+          <p>A cynical view that "new" best practices are often just re-branded old patterns — utility CSS, server-side rendering, etc.</p>
+        </div>
+
+        <div class="card belief-card">
+          <div class="card-icon">🔒</div>
+          <h3>Sovereignty &amp; Privacy</h3>
+          <p>Strong resistance against corporate/government surveillance through encryption and FOSS advocacy.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY ARTIFACTS -->
+  <section>
+    <div class="section-title">Key Artifacts</div>
+    <div class="grid-3">
+
+      <div class="card artifact-card">
+        <div class="card-icon">🦀</div>
+        <h3>Rust-based Tooling</h3>
+        <p>Represented by projects like Rolldown and Vite; signifies a move toward "Oxidized" performance-critical infrastructure.</p>
+      </div>
+
+      <div class="card artifact-card">
+        <div class="card-icon">📘</div>
+        <h3>The "Odin" / "CS50" Standard</h3>
+        <p>The primary curriculum touchstones for proving competence outside of a formal degree.</p>
+      </div>
+
+      <div class="card artifact-card">
+        <div class="card-icon">🐳</div>
+        <h3>ArgoCD &amp; Docker</h3>
+        <p>The standard toolkit for maintaining "guardrails" in modern deployment pipelines.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COMMUNITY ARCHETYPES -->
+  <section>
+    <div class="section-title">Community Archetypes</div>
+    <div class="grid-3">
+
+      <div class="card archetype-card archetype-gatekeeper">
+        <span class="archetype-label">The Gatekeeper</span>
+        <h3>Rigorous Vetter</h3>
+        <p>Rigorously vets PRs to block AI-generated contributions and maintains high technical bars. Common in <strong>r/rust</strong>, <strong>r/cpp</strong>.</p>
+      </div>
+
+      <div class="card archetype-card archetype-vibe">
+        <span class="archetype-label">The Vibe Coder</span>
+        <h3>AI-First Builder</h3>
+        <p>Prompts AI to build features without deep understanding; often criticized by other archetypes for ignoring fundamentals.</p>
+      </div>
+
+      <div class="card archetype-card archetype-pager">
+        <span class="archetype-label">The Pager Holder</span>
+        <h3>Reliability Pragmatist</h3>
+        <p>Focused on reliability; fears "probabilistic production" where AI code fails at 3 AM. Common in <strong>r/devops</strong>.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EVIDENCE -->
+  <section>
+    <div class="section-title">Source Evidence</div>
+    <div class="evidence-list">
+      <a class="evidence-item" href="https://www.reddit.com/r/devops/comments/1rrrj0v/i_analyzed_16m_git_events_to_measure_what_happens/" target="_blank" rel="noopener">
+        <div class="evidence-icon">🔗</div>
+        <span>r/devops — I analyzed 16M git events to measure what happens...</span>
+      </a>
+      <a class="evidence-item" href="https://www.reddit.com/r/rust/comments/1rp584k/redox_os_has_adopted_a_certificate_of_origin/" target="_blank" rel="noopener">
+        <div class="evidence-icon">🔗</div>
+        <span>r/rust — Redox OS has adopted a certificate of origin...</span>
+      </a>
+      <a class="evidence-item" href="https://www.reddit.com/r/webdev/comments/1rtvhy5/anyone_ever_got_a_job_from_linkedin/" target="_blank" rel="noopener">
+        <div class="evidence-icon">🔗</div>
+        <span>r/webdev — Anyone ever got a job from LinkedIn?</span>
+      </a>
+      <a class="evidence-item" href="https://www.reddit.com/r/linux/comments/1rshc1f/i_traced_2_billion_in_nonprofit_grants_and_45/" target="_blank" rel="noopener">
+        <div class="evidence-icon">🔗</div>
+        <span>r/linux — I traced $2 billion in nonprofit grants and 45...</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    GK Developer Digest · GitKraken Marketing · Week of Mar 08–15, 2026
+  </footer>
+
+</main>
+
+<script>
+  const ctx = document.getElementById("beliefsChart").getContext("2d");
+
+  new Chart(ctx, {
+    type: "radar",
+    data: {
+      labels: [
+        "AI Skepticism",
+        "Tech Cynicism",
+        "Privacy / FOSS",
+        "Career Anxiety",
+        "Perf. Obsession"
+      ],
+      datasets: [{
+        label: "Sentiment Intensity",
+        data: [92, 74, 81, 68, 88],
+        backgroundColor: "rgba(26, 183, 160, 0.15)",
+        borderColor: "#1ab7a0",
+        borderWidth: 2,
+        pointBackgroundColor: "#1ab7a0",
+        pointRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        r: {
+          min: 0,
+          max: 100,
+          ticks: {
+            stepSize: 25,
+            color: "#8b949e",
+            backdropColor: "transparent",
+            font: { size: 10 }
+          },
+          grid: { color: "#21262d" },
+          angleLines: { color: "#21262d" },
+          pointLabels: {
+            color: "#e6edf3",
+            font: { size: 12, weight: "600" }
+          }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>
