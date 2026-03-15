@@ -31,7 +31,7 @@ def week_range_label() -> str:
     today = datetime.now(tz=timezone.utc)
     week_start = today - timedelta(days=today.weekday() + 1)  # last Monday
     week_end = today
-    return f"{week_start.strftime('%b %d')} - {week_end.strftime('%b %d, %Y')}"
+    return f"{week_start.strftime('%b %d')}-{week_end.strftime('%b %d, %Y')}"
 
 
 def setup_logging(log_path: str) -> logging.Logger:
@@ -54,6 +54,8 @@ def main():
     config = load_config()
     settings = config["settings"]
     subreddits = [s for s in config["subreddits"] if s.get("enabled", True)]
+    gemini_cfg = config.get("gemini", {})
+    git_cfg = config.get("git", {})
 
     folder_name = output_folder_date()
     output_base = settings.get("output_dir", "output")
@@ -93,13 +95,55 @@ def main():
             failed.append(name)
 
     logger.info(
-        f"Run complete — {len(completed)} succeeded, {len(failed)} failed"
+        f"PDF phase complete — {len(completed)} succeeded, {len(failed)} failed"
         + (f" ({', '.join(failed)})" if failed else "")
     )
 
+    # ── Gemini analysis pipeline ──────────────────────────────────────────────
+    analysis_path = None
+    if gemini_cfg.get("enabled", False):
+        if not completed:
+            logger.warning("Gemini: skipping — no PDFs were generated")
+        else:
+            try:
+                from src.gemini_analyzer import run_pipeline
+                analysis_path = run_pipeline(
+                    run_dir=run_dir,
+                    week_range=week_range,
+                    batch_size=gemini_cfg.get("batch_size", 10),
+                    model_name=gemini_cfg.get("model", "gemini-1.5-pro"),
+                    logger=logger,
+                )
+            except Exception as e:
+                logger.error(f"Gemini pipeline FAILED — {e}")
+    else:
+        logger.info("Gemini: disabled in config — skipping analysis")
+
+    # ── Dashboard rebuild ─────────────────────────────────────────────────────
+    if analysis_path:
+        try:
+            from src.dashboard_builder import build
+            docs_path = os.path.join(os.path.dirname(__file__), "docs", "index.html")
+            build(analysis_path=analysis_path, output_path=docs_path)
+            logger.info(f"Dashboard rebuilt → {docs_path}")
+        except Exception as e:
+            logger.error(f"Dashboard build FAILED — {e}")
+            analysis_path = None  # prevent git push if dashboard failed
+
+    # ── Git push ──────────────────────────────────────────────────────────────
+    if analysis_path and git_cfg.get("auto_push", False):
+        try:
+            from src.git_publisher import publish
+            repo_dir = os.path.dirname(os.path.abspath(__file__))
+            publish(week_range=week_range, repo_dir=repo_dir, logger=logger)
+        except Exception as e:
+            logger.error(f"Git push FAILED — {e}")
+
+    # ── macOS notification ────────────────────────────────────────────────────
     summary = (
         f"{len(completed)} subreddits done"
         + (f", {len(failed)} failed: {', '.join(failed)}" if failed else "")
+        + (", dashboard updated" if analysis_path else "")
         + f" — {run_dir}"
     )
     notify("GK Digest", summary)

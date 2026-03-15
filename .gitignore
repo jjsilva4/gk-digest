@@ -9,3 +9,8 @@ dist/
 build/
 .venv/
 venv/
+# Gemini intermediate files (kept in output/ which is already excluded)
+*_raw.json
+*_snapshot.json
+*_summary.json
+analysis_raw.txt

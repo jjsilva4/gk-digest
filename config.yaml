@@ -6,6 +6,14 @@ settings:
   time_filter: week
   output_dir: output
 
+gemini:
+  enabled: true
+  batch_size: 10
+  model: gemini-1.5-pro
+
+git:
+  auto_push: true
+
 subreddits:
   - name: programming
     enabled: true

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GK Developer Culture Briefing</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #1C1C1C;
+      --surface:    #272727;
+      --border:     #3E3E3E;
+      --text:       #FFFFFF;
+      --muted:      #C9C9C9;
+      --subtle:     #8a8a8a;
+      --purple-600: #7900C9;
+      --purple-200: #B657FF;
+      --blue-300:   #196FFF;
+      --topaz:      #338BEF;
+      --aqua:       #01FEE0;
+      --pink:       #EC7FFF;
+      --positive:   #1EA5AE;
+      --negative:   #BC4E71;
+      --grad-core:  linear-gradient(135deg, #7900C9, #196FFF);
+      --grad-bright:linear-gradient(135deg, #01FEE0, #EC7FFF);
+      --radius:     12px;
+      --radius-sm:  8px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(150deg, #160030 0%, #001440 50%, #1C1C1C 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 40px 36px;
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 10% 50%, rgba(121,0,201,.2) 0%, transparent 60%),
+                  radial-gradient(ellipse at 90% 20%, rgba(25,111,255,.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+
+    .week-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
+    }
+    .week-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--aqua);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    .hero h1 { font-size: clamp(22px, 3.5vw, 36px); font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
+    .hero h1 .grad {
+      background: var(--grad-bright);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero .sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+
+    .stats { display: flex; gap: 12px; flex-wrap: wrap; }
+    .stat-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 20px; padding: 6px 14px; font-size: 13px;
+    }
+    .stat-pill strong {
+      background: var(--grad-bright);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      font-weight: 800; font-size: 15px;
+    }
+    .stat-pill span { color: var(--muted); }
+
+    /* ─── LAYOUT ─── */
+    .page { max-width: 1080px; margin: 0 auto; padding: 44px 40px 0; }
+    section { margin-bottom: 52px; }
+
+    .section-header { margin-bottom: 20px; }
+    .section-label { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--subtle); margin-bottom: 4px; }
+    .section-header h2 { font-size: 20px; font-weight: 800; }
+    .section-header p  { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+
+    /* ─── TOPIC CARDS ─── */
+    .topic-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+      cursor: pointer; transition: border-color .2s, transform .15s; user-select: none;
+    }
+    .topic-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
+    .topic-card.active { border-color: var(--purple-200); }
+
+    .topic-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .topic-icon { width: 34px; height: 34px; min-width: 34px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 17px; }
+    .topic-chevron { color: var(--subtle); font-size: 11px; transition: transform .2s; margin-top: 3px; }
+    .topic-card.active .topic-chevron { transform: rotate(180deg); color: var(--purple-200); }
+    .topic-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.35; }
+    .topic-card p  { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    .topic-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .topic-tag {
+      background: rgba(182,87,255,.1); border: 1px solid rgba(182,87,255,.25);
+      color: var(--purple-200); font-size: 10px; font-weight: 600;
+      padding: 2px 8px; border-radius: 20px;
+    }
+
+    .topic-expand { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .topic-card.active .topic-expand { display: block; }
+
+    .expand-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--subtle); margin-bottom: 8px; }
+    .expand-link {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 8px 10px; border-radius: var(--radius-sm);
+      background: rgba(255,255,255,.04); text-decoration: none;
+      transition: background .15s; margin-bottom: 5px;
+    }
+    .expand-link:hover { background: rgba(1,254,222,.06); }
+    .expand-link-sub { font-size: 10px; font-weight: 700; color: var(--aqua); white-space: nowrap; padding-top: 1px; }
+    .expand-link-meta { display: flex; flex-direction: column; gap: 1px; }
+    .expand-link-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--subtle); }
+    .expand-link-title { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    /* ─── LINGO TABLE ─── */
+    .lingo-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 24px; }
+    .lingo-table { width: 100%; border-collapse: collapse; }
+    .lingo-table thead th {
+      font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--subtle); padding: 0 0 10px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .lingo-table thead th:last-child { text-align: right; }
+    .lingo-table tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    .lingo-table tbody tr:last-child { border-bottom: none; }
+    .lingo-table tbody tr:hover { background: rgba(255,255,255,.03); }
+    .lingo-table td { padding: 13px 0; vertical-align: top; }
+    .lingo-table td:last-child { text-align: right; }
+
+    .lingo-phrase {
+      font-size: 14px; font-weight: 700; color: var(--aqua);
+      position: relative; display: inline-block; cursor: default;
+    }
+    .lingo-phrase::after {
+      content: attr(data-tip);
+      position: absolute; bottom: calc(100% + 8px); left: 0;
+      background: #0a0a0a; border: 1px solid var(--purple-200);
+      color: var(--text); font-size: 12px; font-weight: 400; line-height: 1.5;
+      padding: 8px 12px; border-radius: var(--radius-sm);
+      width: 260px; white-space: normal;
+      opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 10;
+    }
+    .lingo-phrase:hover::after { opacity: 1; }
+    .lingo-meaning { font-size: 13px; color: var(--muted); padding-left: 24px; }
+    .lingo-origin {
+      font-size: 11px; background: rgba(182,87,255,.1); border: 1px solid rgba(182,87,255,.2);
+      color: var(--purple-200); padding: 2px 8px; border-radius: 20px;
+      white-space: nowrap; display: inline-block;
+    }
+
+    /* ─── ARTIFACT CARDS ─── */
+    .artifact-card {
+      background: var(--surface); border: 1px solid var(--border); border-top: 3px solid;
+      border-radius: var(--radius); padding: 20px;
+      cursor: pointer; transition: border-color .2s, transform .15s;
+    }
+    .artifact-card:hover { transform: translateY(-2px); }
+
+    .art-0 { border-top-color: var(--negative); }
+    .art-0:hover, .art-0.active { border-color: var(--negative); }
+    .art-1 { border-top-color: var(--blue-300); }
+    .art-1:hover, .art-1.active { border-color: var(--blue-300); }
+    .art-2 { border-top-color: var(--aqua); }
+    .art-2:hover, .art-2.active { border-color: var(--aqua); }
+    .art-3 { border-top-color: var(--purple-200); }
+    .art-3:hover, .art-3.active { border-color: var(--purple-200); }
+    .art-4 { border-top-color: var(--positive); }
+    .art-4:hover, .art-4.active { border-color: var(--positive); }
+
+    .art-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .art-why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--subtle); margin-bottom: 5px; margin-top: 12px; }
+    .art-why { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .art-examples { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .art-example { background: rgba(255,255,255,.07); color: var(--text); font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px; }
+    .artifact-expand { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .artifact-card.active .artifact-expand { display: block; }
+
+    /* ─── CONCERNS ─── */
+    .concern-list { display: flex; flex-direction: column; gap: 12px; }
+    .concern-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px;
+      display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start;
+    }
+    .concern-num {
+      width: 28px; height: 28px; min-width: 28px; border-radius: 50%;
+      background: var(--grad-core); font-size: 12px; font-weight: 800; color: #fff;
+      display: flex; align-items: center; justify-content: center; margin-top: 2px;
+    }
+    .concern-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .concern-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ─── SOURCES ─── */
+    .source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .source-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px 18px; text-decoration: none; color: var(--text);
+      display: flex; flex-direction: column; gap: 5px;
+      transition: border-color .2s, transform .15s;
+    }
+    .source-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
+    .source-sub {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      background: var(--grad-core);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .source-label {
+      display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--subtle);
+      background: rgba(255,255,255,.06); border-radius: 20px; padding: 1px 7px;
+      width: fit-content;
+    }
+    .source-title { font-size: 12px; color: var(--muted); line-height: 1.4; flex: 1; }
+    .source-arrow { font-size: 11px; color: var(--subtle); padding-top: 4px; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      max-width: 1080px; margin: 48px auto 0; padding: 24px 40px 0;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    footer span { font-size: 12px; color: var(--subtle); }
+    .footer-brand {
+      font-size: 12px; font-weight: 700;
+      background: var(--grad-core);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 32px 20px 28px; }
+      .page { padding: 32px 20px 0; }
+      footer { padding: 20px 20px 0; }
+      .lingo-meaning { padding-left: 0; padding-top: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── HERO ─── -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="week-badge"><span class="dot"></span> <span id="week-text">Loading...</span></div>
+    <h1>Developer Culture <span class="grad">Briefing</span></h1>
+    <p class="sub">What the developer community is talking about this week — across 30 subreddits.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- ─── SECTION 1: TOPICS ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 1</div>
+      <h2>What Are People Talking About?</h2>
+      <p>Click a topic to see the source discussions behind it.</p>
+    </div>
+    <div class="grid-3" id="topics-grid"></div>
+  </section>
+
+  <!-- ─── SECTION 2: LINGO ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 2</div>
+      <h2>Lingo This Week</h2>
+      <p>Phrases appearing repeatedly across discussions. Hover a term for its full definition.</p>
+    </div>
+    <div class="lingo-wrap">
+      <table class="lingo-table">
+        <thead>
+          <tr>
+            <th style="width:220px">Phrase</th>
+            <th>What it means</th>
+            <th>Seen in</th>
+          </tr>
+        </thead>
+        <tbody id="lingo-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 3: ARTIFACTS ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 3</div>
+      <h2>What People Are Sharing</h2>
+      <p>Tools, projects, and resources circulating in discussions this week. Click for source threads.</p>
+    </div>
+    <div class="grid-3" id="artifacts-grid"></div>
+  </section>
+
+  <!-- ─── SECTION 4: CONCERNS ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 4</div>
+      <h2>What Matters Right Now</h2>
+      <p>The underlying concerns shaping this week's developer conversations.</p>
+    </div>
+    <div class="concern-list" id="concerns-list"></div>
+  </section>
+
+  <!-- ─── METHODOLOGY ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Methodology</div>
+      <h2>How This Briefing Is Made</h2>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;">
+      <p style="font-size:14px;color:var(--muted);line-height:1.8;max-width:820px;">
+        Every Sunday night, an automated Python script fetches the top posts from 30 developer subreddits via the Reddit API — collecting up to 50 posts per community, filtered to exclude mod posts, stickied announcements, and low-engagement threads (fewer than 5 comments). For each qualifying post, the top 20 comments and their replies are captured. The results are packaged into per-subreddit PDFs — one per community — which are then automatically uploaded to Gemini for cultural and ethnographic analysis using a multi-step pipeline: PDFs are analyzed in batches of 10, compressed into cultural snapshots, synthesized into cross-batch summaries, and finally distilled into a single dashboard dataset. Gemini identifies conversation clusters, recurring beliefs, shared artifacts, behavioral archetypes, and key lingo. That dataset is used to automatically regenerate this dashboard and push it to GitHub Pages — updated every week without any manual steps.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── SOURCES ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Sources</div>
+      <h2>Source Discussions</h2>
+      <p id="sources-count">Original threads this briefing is based on.</p>
+    </div>
+    <div class="source-grid" id="source-grid"></div>
+  </section>
+
+</main>
+
+<footer>
+  <span id="footer-text">GK Developer Culture Briefing</span>
+  <span class="footer-brand">GitKraken Marketing</span>
+</footer>
+
+<script>
+  const DIGEST_DATA = null; // __DIGEST_DATA_INJECT__
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function expandHTML(keys) {
+    const srcs = DIGEST_DATA.sources || {};
+    const links = keys
+      .map(k => srcs[k])
+      .filter(Boolean)
+      .map(s => `<a class="expand-link" href="${escHtml(s.url)}" target="_blank" rel="noopener">
+        <span class="expand-link-sub">${escHtml(s.sub)}</span>
+        <span class="expand-link-meta">
+          <span class="expand-link-label">${escHtml(s.label)}</span>
+          <span class="expand-link-title">${escHtml(s.title)}</span>
+        </span>
+      </a>`)
+      .join("");
+    return links ? `<div class="expand-label">Related discussions</div>${links}` : "";
+  }
+
+  const D = DIGEST_DATA;
+  if (!D) { console.error("No DIGEST_DATA found"); }
+  else {
+    // ── Page title + hero badge ──
+    document.title = `GK Developer Culture Briefing \u2014 ${D.week_range}`;
+    document.getElementById("week-text").textContent = `Week of ${D.week_range}`;
+
+    // ── Stats pills ──
+    const sourceCount = Object.keys(D.sources || {}).length;
+    document.getElementById("stats").innerHTML = [
+      [D.topics.length,    "Topics"],
+      [D.lingo.length,     "Lingo Terms"],
+      [D.artifacts.length, "Things Being Shared"],
+      [D.concerns.length,  "Major Concerns"],
+      [sourceCount,        "Source Threads"],
+    ].map(([n, label]) =>
+      `<div class="stat-pill"><strong>${n}</strong> <span>${escHtml(label)}</span></div>`
+    ).join("");
+
+    // ── Footer ──
+    document.getElementById("footer-text").textContent =
+      `GK Developer Culture Briefing \u00b7 Week of ${D.week_range}`;
+
+    // ── Sources count subheading ──
+    document.getElementById("sources-count").textContent =
+      `${sourceCount} original thread${sourceCount !== 1 ? "s" : ""} this briefing is based on.`;
+
+    // ── Topics ──
+    const TOPIC_BG = [
+      "rgba(188,78,113,.15)",
+      "rgba(188,78,113,.15)",
+      "rgba(25,111,255,.15)",
+      "rgba(1,254,222,.1)",
+      "rgba(182,87,255,.15)",
+      "rgba(1,254,222,.1)",
+    ];
+    document.getElementById("topics-grid").innerHTML = D.topics.map((t, i) => `
+      <div class="topic-card" data-idx="${i}">
+        <div class="topic-card-top">
+          <div class="topic-icon" style="background:${TOPIC_BG[i % TOPIC_BG.length]}">${t.icon}</div>
+          <div class="topic-chevron">&#9660;</div>
+        </div>
+        <h3>${escHtml(t.title)}</h3>
+        <p>${escHtml(t.description)}</p>
+        <div class="topic-tags">${(t.tags || []).map(tag => `<span class="topic-tag">${escHtml(tag)}</span>`).join("")}</div>
+        <div class="topic-expand"></div>
+      </div>`).join("");
+
+    document.querySelectorAll(".topic-card").forEach(card => {
+      const idx = +card.dataset.idx;
+      card.querySelector(".topic-expand").innerHTML = expandHTML(D.topics[idx].source_keys || []);
+      card.addEventListener("click", () => {
+        const was = card.classList.contains("active");
+        document.querySelectorAll(".topic-card").forEach(c => c.classList.remove("active"));
+        if (!was) card.classList.add("active");
+      });
+    });
+
+    // ── Lingo ──
+    document.getElementById("lingo-tbody").innerHTML = D.lingo.map(l => `
+      <tr>
+        <td><span class="lingo-phrase" data-tip="${escHtml(l.tooltip)}">${escHtml(l.term)}</span></td>
+        <td class="lingo-meaning">${escHtml(l.meaning)}</td>
+        <td><span class="lingo-origin">${escHtml(l.origin)}</span></td>
+      </tr>`).join("");
+
+    // ── Artifacts ──
+    const ART_CLASSES = ["art-0", "art-1", "art-2", "art-3", "art-4"];
+    document.getElementById("artifacts-grid").innerHTML = D.artifacts.map((a, i) => `
+      <div class="artifact-card ${ART_CLASSES[i % ART_CLASSES.length]}" data-idx="${i}">
+        <div class="art-name">${a.icon} ${escHtml(a.name)}</div>
+        <div class="art-why-label">Why it's being discussed</div>
+        <div class="art-why">${escHtml(a.description)}</div>
+        <div class="art-why-label" style="margin-top:14px">${escHtml(a.examples_label || "Mentioned")}</div>
+        <div class="art-examples">${(a.examples || []).map(e => `<span class="art-example">${escHtml(e)}</span>`).join("")}</div>
+        <div class="artifact-expand"></div>
+      </div>`).join("");
+
+    document.querySelectorAll(".artifact-card").forEach(card => {
+      const idx = +card.dataset.idx;
+      card.querySelector(".artifact-expand").innerHTML = expandHTML(D.artifacts[idx].source_keys || []);
+      card.addEventListener("click", () => {
+        const was = card.classList.contains("active");
+        document.querySelectorAll(".artifact-card").forEach(c => c.classList.remove("active"));
+        if (!was) card.classList.add("active");
+      });
+    });
+
+    // ── Concerns ──
+    document.getElementById("concerns-list").innerHTML = D.concerns.map((c, i) => `
+      <div class="concern-item">
+        <div class="concern-num">${i + 1}</div>
+        <div>
+          <div class="concern-title">${escHtml(c.title)}</div>
+          <div class="concern-desc">${escHtml(c.description)}</div>
+        </div>
+      </div>`).join("");
+
+    // ── Source grid ──
+    document.getElementById("source-grid").innerHTML = Object.values(D.sources || {}).map(s => `
+      <a class="source-card" href="${escHtml(s.url)}" target="_blank" rel="noopener">
+        <div class="source-sub">${escHtml(s.sub)}</div>
+        <div class="source-label">${escHtml(s.label)}</div>
+        <div class="source-title">${escHtml(s.title)}</div>
+        <div class="source-arrow">Open thread &#8599;</div>
+      </a>`).join("");
+  }
+</script>
+</body>
+</html>
