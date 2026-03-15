@@ -1,0 +1,69 @@
+settings:
+  posts_per_subreddit: 50
+  min_comments: 5
+  top_comments: 20
+  comment_depth: 1
+  time_filter: week
+  output_dir: output
+
+subreddits:
+  - name: programming
+    enabled: true
+  - name: webdev
+    enabled: true
+  - name: learnprogramming
+    enabled: true
+  - name: Python
+    enabled: true
+  - name: typescript
+    enabled: true
+  - name: csharp
+    enabled: true
+  - name: rust
+    enabled: true
+  - name: cpp
+    enabled: true
+  - name: linux
+    enabled: true
+  - name: devops
+    enabled: true
+  - name: MachineLearning
+    enabled: true
+  - name: LocalLLaMA
+    enabled: true
+  - name: ClaudeAI
+    enabled: true
+  - name: vibecoding
+    enabled: true
+  - name: ExperiencedDevs
+    enabled: true
+  - name: cscareerquestions
+    enabled: true
+  - name: AskProgramming
+    enabled: true
+  - name: vscode
+    enabled: true
+  - name: npm
+    enabled: true
+  - name: opensource
+    enabled: true
+  - name: tauri
+    enabled: true
+  - name: gamedev
+    enabled: true
+  - name: unrealengine
+    enabled: true
+  - name: technology
+    enabled: true
+  - name: javascript
+    enabled: true
+  - name: golang
+    enabled: true
+  - name: node
+    enabled: true
+  - name: docker
+    enabled: true
+  - name: softwaretesting
+    enabled: true
+  - name: github
+    enabled: true
