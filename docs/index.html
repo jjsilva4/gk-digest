@@ -9,17 +9,36 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0d1117;
-      --surface:   #161b22;
-      --border:    #21262d;
-      --teal:      #1ab7a0;
-      --teal-dim:  #0e6b5e;
-      --purple:    #a371f7;
-      --amber:     #e3b341;
-      --red:       #f85149;
-      --text:      #e6edf3;
-      --muted:     #8b949e;
-      --radius:    12px;
+      /* Base */
+      --bg:          #1C1C1C;  /* Base Dark 600 */
+      --surface:     #272727;  /* Base Dark 500 */
+      --border:      #3E3E3E;  /* Base Dark 300 */
+      --text:        #FFFFFF;  /* Base Light 100 */
+      --muted:       #C9C9C9;  /* Base Light 400 */
+
+      /* Purple */
+      --purple-600:  #7900C9;
+      --purple-200:  #B657FF;
+
+      /* Blue / Topaz */
+      --blue-600:    #2C30C0;
+      --blue-300:    #196FFF;
+      --topaz-600:   #338BEF;
+
+      /* Aqua & Pink */
+      --aqua-400:    #01FEE0;
+      --pink-300:    #EC7FFF;
+      --pink-200:    #F8ABFF;
+
+      /* Functional */
+      --positive:    #1EA5AE;  /* Positive 500 */
+      --negative:    #BC4E71;  /* Negative 600 */
+
+      /* Gradients */
+      --grad-core:   linear-gradient(135deg, #7900C9, #196FFF);
+      --grad-bright: linear-gradient(135deg, #01FEE0, #EC7FFF);
+
+      --radius: 12px;
     }
 
     body {
@@ -32,21 +51,29 @@
 
     /* ── HERO ── */
     .hero {
-      background: linear-gradient(160deg, #0d2026 0%, #0d1117 60%);
+      background: linear-gradient(150deg, #1a003d 0%, #001a4d 50%, #1C1C1C 100%);
       border-bottom: 1px solid var(--border);
       padding: 52px 40px 40px;
+      position: relative;
+      overflow: hidden;
     }
-    .hero-inner { max-width: 1100px; margin: 0 auto; }
+    .hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(121,0,201,.18) 0%, rgba(25,111,255,.12) 100%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 1100px; margin: 0 auto; position: relative; }
 
     .badge {
       display: inline-block;
-      background: var(--teal-dim);
-      color: var(--teal);
+      background: var(--grad-core);
+      color: #fff;
       font-size: 11px;
       font-weight: 700;
       letter-spacing: .08em;
       text-transform: uppercase;
-      padding: 3px 10px;
+      padding: 3px 12px;
       border-radius: 20px;
       margin-bottom: 16px;
     }
@@ -57,29 +84,34 @@
       line-height: 1.2;
       margin-bottom: 8px;
     }
-    .hero h1 span { color: var(--teal); }
+    .hero h1 span {
+      background: var(--grad-bright);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
     .hero p.sub {
       color: var(--muted);
       font-size: 15px;
       margin-bottom: 32px;
     }
 
-    .stats {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
+    .stats { display: flex; gap: 16px; flex-wrap: wrap; }
     .stat {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
       border-radius: var(--radius);
       padding: 18px 24px;
       min-width: 130px;
+      backdrop-filter: blur(8px);
     }
     .stat-value {
       font-size: 28px;
       font-weight: 800;
-      color: var(--teal);
+      background: var(--grad-bright);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       display: block;
       line-height: 1;
       margin-bottom: 4px;
@@ -88,34 +120,32 @@
 
     /* ── LAYOUT ── */
     .page { max-width: 1100px; margin: 0 auto; padding: 48px 40px 0; }
-
     section { margin-bottom: 56px; }
+
     .section-title {
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .1em;
+      letter-spacing: .12em;
       color: var(--muted);
       margin-bottom: 20px;
       padding-bottom: 10px;
       border-bottom: 1px solid var(--border);
     }
 
-    /* ── GRID ── */
+    /* ── GRIDS ── */
     .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
 
-    /* ── CARD ── */
+    /* ── CARD BASE ── */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 24px;
-      transition: border-color .2s;
+      transition: border-color .2s, transform .2s;
     }
-    .card:hover { border-color: var(--teal-dim); }
-
+    .card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
     .card-icon {
       width: 36px; height: 36px;
       border-radius: 8px;
@@ -132,39 +162,42 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 24px;
-      transition: border-color .2s;
+      transition: border-color .2s, transform .2s;
     }
-    .cluster-card:hover { border-color: var(--teal-dim); }
+    .cluster-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
     .cluster-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
     .cluster-num {
       width: 28px; height: 28px; min-width: 28px;
       border-radius: 50%;
-      background: var(--teal-dim);
-      color: var(--teal);
+      background: var(--grad-core);
+      color: #fff;
       font-size: 12px; font-weight: 800;
       display: flex; align-items: center; justify-content: center;
       margin-top: 2px;
+      flex-shrink: 0;
     }
     .cluster-card h3 { font-size: 15px; font-weight: 700; line-height: 1.3; }
+
     .community-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
     .tag {
-      background: rgba(26, 183, 160, .1);
-      border: 1px solid var(--teal-dim);
-      color: var(--teal);
-      font-size: 11px;
-      font-weight: 600;
+      background: rgba(182, 87, 255, .12);
+      border: 1px solid rgba(182, 87, 255, .35);
+      color: var(--purple-200);
+      font-size: 11px; font-weight: 600;
       padding: 2px 9px;
       border-radius: 20px;
     }
     .cluster-focus { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
     /* ── BELIEFS ── */
-    .belief-card { border-left: 3px solid var(--amber); }
-    .belief-card .card-icon { background: rgba(227,179,65,.1); }
+    .belief-card { border-left: 3px solid var(--blue-300); }
+    .belief-card .card-icon { background: rgba(25, 111, 255, .12); }
+    .belief-card:hover { border-color: var(--blue-300); border-left-color: var(--blue-300); }
 
     /* ── ARTIFACTS ── */
-    .artifact-card { border-left: 3px solid var(--purple); }
-    .artifact-card .card-icon { background: rgba(163,113,247,.1); }
+    .artifact-card { border-left: 3px solid var(--pink-300); }
+    .artifact-card .card-icon { background: rgba(236, 127, 255, .12); }
+    .artifact-card:hover { border-color: var(--pink-300); border-left-color: var(--pink-300); }
 
     /* ── ARCHETYPES ── */
     .archetype-card { position: relative; overflow: hidden; }
@@ -172,9 +205,9 @@
       content: "";
       position: absolute; top: 0; left: 0; right: 0; height: 3px;
     }
-    .archetype-gatekeeper::before { background: var(--red); }
-    .archetype-vibe::before       { background: var(--teal); }
-    .archetype-pager::before      { background: var(--amber); }
+    .archetype-gatekeeper::before { background: var(--negative); }
+    .archetype-vibe::before       { background: var(--grad-bright); }
+    .archetype-pager::before      { background: var(--blue-300); }
 
     .archetype-label {
       display: inline-block;
@@ -183,9 +216,20 @@
       padding: 2px 8px; border-radius: 20px;
       margin-bottom: 10px;
     }
-    .archetype-gatekeeper .archetype-label { background: rgba(248,81,73,.15); color: var(--red); }
-    .archetype-vibe       .archetype-label { background: rgba(26,183,160,.15); color: var(--teal); }
-    .archetype-pager      .archetype-label { background: rgba(227,179,65,.15); color: var(--amber); }
+    .archetype-gatekeeper .archetype-label { background: rgba(188, 78, 113, .18); color: #C76B88; }
+    .archetype-vibe       .archetype-label { background: rgba(1, 254, 222, .12);  color: var(--aqua-400); }
+    .archetype-pager      .archetype-label { background: rgba(25, 111, 255, .15); color: var(--topaz-600); }
+
+    /* ── BELIEFS LAYOUT ── */
+    .beliefs-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 700px) {
+      .beliefs-layout { grid-template-columns: 1fr; }
+    }
+    .beliefs-cards { display: flex; flex-direction: column; gap: 16px; }
 
     /* ── CHART ── */
     .chart-wrap {
@@ -193,18 +237,11 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .chart-wrap canvas { max-height: 320px; }
-
-    /* ── BELIEFS LAYOUT ── */
-    .beliefs-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 700px) { .beliefs-layout { grid-template-columns: 1fr; } }
-    .beliefs-layout .chart-wrap { grid-column: 1; }
-    .beliefs-layout .beliefs-cards { grid-column: 2; display: flex; flex-direction: column; gap: 16px; }
-    @media (max-width: 700px) {
-      .beliefs-layout .chart-wrap { grid-column: 1; }
-      .beliefs-layout .beliefs-cards { grid-column: 1; }
-    }
 
     /* ── EVIDENCE ── */
     .evidence-list { display: flex; flex-direction: column; gap: 10px; }
@@ -218,15 +255,19 @@
       text-decoration: none;
       color: var(--text);
     }
-    .evidence-item:hover { border-color: var(--teal-dim); }
+    .evidence-item:hover { border-color: var(--purple-200); }
     .evidence-icon {
       width: 32px; height: 32px; min-width: 32px;
       border-radius: 8px;
-      background: rgba(26,183,160,.1);
+      background: rgba(121, 0, 201, .2);
       display: flex; align-items: center; justify-content: center;
       font-size: 15px;
     }
-    .evidence-item span { font-size: 13px; color: var(--teal); word-break: break-all; }
+    .evidence-item span {
+      font-size: 13px;
+      color: var(--aqua-400);
+      word-break: break-all;
+    }
 
     /* ── FOOTER ── */
     footer {
@@ -251,7 +292,7 @@
   <div class="hero-inner">
     <div class="badge">GitKraken Marketing Intelligence</div>
     <h1>Developer Digest <span>/ Mar 08–15, 2026</span></h1>
-    <p class="sub">Cultural & sentiment analysis of 30 developer subreddits. Powered by Gemini.</p>
+    <p class="sub">Cultural &amp; sentiment analysis of 30 developer subreddits. Powered by Gemini.</p>
     <div class="stats">
       <div class="stat"><span class="stat-value">30</span><span class="stat-label">Subreddits</span></div>
       <div class="stat"><span class="stat-value">4</span><span class="stat-label">Clusters</span></div>
@@ -297,7 +338,7 @@
       <div class="cluster-card">
         <div class="cluster-header">
           <div class="cluster-num">3</div>
-          <h3>Entry-Level Survival<br><small style="font-weight:400;color:var(--muted)">&nbsp;</small></h3>
+          <h3>Entry-Level Survival</h3>
         </div>
         <div class="community-tags">
           <span class="tag">r/learnprogramming</span>
@@ -308,7 +349,7 @@
       <div class="cluster-card">
         <div class="cluster-header">
           <div class="cluster-num">4</div>
-          <h3>Infrastructure &amp; Orchestration<br><small style="font-weight:400;color:var(--muted)">&nbsp;</small></h3>
+          <h3>Infrastructure &amp; Orchestration</h3>
         </div>
         <div class="community-tags">
           <span class="tag">r/devops</span>
@@ -324,30 +365,29 @@
   <section>
     <div class="section-title">Dominant Beliefs</div>
     <div class="beliefs-layout">
+
       <div class="chart-wrap">
         <canvas id="beliefsChart"></canvas>
       </div>
-      <div class="beliefs-cards">
 
+      <div class="beliefs-cards">
         <div class="card belief-card">
           <div class="card-icon">⚠️</div>
           <h3>AI Skepticism / Antipathy</h3>
           <p>AI is increasingly viewed as a generator of "slop" that dilutes code quality and harms open-source sustainability.</p>
         </div>
-
         <div class="card belief-card">
           <div class="card-icon">🔄</div>
           <h3>The Cyclical Nature of Tech</h3>
           <p>A cynical view that "new" best practices are often just re-branded old patterns — utility CSS, server-side rendering, etc.</p>
         </div>
-
         <div class="card belief-card">
           <div class="card-icon">🔒</div>
           <h3>Sovereignty &amp; Privacy</h3>
           <p>Strong resistance against corporate/government surveillance through encryption and FOSS advocacy.</p>
         </div>
-
       </div>
+
     </div>
   </section>
 
@@ -448,11 +488,13 @@
       datasets: [{
         label: "Sentiment Intensity",
         data: [92, 74, 81, 68, 88],
-        backgroundColor: "rgba(26, 183, 160, 0.15)",
-        borderColor: "#1ab7a0",
+        backgroundColor: "rgba(1, 254, 222, 0.1)",
+        borderColor: "#01FEE0",
         borderWidth: 2,
-        pointBackgroundColor: "#1ab7a0",
-        pointRadius: 4,
+        pointBackgroundColor: "#EC7FFF",
+        pointBorderColor: "#01FEE0",
+        pointRadius: 5,
+        pointHoverRadius: 7,
       }]
     },
     options: {
@@ -466,14 +508,14 @@
           max: 100,
           ticks: {
             stepSize: 25,
-            color: "#8b949e",
+            color: "#C9C9C9",
             backdropColor: "transparent",
             font: { size: 10 }
           },
-          grid: { color: "#21262d" },
-          angleLines: { color: "#21262d" },
+          grid: { color: "#3E3E3E" },
+          angleLines: { color: "#3E3E3E" },
           pointLabels: {
-            color: "#e6edf3",
+            color: "#FFFFFF",
             font: { size: 12, weight: "600" }
           }
         }
