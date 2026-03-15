@@ -3,42 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GK Developer Digest — Mar 08–15, 2026</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <title>GK Developer Culture Briefing — Mar 08–15, 2026</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Base */
-      --bg:          #1C1C1C;  /* Base Dark 600 */
-      --surface:     #272727;  /* Base Dark 500 */
-      --border:      #3E3E3E;  /* Base Dark 300 */
-      --text:        #FFFFFF;  /* Base Light 100 */
-      --muted:       #C9C9C9;  /* Base Light 400 */
-
-      /* Purple */
-      --purple-600:  #7900C9;
-      --purple-200:  #B657FF;
-
-      /* Blue / Topaz */
-      --blue-600:    #2C30C0;
-      --blue-300:    #196FFF;
-      --topaz-600:   #338BEF;
-
-      /* Aqua & Pink */
-      --aqua-400:    #01FEE0;
-      --pink-300:    #EC7FFF;
-      --pink-200:    #F8ABFF;
-
-      /* Functional */
-      --positive:    #1EA5AE;  /* Positive 500 */
-      --negative:    #BC4E71;  /* Negative 600 */
-
-      /* Gradients */
-      --grad-core:   linear-gradient(135deg, #7900C9, #196FFF);
-      --grad-bright: linear-gradient(135deg, #01FEE0, #EC7FFF);
-
-      --radius: 12px;
+      --bg:         #1C1C1C;
+      --surface:    #272727;
+      --surface-2:  #2f2f2f;
+      --border:     #3E3E3E;
+      --text:       #FFFFFF;
+      --muted:      #C9C9C9;
+      --subtle:     #8a8a8a;
+      --purple-600: #7900C9;
+      --purple-200: #B657FF;
+      --blue-300:   #196FFF;
+      --blue-600:   #2C30C0;
+      --topaz:      #338BEF;
+      --aqua:       #01FEE0;
+      --pink:       #EC7FFF;
+      --pink-200:   #F8ABFF;
+      --positive:   #1EA5AE;
+      --negative:   #BC4E71;
+      --grad-core:  linear-gradient(135deg, #7900C9, #196FFF);
+      --grad-bright:linear-gradient(135deg, #01FEE0, #EC7FFF);
+      --grad-warm:  linear-gradient(135deg, #B657FF, #EC7FFF);
+      --radius:     12px;
+      --radius-sm:  8px;
     }
 
     body {
@@ -49,478 +40,660 @@
       padding-bottom: 80px;
     }
 
-    /* ── HERO ── */
+    /* ─── HERO ─── */
     .hero {
-      background: linear-gradient(150deg, #1a003d 0%, #001a4d 50%, #1C1C1C 100%);
+      background: linear-gradient(150deg, #160030 0%, #001440 50%, #1C1C1C 100%);
       border-bottom: 1px solid var(--border);
-      padding: 52px 40px 40px;
+      padding: 48px 40px 36px;
       position: relative;
       overflow: hidden;
     }
-    .hero::before {
+    .hero::after {
       content: "";
       position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(121,0,201,.18) 0%, rgba(25,111,255,.12) 100%);
+      background: radial-gradient(ellipse at 10% 50%, rgba(121,0,201,.2) 0%, transparent 60%),
+                  radial-gradient(ellipse at 90% 20%, rgba(25,111,255,.15) 0%, transparent 50%);
       pointer-events: none;
     }
-    .hero-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+    .hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
 
-    .badge {
-      display: inline-block;
-      background: var(--grad-core);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 3px 12px;
-      border-radius: 20px;
-      margin-bottom: 16px;
+    .week-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
     }
+    .week-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--aqua);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; } 50% { opacity: .4; }
+    }
+
     .hero h1 {
-      font-size: clamp(24px, 4vw, 40px);
-      font-weight: 800;
-      color: var(--text);
-      line-height: 1.2;
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 800; line-height: 1.2;
       margin-bottom: 8px;
     }
-    .hero h1 span {
+    .hero h1 .grad {
       background: var(--grad-bright);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .hero p.sub {
-      color: var(--muted);
-      font-size: 15px;
-      margin-bottom: 32px;
-    }
+    .hero .sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
 
-    .stats { display: flex; gap: 16px; flex-wrap: wrap; }
-    .stat {
+    .stats { display: flex; gap: 12px; flex-wrap: wrap; }
+    .stat-pill {
+      display: flex; align-items: center; gap: 8px;
       background: rgba(255,255,255,.06);
       border: 1px solid rgba(255,255,255,.1);
-      border-radius: var(--radius);
-      padding: 18px 24px;
-      min-width: 130px;
-      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
     }
-    .stat-value {
-      font-size: 28px;
-      font-weight: 800;
+    .stat-pill strong {
       background: var(--grad-bright);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
-      display: block;
-      line-height: 1;
+      font-weight: 800; font-size: 15px;
+    }
+    .stat-pill span { color: var(--muted); }
+
+    /* ─── LAYOUT ─── */
+    .page { max-width: 1080px; margin: 0 auto; padding: 44px 40px 0; }
+    section { margin-bottom: 52px; }
+
+    .section-header { margin-bottom: 20px; }
+    .section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--subtle);
       margin-bottom: 4px;
     }
-    .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .section-header h2 { font-size: 20px; font-weight: 800; }
+    .section-header p  { font-size: 13px; color: var(--muted); margin-top: 2px; }
 
-    /* ── LAYOUT ── */
-    .page { max-width: 1100px; margin: 0 auto; padding: 48px 40px 0; }
-    section { margin-bottom: 56px; }
+    /* ─── GRIDS ─── */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
 
-    .section-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--muted);
-      margin-bottom: 20px;
-      padding-bottom: 10px;
+    /* ─── TOPIC CARDS ─── */
+    .topic-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color .2s, transform .15s;
+      user-select: none;
+    }
+    .topic-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
+    .topic-card.active { border-color: var(--purple-200); }
+
+    .topic-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .topic-icon {
+      width: 34px; height: 34px; min-width: 34px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px;
+    }
+    .topic-chevron { color: var(--subtle); font-size: 12px; transition: transform .2s; margin-top: 2px; }
+    .topic-card.active .topic-chevron { transform: rotate(180deg); color: var(--purple-200); }
+
+    .topic-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.35; }
+    .topic-card p  { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    .topic-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .topic-tag {
+      background: rgba(182,87,255,.1);
+      border: 1px solid rgba(182,87,255,.25);
+      color: var(--purple-200);
+      font-size: 10px; font-weight: 600;
+      padding: 2px 8px; border-radius: 20px;
+    }
+
+    /* expanded panel inside card */
+    .topic-expand {
+      display: none;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .topic-card.active .topic-expand { display: block; }
+    .expand-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--subtle); margin-bottom: 8px;
+    }
+    .expand-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 10px; border-radius: var(--radius-sm);
+      background: rgba(255,255,255,.04);
+      text-decoration: none; color: var(--aqua);
+      font-size: 12px;
+      transition: background .15s;
+      margin-bottom: 5px;
+    }
+    .expand-link:hover { background: rgba(1,254,222,.08); }
+    .expand-link .link-icon { font-size: 11px; color: var(--subtle); }
+
+    /* ─── LINGO TABLE ─── */
+    .lingo-table { width: 100%; border-collapse: collapse; }
+    .lingo-table thead tr {
       border-bottom: 1px solid var(--border);
     }
+    .lingo-table thead th {
+      font-size: 10px; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--subtle);
+      padding: 0 0 10px; text-align: left;
+    }
+    .lingo-table thead th:last-child { text-align: right; }
+    .lingo-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .15s;
+    }
+    .lingo-table tbody tr:last-child { border-bottom: none; }
+    .lingo-table tbody tr:hover { background: rgba(255,255,255,.03); }
+    .lingo-table td { padding: 13px 0; vertical-align: top; }
+    .lingo-table td:last-child { text-align: right; }
 
-    /* ── GRIDS ── */
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .lingo-phrase {
+      font-size: 14px; font-weight: 700;
+      color: var(--aqua);
+      position: relative; display: inline-block; cursor: default;
+    }
+    .lingo-phrase::after {
+      content: attr(data-tip);
+      position: absolute; bottom: calc(100% + 8px); left: 0;
+      background: #0a0a0a;
+      border: 1px solid var(--purple-200);
+      color: var(--text);
+      font-size: 12px; font-weight: 400;
+      line-height: 1.5;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      width: 240px; white-space: normal;
+      opacity: 0; pointer-events: none;
+      transition: opacity .15s;
+      z-index: 10;
+    }
+    .lingo-phrase:hover::after { opacity: 1; }
 
-    /* ── CARD BASE ── */
-    .card {
+    .lingo-meaning { font-size: 13px; color: var(--muted); padding-left: 24px; }
+    .lingo-origin {
+      font-size: 11px;
+      background: rgba(182,87,255,.1);
+      border: 1px solid rgba(182,87,255,.2);
+      color: var(--purple-200);
+      padding: 2px 8px; border-radius: 20px;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    /* ─── ARTIFACT CARDS ─── */
+    .artifact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid;
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color .2s, transform .15s;
+    }
+    .artifact-card:hover { transform: translateY(-2px); }
+    .artifact-card.art-rust   { border-top-color: var(--negative); }
+    .artifact-card.art-learn  { border-top-color: var(--blue-300); }
+    .artifact-card.art-devops { border-top-color: var(--aqua); }
+
+    .artifact-card:hover.art-rust   { border-color: var(--negative); }
+    .artifact-card:hover.art-learn  { border-color: var(--blue-300); }
+    .artifact-card:hover.art-devops { border-color: var(--aqua); }
+
+    .art-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .art-why-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--subtle); margin-bottom: 5px; margin-top: 12px;
+    }
+    .art-why { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .art-examples { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .art-example {
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      font-size: 11px; font-weight: 600;
+      padding: 2px 9px; border-radius: 20px;
+    }
+    .artifact-expand {
+      display: none;
+      margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .artifact-card.active .artifact-expand { display: block; }
+
+    /* ─── CONCERNS ─── */
+    .concern-list { display: flex; flex-direction: column; gap: 12px; }
+    .concern-item {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 24px;
-      transition: border-color .2s, transform .2s;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: start;
+      transition: border-color .2s;
     }
-    .card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
-    .card-icon {
-      width: 36px; height: 36px;
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      margin-bottom: 14px;
-    }
-    .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-    .card p  { font-size: 13px; color: var(--muted); line-height: 1.65; }
-
-    /* ── CLUSTERS ── */
-    .cluster-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      transition: border-color .2s, transform .2s;
-    }
-    .cluster-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
-    .cluster-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
-    .cluster-num {
+    .concern-item:hover { border-color: var(--border); }
+    .concern-num {
       width: 28px; height: 28px; min-width: 28px;
       border-radius: 50%;
       background: var(--grad-core);
-      color: #fff;
-      font-size: 12px; font-weight: 800;
+      font-size: 12px; font-weight: 800; color: #fff;
       display: flex; align-items: center; justify-content: center;
       margin-top: 2px;
-      flex-shrink: 0;
     }
-    .cluster-card h3 { font-size: 15px; font-weight: 700; line-height: 1.3; }
+    .concern-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .concern-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
-    .community-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-    .tag {
-      background: rgba(182, 87, 255, .12);
-      border: 1px solid rgba(182, 87, 255, .35);
-      color: var(--purple-200);
-      font-size: 11px; font-weight: 600;
-      padding: 2px 9px;
-      border-radius: 20px;
-    }
-    .cluster-focus { font-size: 13px; color: var(--muted); line-height: 1.65; }
-
-    /* ── BELIEFS ── */
-    .belief-card { border-left: 3px solid var(--blue-300); }
-    .belief-card .card-icon { background: rgba(25, 111, 255, .12); }
-    .belief-card:hover { border-color: var(--blue-300); border-left-color: var(--blue-300); }
-
-    /* ── ARTIFACTS ── */
-    .artifact-card { border-left: 3px solid var(--pink-300); }
-    .artifact-card .card-icon { background: rgba(236, 127, 255, .12); }
-    .artifact-card:hover { border-color: var(--pink-300); border-left-color: var(--pink-300); }
-
-    /* ── ARCHETYPES ── */
-    .archetype-card { position: relative; overflow: hidden; }
-    .archetype-card::before {
-      content: "";
-      position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    }
-    .archetype-gatekeeper::before { background: var(--negative); }
-    .archetype-vibe::before       { background: var(--grad-bright); }
-    .archetype-pager::before      { background: var(--blue-300); }
-
-    .archetype-label {
-      display: inline-block;
-      font-size: 10px; font-weight: 700; letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 2px 8px; border-radius: 20px;
-      margin-bottom: 10px;
-    }
-    .archetype-gatekeeper .archetype-label { background: rgba(188, 78, 113, .18); color: #C76B88; }
-    .archetype-vibe       .archetype-label { background: rgba(1, 254, 222, .12);  color: var(--aqua-400); }
-    .archetype-pager      .archetype-label { background: rgba(25, 111, 255, .15); color: var(--topaz-600); }
-
-    /* ── BELIEFS LAYOUT ── */
-    .beliefs-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    @media (max-width: 700px) {
-      .beliefs-layout { grid-template-columns: 1fr; }
-    }
-    .beliefs-cards { display: flex; flex-direction: column; gap: 16px; }
-
-    /* ── CHART ── */
-    .chart-wrap {
+    /* ─── SOURCES ─── */
+    .source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .source-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 16px 18px;
+      text-decoration: none; color: var(--text);
+      display: flex; flex-direction: column; gap: 6px;
+      transition: border-color .2s, transform .15s;
     }
-    .chart-wrap canvas { max-height: 320px; }
+    .source-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
+    .source-sub {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em;
+      background: var(--grad-core);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .source-title { font-size: 13px; font-weight: 600; line-height: 1.4; }
+    .source-arrow { font-size: 11px; color: var(--subtle); margin-top: auto; padding-top: 4px; }
 
-    /* ── EVIDENCE ── */
-    .evidence-list { display: flex; flex-direction: column; gap: 10px; }
-    .evidence-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 18px;
-      display: flex; align-items: center; gap: 12px;
-      transition: border-color .2s;
-      text-decoration: none;
-      color: var(--text);
-    }
-    .evidence-item:hover { border-color: var(--purple-200); }
-    .evidence-icon {
-      width: 32px; height: 32px; min-width: 32px;
-      border-radius: 8px;
-      background: rgba(121, 0, 201, .2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px;
-    }
-    .evidence-item span {
-      font-size: 13px;
-      color: var(--aqua-400);
-      word-break: break-all;
-    }
-
-    /* ── FOOTER ── */
+    /* ─── FOOTER ─── */
     footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 48px;
-      padding-top: 24px;
+      max-width: 1080px; margin: 48px auto 0;
+      padding: 24px 40px 0;
       border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
+    }
+    footer span { font-size: 12px; color: var(--subtle); }
+    .footer-brand {
+      font-size: 12px; font-weight: 700;
+      background: var(--grad-core);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     @media (max-width: 600px) {
-      .hero { padding: 36px 20px 28px; }
-      .page { padding: 36px 20px 0; }
+      .hero  { padding: 32px 20px 28px; }
+      .page  { padding: 32px 20px 0; }
+      footer { padding: 20px 20px 0; }
+      .lingo-meaning { padding-left: 0; padding-top: 4px; }
     }
   </style>
 </head>
 <body>
 
-<!-- HERO -->
+<!-- ─── HERO ─── -->
 <header class="hero">
   <div class="hero-inner">
-    <div class="badge">GitKraken Marketing Intelligence</div>
-    <h1>Developer Digest <span>/ Mar 08–15, 2026</span></h1>
-    <p class="sub">Cultural &amp; sentiment analysis of 30 developer subreddits. Powered by Gemini.</p>
+    <div class="week-badge"><span class="dot"></span> Week of Mar 08–15, 2026</div>
+    <h1>Developer Culture <span class="grad">Briefing</span></h1>
+    <p class="sub">What the developer community is talking about this week — across 30 subreddits.</p>
     <div class="stats">
-      <div class="stat"><span class="stat-value">30</span><span class="stat-label">Subreddits</span></div>
-      <div class="stat"><span class="stat-value">4</span><span class="stat-label">Clusters</span></div>
-      <div class="stat"><span class="stat-value">3</span><span class="stat-label">Beliefs</span></div>
-      <div class="stat"><span class="stat-value">3</span><span class="stat-label">Archetypes</span></div>
+      <div class="stat-pill"><strong>5</strong> <span>Topics</span></div>
+      <div class="stat-pill"><strong>8</strong> <span>Lingo Terms</span></div>
+      <div class="stat-pill"><strong>3</strong> <span>Things Being Shared</span></div>
+      <div class="stat-pill"><strong>3</strong> <span>Major Concerns</span></div>
     </div>
   </div>
 </header>
 
 <main class="page">
 
-  <!-- CULTURAL CLUSTERS -->
-  <section>
-    <div class="section-title">Cultural Clusters</div>
-    <div class="grid-2">
+  <!-- ─── SECTION 1: TOPICS ─── -->
+  <section id="topics">
+    <div class="section-header">
+      <div class="section-label">Section 1</div>
+      <h2>What Are People Talking About?</h2>
+      <p>Click a topic to see source discussions.</p>
+    </div>
+    <div class="grid-3" id="topic-grid">
 
-      <div class="cluster-card">
-        <div class="cluster-header">
-          <div class="cluster-num">1</div>
-          <h3>Systems &amp; Safety<br><small style="font-weight:400;color:var(--muted)">Low-Level</small></h3>
+      <div class="topic-card" data-sources="devops,rust">
+        <div class="topic-card-top">
+          <div class="topic-icon" style="background:rgba(188,78,113,.15)">🤖</div>
+          <div class="topic-chevron">▼</div>
         </div>
-        <div class="community-tags">
-          <span class="tag">r/rust</span>
-          <span class="tag">r/cpp</span>
-          <span class="tag">r/linux</span>
+        <h3>AI Code Is Lowering the Bar</h3>
+        <p>Developers are arguing about whether AI-generated pull requests are degrading code quality. Some communities are actively blocking them; others are building new review practices around them.</p>
+        <div class="topic-tags">
+          <span class="topic-tag">r/rust</span>
+          <span class="topic-tag">r/cpp</span>
+          <span class="topic-tag">r/devops</span>
         </div>
-        <p class="cluster-focus">Memory safety, performance, digital sovereignty, and technical rigor.</p>
+        <div class="topic-expand" id="expand-ai"></div>
       </div>
 
-      <div class="cluster-card">
-        <div class="cluster-header">
-          <div class="cluster-num">2</div>
-          <h3>Professional Pragmatism<br><small style="font-weight:400;color:var(--muted)">High-Level</small></h3>
+      <div class="topic-card" data-sources="rust">
+        <div class="topic-card-top">
+          <div class="topic-icon" style="background:rgba(188,78,113,.15)">🦀</div>
+          <div class="topic-chevron">▼</div>
         </div>
-        <div class="community-tags">
-          <span class="tag">r/webdev</span>
-          <span class="tag">r/csharp</span>
-          <span class="tag">r/typescript</span>
+        <h3>Rust Is Eating the Infrastructure Stack</h3>
+        <p>Core developer tools are being rewritten in Rust for performance and memory safety. This is shifting community culture toward stricter technical standards and gatekeeping.</p>
+        <div class="topic-tags">
+          <span class="topic-tag">r/rust</span>
+          <span class="topic-tag">r/cpp</span>
+          <span class="topic-tag">r/linux</span>
         </div>
-        <p class="cluster-focus">Career growth, shipping features, and utilizing industry-standard frameworks.</p>
+        <div class="topic-expand" id="expand-rust"></div>
       </div>
 
-      <div class="cluster-card">
-        <div class="cluster-header">
-          <div class="cluster-num">3</div>
-          <h3>Entry-Level Survival</h3>
+      <div class="topic-card" data-sources="webdev">
+        <div class="topic-card-top">
+          <div class="topic-icon" style="background:rgba(25,111,255,.15)">📚</div>
+          <div class="topic-chevron">▼</div>
         </div>
-        <div class="community-tags">
-          <span class="tag">r/learnprogramming</span>
+        <h3>Breaking Into Tech Has Never Been Harder</h3>
+        <p>Entry-level developers are stuck in "Tutorial Hell" while competing against an oversaturated job market. LinkedIn is being called out as nearly useless for landing a first role.</p>
+        <div class="topic-tags">
+          <span class="topic-tag">r/learnprogramming</span>
+          <span class="topic-tag">r/webdev</span>
         </div>
-        <p class="cluster-focus">Navigating the "Tutorial Hell" cycle and surviving a hyper-competitive job market.</p>
+        <div class="topic-expand" id="expand-jobs"></div>
       </div>
 
-      <div class="cluster-card">
-        <div class="cluster-header">
-          <div class="cluster-num">4</div>
-          <h3>Infrastructure &amp; Orchestration</h3>
+      <div class="topic-card" data-sources="devops">
+        <div class="topic-card-top">
+          <div class="topic-icon" style="background:rgba(1,254,222,.1)">🚨</div>
+          <div class="topic-chevron">▼</div>
         </div>
-        <div class="community-tags">
-          <span class="tag">r/devops</span>
-          <span class="tag">r/Python</span>
+        <h3>No One Owns the Code in Production</h3>
+        <p>Teams are increasingly shipping code that nobody fully understands — especially when AI writes it. DevOps and SRE communities are debating who's accountable when it fails at 3 AM.</p>
+        <div class="topic-tags">
+          <span class="topic-tag">r/devops</span>
+          <span class="topic-tag">r/Python</span>
         </div>
-        <p class="cluster-focus">Reliability, automation, and managing the "Ownership Gap" in production.</p>
+        <div class="topic-expand" id="expand-prod"></div>
+      </div>
+
+      <div class="topic-card" data-sources="webdev,linux">
+        <div class="topic-card-top">
+          <div class="topic-icon" style="background:rgba(182,87,255,.15)">🔄</div>
+          <div class="topic-chevron">▼</div>
+        </div>
+        <h3>"We've Seen This Before"</h3>
+        <p>Veteran developers are pointing out that today's hottest patterns — utility CSS, server-side rendering, local AI — are cyclical returns of ideas from the 2000s, just rebranded.</p>
+        <div class="topic-tags">
+          <span class="topic-tag">r/webdev</span>
+          <span class="topic-tag">r/csharp</span>
+          <span class="topic-tag">r/linux</span>
+        </div>
+        <div class="topic-expand" id="expand-cycle"></div>
       </div>
 
     </div>
   </section>
 
-  <!-- DOMINANT BELIEFS -->
-  <section>
-    <div class="section-title">Dominant Beliefs</div>
-    <div class="beliefs-layout">
-
-      <div class="chart-wrap">
-        <canvas id="beliefsChart"></canvas>
-      </div>
-
-      <div class="beliefs-cards">
-        <div class="card belief-card">
-          <div class="card-icon">⚠️</div>
-          <h3>AI Skepticism / Antipathy</h3>
-          <p>AI is increasingly viewed as a generator of "slop" that dilutes code quality and harms open-source sustainability.</p>
-        </div>
-        <div class="card belief-card">
-          <div class="card-icon">🔄</div>
-          <h3>The Cyclical Nature of Tech</h3>
-          <p>A cynical view that "new" best practices are often just re-branded old patterns — utility CSS, server-side rendering, etc.</p>
-        </div>
-        <div class="card belief-card">
-          <div class="card-icon">🔒</div>
-          <h3>Sovereignty &amp; Privacy</h3>
-          <p>Strong resistance against corporate/government surveillance through encryption and FOSS advocacy.</p>
-        </div>
-      </div>
-
+  <!-- ─── SECTION 2: LINGO ─── -->
+  <section id="lingo">
+    <div class="section-header">
+      <div class="section-label">Section 2</div>
+      <h2>Lingo This Week</h2>
+      <p>Phrases appearing repeatedly in discussions. Hover a term for its full definition.</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px 24px;">
+      <table class="lingo-table">
+        <thead>
+          <tr>
+            <th style="width:200px">Phrase</th>
+            <th>What it means</th>
+            <th>Seen in</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="lingo-phrase" data-tip="Low-quality AI-generated code being submitted to repos — often copy-pasted from an LLM without review or understanding.">AI slop</span></td>
+            <td class="lingo-meaning">Low-quality AI-generated code polluting codebases</td>
+            <td><span class="lingo-origin">r/rust · r/cpp</span></td>
+          </tr>
+          <tr>
+            <td><span class="lingo-phrase" data-tip="Using AI to build features by writing prompts instead of code — without understanding what the AI actually produced.">Vibe coding</span></td>
+            <td class="lingo-meaning">Building with AI prompts instead of writing or understanding code</td>
+            <td><span class="lingo-origin">r/learnprogramming</span></td>
+          </tr>
+          <tr>
+            <td><span class="lingo-phrase" data-tip="The trap of endlessly watching tutorials and completing courses without ever shipping a real project or building independently.">Tutorial hell</span></td>
+            <td class="lingo-meaning">Looping through courses forever without building anything real</td>
+            <td><span class="lingo-origin">r/learnprogramming</span></td>
+          </tr>
+          <tr>
+            <td><span class="lingo-phrase" data-tip="Rewriting a software tool or infrastructure component in Rust. Seen as a signal of quality and performance-seriousness.">Oxidized</span></td>
+            <td class="lingo-meaning">Rewritten in Rust for performance and memory safety</td>
+            <td><span class="lingo-origin">r/rust · r/linux</span></td>
+          </tr>
+          <tr>
+            <td><span class="lingo-phrase" data-tip="When AI-generated code introduces unpredictable, hard-to-reproduce bugs in live production systems — failures that can't be reasoned about in advance.">Probabilistic production</span></td>
+            <td class="lingo-meaning">Live failures caused by AI code that no one fully understood</td>
+            <td><span class="lingo-origin">r/devops</span></td>
+          </tr>
+          <tr>
+            <td><span class="lingo-phrase" data-tip="A situation where no one on the team fully understands or owns the code running in production — often the result of AI-assisted development or rapid team turnover.">Ownership gap</span></td>
+            <td class="lingo-meaning">No one on the team understands what's running in production</td>
+            <td><span class="lingo-origin">r/devops · r/Python</span></td>
+          </tr>
+          <tr>
+            <td><span class="lingo-phrase" data-tip="CI/CD pipeline rules and deployment policies that prevent unreviewed or AI-generated code from reaching production without human sign-off.">Guardrails</span></td>
+            <td class="lingo-meaning">Deployment policies that keep unreviewed code out of prod</td>
+            <td><span class="lingo-origin">r/devops</span></td>
+          </tr>
+          <tr>
+            <td><span class="lingo-phrase" data-tip="A formal sign-off practice (like a DCO) that contributors attach to commits to certify the code is their own original work — now being used to explicitly flag non-AI contributions.">Certificate of origin</span></td>
+            <td class="lingo-meaning">A formal commit sign-off certifying code is human-written</td>
+            <td><span class="lingo-origin">r/rust</span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
-  <!-- KEY ARTIFACTS -->
-  <section>
-    <div class="section-title">Key Artifacts</div>
+  <!-- ─── SECTION 3: ARTIFACTS ─── -->
+  <section id="artifacts">
+    <div class="section-header">
+      <div class="section-label">Section 3</div>
+      <h2>What People Are Sharing</h2>
+      <p>Tools, projects, and resources circulating in discussions this week. Click for source threads.</p>
+    </div>
     <div class="grid-3">
 
-      <div class="card artifact-card">
-        <div class="card-icon">🦀</div>
-        <h3>Rust-based Tooling</h3>
-        <p>Represented by projects like Rolldown and Vite; signifies a move toward "Oxidized" performance-critical infrastructure.</p>
+      <div class="artifact-card art-rust" data-art="rust">
+        <div class="art-name">🦀 Rust-Based Tooling</div>
+        <div class="art-why-label">Why it's being discussed</div>
+        <div class="art-why">Developers are rewriting performance-critical infrastructure in Rust. This week's discussions signal a broader shift away from JavaScript-based tooling toward "Oxidized" alternatives.</div>
+        <div class="art-why-label" style="margin-top:14px">Projects mentioned</div>
+        <div class="art-examples">
+          <span class="art-example">Rolldown</span>
+          <span class="art-example">Vite</span>
+          <span class="art-example">Redox OS</span>
+        </div>
+        <div class="artifact-expand" id="art-expand-rust"></div>
       </div>
 
-      <div class="card artifact-card">
-        <div class="card-icon">📘</div>
-        <h3>The "Odin" / "CS50" Standard</h3>
-        <p>The primary curriculum touchstones for proving competence outside of a formal degree.</p>
+      <div class="artifact-card art-learn" data-art="learn">
+        <div class="art-name">📘 Odin / CS50</div>
+        <div class="art-why-label">Why it's being discussed</div>
+        <div class="art-why">These are the two resources entry-level developers cite as proof of competence when they don't have a degree. They dominate "how do I get hired?" threads as the accepted baseline.</div>
+        <div class="art-why-label" style="margin-top:14px">Resources mentioned</div>
+        <div class="art-examples">
+          <span class="art-example">The Odin Project</span>
+          <span class="art-example">CS50</span>
+        </div>
+        <div class="artifact-expand" id="art-expand-learn"></div>
       </div>
 
-      <div class="card artifact-card">
-        <div class="card-icon">🐳</div>
-        <h3>ArgoCD &amp; Docker</h3>
-        <p>The standard toolkit for maintaining "guardrails" in modern deployment pipelines.</p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- COMMUNITY ARCHETYPES -->
-  <section>
-    <div class="section-title">Community Archetypes</div>
-    <div class="grid-3">
-
-      <div class="card archetype-card archetype-gatekeeper">
-        <span class="archetype-label">The Gatekeeper</span>
-        <h3>Rigorous Vetter</h3>
-        <p>Rigorously vets PRs to block AI-generated contributions and maintains high technical bars. Common in <strong>r/rust</strong>, <strong>r/cpp</strong>.</p>
-      </div>
-
-      <div class="card archetype-card archetype-vibe">
-        <span class="archetype-label">The Vibe Coder</span>
-        <h3>AI-First Builder</h3>
-        <p>Prompts AI to build features without deep understanding; often criticized by other archetypes for ignoring fundamentals.</p>
-      </div>
-
-      <div class="card archetype-card archetype-pager">
-        <span class="archetype-label">The Pager Holder</span>
-        <h3>Reliability Pragmatist</h3>
-        <p>Focused on reliability; fears "probabilistic production" where AI code fails at 3 AM. Common in <strong>r/devops</strong>.</p>
+      <div class="artifact-card art-devops" data-art="devops">
+        <div class="art-name">🐳 ArgoCD &amp; Docker</div>
+        <div class="art-why-label">Why it's being discussed</div>
+        <div class="art-why">The standard deployment toolkit for teams trying to maintain accountability in production. Being cited as the "guardrail" answer to AI-generated code failures.</div>
+        <div class="art-why-label" style="margin-top:14px">Tools mentioned</div>
+        <div class="art-examples">
+          <span class="art-example">ArgoCD</span>
+          <span class="art-example">Docker</span>
+          <span class="art-example">Helm</span>
+        </div>
+        <div class="artifact-expand" id="art-expand-devops"></div>
       </div>
 
     </div>
   </section>
 
-  <!-- EVIDENCE -->
-  <section>
-    <div class="section-title">Source Evidence</div>
-    <div class="evidence-list">
-      <a class="evidence-item" href="https://www.reddit.com/r/devops/comments/1rrrj0v/i_analyzed_16m_git_events_to_measure_what_happens/" target="_blank" rel="noopener">
-        <div class="evidence-icon">🔗</div>
-        <span>r/devops — I analyzed 16M git events to measure what happens...</span>
-      </a>
-      <a class="evidence-item" href="https://www.reddit.com/r/rust/comments/1rp584k/redox_os_has_adopted_a_certificate_of_origin/" target="_blank" rel="noopener">
-        <div class="evidence-icon">🔗</div>
-        <span>r/rust — Redox OS has adopted a certificate of origin...</span>
-      </a>
-      <a class="evidence-item" href="https://www.reddit.com/r/webdev/comments/1rtvhy5/anyone_ever_got_a_job_from_linkedin/" target="_blank" rel="noopener">
-        <div class="evidence-icon">🔗</div>
-        <span>r/webdev — Anyone ever got a job from LinkedIn?</span>
-      </a>
-      <a class="evidence-item" href="https://www.reddit.com/r/linux/comments/1rshc1f/i_traced_2_billion_in_nonprofit_grants_and_45/" target="_blank" rel="noopener">
-        <div class="evidence-icon">🔗</div>
-        <span>r/linux — I traced $2 billion in nonprofit grants and 45...</span>
-      </a>
+  <!-- ─── SECTION 4: CONCERNS ─── -->
+  <section id="concerns">
+    <div class="section-header">
+      <div class="section-label">Section 4</div>
+      <h2>What Matters Right Now</h2>
+      <p>The underlying concerns shaping this week's conversations.</p>
+    </div>
+    <div class="concern-list">
+
+      <div class="concern-item">
+        <div class="concern-num">1</div>
+        <div>
+          <div class="concern-title">Code quality is getting harder to enforce</div>
+          <div class="concern-desc">AI tools make it easy to ship code that works but isn't understood. Communities that care about long-term maintainability — especially in systems languages — are actively debating how to raise the bar: stricter PR reviews, contributor certificates, AI-contribution bans.</div>
+        </div>
+      </div>
+
+      <div class="concern-item">
+        <div class="concern-num">2</div>
+        <div>
+          <div class="concern-title">The tech industry keeps reinventing the wheel</div>
+          <div class="concern-desc">Experienced developers are increasingly cynical about "new" trends. Utility CSS is just inline styles. SSR is just PHP. Local AI models are just client-side apps. The pattern of rebranding old ideas as innovation is generating visible fatigue, especially in r/webdev and r/ExperiencedDevs.</div>
+        </div>
+      </div>
+
+      <div class="concern-item">
+        <div class="concern-num">3</div>
+        <div>
+          <div class="concern-title">Privacy and corporate control are back on the agenda</div>
+          <div class="concern-desc">Discussions around FOSS, encryption, and digital sovereignty are intensifying — partly driven by local AI model adoption, partly by broader political context around surveillance. Communities in r/linux and r/rust are the loudest voices here.</div>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <footer>
-    GK Developer Digest · GitKraken Marketing · Week of Mar 08–15, 2026
-  </footer>
+  <!-- ─── SOURCES ─── -->
+  <section id="sources">
+    <div class="section-header">
+      <div class="section-label">Sources</div>
+      <h2>Source Discussions</h2>
+      <p>Original threads this briefing is based on.</p>
+    </div>
+    <div class="source-grid">
+
+      <a class="source-card" href="https://www.reddit.com/r/devops/comments/1rrrj0v/i_analyzed_16m_git_events_to_measure_what_happens/" target="_blank" rel="noopener">
+        <div class="source-sub">r/devops</div>
+        <div class="source-title">Analyzing 16M git events to measure what happens when AI writes code</div>
+        <div class="source-arrow">Open thread ↗</div>
+      </a>
+
+      <a class="source-card" href="https://www.reddit.com/r/rust/comments/1rp584k/redox_os_has_adopted_a_certificate_of_origin/" target="_blank" rel="noopener">
+        <div class="source-sub">r/rust</div>
+        <div class="source-title">Redox OS adopts a Certificate of Origin to block AI contributions</div>
+        <div class="source-arrow">Open thread ↗</div>
+      </a>
+
+      <a class="source-card" href="https://www.reddit.com/r/webdev/comments/1rtvhy5/anyone_ever_got_a_job_from_linkedin/" target="_blank" rel="noopener">
+        <div class="source-sub">r/webdev</div>
+        <div class="source-title">Has anyone actually gotten a dev job from LinkedIn?</div>
+        <div class="source-arrow">Open thread ↗</div>
+      </a>
+
+      <a class="source-card" href="https://www.reddit.com/r/linux/comments/1rshc1f/i_traced_2_billion_in_nonprofit_grants_and_45/" target="_blank" rel="noopener">
+        <div class="source-sub">r/linux</div>
+        <div class="source-title">Tracing $2 billion in nonprofit grants and FOSS funding flows</div>
+        <div class="source-arrow">Open thread ↗</div>
+      </a>
+
+    </div>
+  </section>
 
 </main>
 
-<script>
-  const ctx = document.getElementById("beliefsChart").getContext("2d");
+<footer>
+  <span>GK Developer Culture Briefing · Week of Mar 08–15, 2026</span>
+  <span class="footer-brand">GitKraken Marketing</span>
+</footer>
 
-  new Chart(ctx, {
-    type: "radar",
-    data: {
-      labels: [
-        "AI Skepticism",
-        "Tech Cynicism",
-        "Privacy / FOSS",
-        "Career Anxiety",
-        "Perf. Obsession"
-      ],
-      datasets: [{
-        label: "Sentiment Intensity",
-        data: [92, 74, 81, 68, 88],
-        backgroundColor: "rgba(1, 254, 222, 0.1)",
-        borderColor: "#01FEE0",
-        borderWidth: 2,
-        pointBackgroundColor: "#EC7FFF",
-        pointBorderColor: "#01FEE0",
-        pointRadius: 5,
-        pointHoverRadius: 7,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false }
-      },
-      scales: {
-        r: {
-          min: 0,
-          max: 100,
-          ticks: {
-            stepSize: 25,
-            color: "#C9C9C9",
-            backdropColor: "transparent",
-            font: { size: 10 }
-          },
-          grid: { color: "#3E3E3E" },
-          angleLines: { color: "#3E3E3E" },
-          pointLabels: {
-            color: "#FFFFFF",
-            font: { size: 12, weight: "600" }
-          }
-        }
-      }
-    }
+<script>
+  /* ── source data ── */
+  const SOURCES = {
+    devops: { sub: "r/devops", title: "Analyzing 16M git events to measure what happens when AI writes code", url: "https://www.reddit.com/r/devops/comments/1rrrj0v/i_analyzed_16m_git_events_to_measure_what_happens/" },
+    rust:   { sub: "r/rust",   title: "Redox OS adopts a Certificate of Origin to block AI contributions",  url: "https://www.reddit.com/r/rust/comments/1rp584k/redox_os_has_adopted_a_certificate_of_origin/" },
+    webdev: { sub: "r/webdev", title: "Has anyone actually gotten a dev job from LinkedIn?",               url: "https://www.reddit.com/r/webdev/comments/1rtvhy5/anyone_ever_got_a_job_from_linkedin/" },
+    linux:  { sub: "r/linux",  title: "Tracing $2 billion in nonprofit grants and FOSS funding flows",     url: "https://www.reddit.com/r/linux/comments/1rshc1f/i_traced_2_billion_in_nonprofit_grants_and_45/" },
+  };
+
+  const ARTIFACT_SOURCES = {
+    rust:   ["rust"],
+    learn:  ["webdev"],
+    devops: ["devops"],
+  };
+
+  function sourceHTML(keys) {
+    return keys.map(k => {
+      const s = SOURCES[k];
+      return `<a class="expand-link" href="${s.url}" target="_blank" rel="noopener">
+        <span class="link-icon">↗</span> <strong>${s.sub}</strong> — ${s.title}
+      </a>`;
+    }).join("");
+  }
+
+  /* ── topic card interactions ── */
+  const topicSourceMap = {
+    0: ["devops", "rust"],
+    1: ["rust"],
+    2: ["webdev"],
+    3: ["devops"],
+    4: ["webdev", "linux"],
+  };
+
+  document.querySelectorAll(".topic-card").forEach((card, i) => {
+    const expandEl = card.querySelector(".topic-expand");
+    const keys = topicSourceMap[i] || [];
+    expandEl.innerHTML = `<div class="expand-label">Related discussions</div>` + sourceHTML(keys);
+
+    card.addEventListener("click", () => {
+      const isActive = card.classList.contains("active");
+      document.querySelectorAll(".topic-card").forEach(c => c.classList.remove("active"));
+      if (!isActive) card.classList.add("active");
+    });
+  });
+
+  /* ── artifact card interactions ── */
+  document.querySelectorAll(".artifact-card").forEach(card => {
+    const artKey = card.dataset.art;
+    const keys = ARTIFACT_SOURCES[artKey] || [];
+    const expandEl = card.querySelector(".artifact-expand");
+    expandEl.innerHTML = `<div class="expand-label">Source threads</div>` + sourceHTML(keys);
+
+    card.addEventListener("click", () => {
+      const isActive = card.classList.contains("active");
+      document.querySelectorAll(".artifact-card").forEach(c => c.classList.remove("active"));
+      if (!isActive) card.classList.add("active");
+    });
   });
 </script>
 </body>
