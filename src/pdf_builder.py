@@ -2,16 +2,19 @@ import os
 from datetime import datetime, timezone
 from fpdf import FPDF
 
+FONT_REGULAR = "/System/Library/Fonts/Supplemental/Arial.ttf"
+FONT_BOLD = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+FONT_ITALIC = "/System/Library/Fonts/Supplemental/Arial Italic.ttf"
 
 MAX_BODY_CHARS = 3000
 MAX_COMMENT_CHARS = 1000
 
 
-def _sanitize(text: str) -> str:
+def _clean(text: str) -> str:
+    """Remove null bytes and other control characters that break PDF rendering."""
     if not text:
         return ""
-    # Replace characters that cause encoding issues
-    return text.encode("latin-1", errors="replace").decode("latin-1")
+    return "".join(c for c in text if c >= " " or c in "\n\t")
 
 
 class DigestPDF(FPDF):
@@ -21,11 +24,14 @@ class DigestPDF(FPDF):
         self.week_range = week_range
         self.post_count = post_count
         self.set_auto_page_break(auto=True, margin=15)
+        self.add_font("Arial", "", FONT_REGULAR)
+        self.add_font("Arial", "B", FONT_BOLD)
+        self.add_font("Arial", "I", FONT_ITALIC)
 
     def header(self):
         if self.page_no() == 1:
             return
-        self.set_font("Helvetica", "I", 8)
+        self.set_font("Arial", "I", 8)
         self.set_text_color(150, 150, 150)
         self.cell(0, 6, f"r/{self.subreddit_name}  |  {self.week_range}", align="L")
         self.ln(2)
@@ -33,44 +39,44 @@ class DigestPDF(FPDF):
 
     def footer(self):
         self.set_y(-12)
-        self.set_font("Helvetica", "I", 8)
+        self.set_font("Arial", "I", 8)
         self.set_text_color(150, 150, 150)
         self.cell(0, 6, f"Page {self.page_no()}", align="C")
         self.set_text_color(0, 0, 0)
 
     def cover_page(self):
         self.add_page()
-        self.set_font("Helvetica", "B", 32)
+        self.set_font("Arial", "B", 32)
         self.set_y(60)
-        self.cell(0, 14, _sanitize(f"r/{self.subreddit_name}"), align="C")
+        self.cell(0, 14, f"r/{self.subreddit_name}", align="C")
         self.ln(10)
-        self.set_font("Helvetica", "", 16)
-        self.cell(0, 10, _sanitize(self.week_range), align="C")
+        self.set_font("Arial", "", 16)
+        self.cell(0, 10, self.week_range, align="C")
         self.ln(8)
-        self.set_font("Helvetica", "", 13)
+        self.set_font("Arial", "", 13)
         self.set_text_color(100, 100, 100)
         self.cell(0, 10, f"{self.post_count} qualifying posts", align="C")
         self.set_text_color(0, 0, 0)
         self.ln(6)
-        self.set_font("Helvetica", "I", 10)
+        self.set_font("Arial", "I", 10)
         self.set_text_color(150, 150, 150)
-        self.cell(0, 8, "GK Digest — GitKraken Marketing", align="C")
+        self.cell(0, 8, "GK Digest  —  GitKraken Marketing", align="C")
         self.set_text_color(0, 0, 0)
 
     def add_post(self, post: dict, index: int):
         self.add_page()
 
-        title = _sanitize(post["title"])
+        title = _clean(post["title"])
         score = post["score"]
         created = datetime.fromtimestamp(post["created_utc"], tz=timezone.utc)
         date_str = created.strftime("%b %d, %Y")
-        url = _sanitize(post["url"])
-        body = _sanitize(post["selftext"])
+        url = _clean(post["url"])
+        body = _clean(post["selftext"])
         if len(body) > MAX_BODY_CHARS:
             body = body[:MAX_BODY_CHARS] + "... [truncated]"
 
         # Post number badge
-        self.set_font("Helvetica", "B", 9)
+        self.set_font("Arial", "B", 9)
         self.set_fill_color(30, 30, 30)
         self.set_text_color(255, 255, 255)
         self.cell(20, 7, f"  #{index}", fill=True)
@@ -78,16 +84,16 @@ class DigestPDF(FPDF):
         self.ln(9)
 
         # Title
-        self.set_font("Helvetica", "B", 14)
+        self.set_font("Arial", "B", 14)
         self.multi_cell(0, 7, title)
         self.ln(2)
 
         # Meta line
-        self.set_font("Helvetica", "", 9)
+        self.set_font("Arial", "", 9)
         self.set_text_color(80, 80, 80)
         self.cell(0, 6, f"Score: {score:,}    Posted: {date_str}")
         self.ln(5)
-        self.set_font("Helvetica", "U", 8)
+        self.set_font("Arial", "I", 8)
         self.set_text_color(0, 0, 200)
         self.multi_cell(0, 5, url)
         self.set_text_color(0, 0, 0)
@@ -95,45 +101,45 @@ class DigestPDF(FPDF):
 
         # Post body
         if body:
-            self.set_font("Helvetica", "", 10)
+            self.set_font("Arial", "", 10)
             self.multi_cell(0, 5, body)
             self.ln(4)
 
         # Comments section
         if post["comments"]:
-            self.set_font("Helvetica", "B", 10)
+            self.set_font("Arial", "B", 10)
             self.set_fill_color(240, 240, 240)
             self.cell(0, 7, "  Top Comments", fill=True)
             self.ln(8)
 
             for i, comment in enumerate(post["comments"], 1):
-                cbody = _sanitize(comment["body"])
+                cbody = _clean(comment["body"])
                 if len(cbody) > MAX_COMMENT_CHARS:
                     cbody = cbody[:MAX_COMMENT_CHARS] + "... [truncated]"
                 cscore = comment["score"]
 
-                self.set_font("Helvetica", "B", 9)
+                self.set_font("Arial", "B", 9)
                 self.set_text_color(60, 60, 60)
                 self.cell(0, 5, f"Comment #{i}  |  Score: {cscore:,}")
                 self.ln(5)
-                self.set_font("Helvetica", "", 9)
+                self.set_font("Arial", "", 9)
                 self.set_text_color(0, 0, 0)
                 self.set_x(self.get_x() + 5)
                 self.multi_cell(self.w - self.l_margin - self.r_margin - 5, 5, cbody)
                 self.ln(2)
 
                 for reply in comment.get("replies", []):
-                    rbody = _sanitize(reply["body"])
+                    rbody = _clean(reply["body"])
                     if len(rbody) > MAX_COMMENT_CHARS:
                         rbody = rbody[:MAX_COMMENT_CHARS] + "... [truncated]"
                     rscore = reply["score"]
 
-                    self.set_font("Helvetica", "I", 8)
+                    self.set_font("Arial", "I", 8)
                     self.set_text_color(100, 100, 100)
                     self.set_x(self.get_x() + 10)
                     self.cell(0, 4, f"Reply  |  Score: {rscore:,}")
                     self.ln(4)
-                    self.set_font("Helvetica", "", 8)
+                    self.set_font("Arial", "", 8)
                     self.set_x(self.get_x() + 10)
                     self.multi_cell(self.w - self.l_margin - self.r_margin - 10, 4, rbody)
                     self.ln(2)

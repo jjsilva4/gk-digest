@@ -31,7 +31,7 @@ def week_range_label() -> str:
     today = datetime.now(tz=timezone.utc)
     week_start = today - timedelta(days=today.weekday() + 1)  # last Monday
     week_end = today
-    return f"{week_start.strftime('%b %d')} – {week_end.strftime('%b %d, %Y')}"
+    return f"{week_start.strftime('%b %d')} - {week_end.strftime('%b %d, %Y')}"
 
 
 def setup_logging(log_path: str) -> logging.Logger:
