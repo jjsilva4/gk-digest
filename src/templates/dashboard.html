@@ -356,6 +356,65 @@
       footer { padding: 20px 20px 0; }
       .lingo-meaning { padding-left: 0; padding-top: 4px; }
     }
+
+    /* ─── PDF BUTTON ─── */
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+      color: var(--muted); font-size: 12px; font-weight: 600;
+      padding: 6px 16px; border-radius: 20px; margin-top: 20px;
+      cursor: pointer; transition: background .15s, border-color .15s, color .15s;
+      font-family: inherit;
+    }
+    .pdf-btn:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.3); color: var(--text); }
+
+    /* ─── PRINT ─── */
+    @media print {
+      /* Reset theme tokens */
+      :root {
+        --bg: #fff; --surface: #f5f5f5; --border: #ddd;
+        --text: #111; --muted: #444; --subtle: #777;
+      }
+
+      body { background: #fff !important; color: #111 !important; padding-bottom: 0; }
+
+      /* Hero */
+      .hero { background: #fff !important; border-bottom: 1px solid #ddd !important; padding: 24px 40px 20px !important; }
+      .hero::after { display: none; }
+
+      /* Fix gradient-clipped text — invisible in print */
+      .hero h1 .grad, .stat-pill strong, .footer-brand {
+        background: none !important; -webkit-text-fill-color: #7900C9 !important; color: #7900C9 !important;
+      }
+      .source-sub {
+        background: none !important; -webkit-text-fill-color: #7900C9 !important; color: #7900C9 !important;
+      }
+
+      /* Hide non-content / interactive elements */
+      .pdf-btn, .week-badge .dot, .topic-chevron, .source-arrow,
+      .expand-link, .lingo-phrase::after { display: none !important; }
+
+      /* Show expand sections so all content is visible */
+      .topic-expand, .artifact-expand { display: block !important; }
+
+      /* Cards */
+      .topic-card, .artifact-card, .source-card, .concern-item,
+      .connection-group, .implication-card, .signal-card, .lingo-wrap {
+        background: #f5f5f5 !important; border-color: #ddd !important;
+        break-inside: avoid; box-shadow: none !important; transform: none !important;
+      }
+
+      /* Preserve colored badges */
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+      /* Layout */
+      .page { padding: 24px 40px 0 !important; }
+      section { break-inside: avoid; margin-bottom: 32px; }
+      .grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+      .source-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+      footer { border-top-color: #ddd !important; }
+    }
   </style>
 </head>
 <body>
@@ -365,8 +424,9 @@
   <div class="hero-inner">
     <div class="week-badge"><span class="dot"></span> <span id="week-text">Loading...</span></div>
     <h1>Developer Culture <span class="grad">Briefing</span></h1>
-    <p class="sub">What the developer community is talking about this week — across 30 subreddits.</p>
+    <p class="sub">What the developer community is talking about this week, across 30 subreddits.</p>
     <div class="stats" id="stats"></div>
+    <button class="pdf-btn" onclick="window.print()">&#8681; Download as PDF</button>
   </div>
 </header>
 
