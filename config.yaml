@@ -8,8 +8,8 @@ settings:
 
 gemini:
   enabled: true
-  batch_size: 10
-  model: gemini-1.5-pro
+  batch_size: 5
+  model: gemini-2.5-pro
 
 git:
   auto_push: true
