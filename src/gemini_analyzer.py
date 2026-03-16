@@ -101,13 +101,22 @@ Output a single JSON object matching this schema EXACTLY — field names, types,
 must match precisely:
 
 {{
+  "key_signals": [
+    {{
+      "icon": "<single emoji>",
+      "title": "<signal headline, 4-8 words>",
+      "description": "<one sentence — the most important takeaway for a marketing audience>"
+    }}
+  ],
   "topics": [
     {{
       "icon": "<single emoji best representing this topic>",
       "title": "<headline, present tense, 6-12 words>",
       "description": "<2-3 sentences explaining the trend in plain language for a marketing audience>",
       "tags": ["r/subreddit1", "r/subreddit2"],
-      "source_keys": ["key1", "key2"]
+      "source_keys": ["key1", "key2"],
+      "signal_strength": "<'high' | 'medium' | 'low' — how strongly this signal is trending across communities>",
+      "trend": "<'rising' | 'stable' | 'declining' — momentum direction based on recency and volume of discussion>"
     }}
   ],
   "lingo": [
@@ -134,6 +143,23 @@ must match precisely:
       "description": "<2-3 sentences describing the concern and which communities feel it>"
     }}
   ],
+  "connections": [
+    {{
+      "title": "<cross-community theme in 5-8 words>",
+      "nodes": [
+        {{
+          "community": "r/<subreddit>",
+          "insight": "<one sentence — how this community relates to the theme>"
+        }}
+      ]
+    }}
+  ],
+  "implications": [
+    {{
+      "title": "<strategic implication in 5-8 words>",
+      "implication": "<2-3 sentences — what this means specifically for GitKraken and its products (GitKraken Desktop, GitLens, Git Integration for Jira, GitKraken Insights). Frame as a concrete opportunity or risk for GitKraken's marketing, messaging, or product direction.>"
+    }}
+  ],
   "sources": {{
     "<short_key>": {{
       "sub": "r/<subreddit>",
@@ -145,15 +171,20 @@ must match precisely:
 }}
 
 Requirements:
+- Produce exactly 3-5 key_signals (the highest-priority takeaways a busy exec should read first)
 - Produce exactly 4-6 topics
+- For each topic, always include signal_strength and trend — these are required fields
 - Produce exactly 6-10 lingo terms
 - Produce exactly 3-4 artifacts
 - Produce exactly 3 concerns
-- Produce 8-12 sources
+- Produce exactly 2-3 connections (each with 3-5 nodes from different subreddits)
+- Produce exactly 3-4 implications (strategic takeaways for developer marketing teams)
+- Produce 20-28 sources — aim to include at least one source per subreddit that appears in the data
 - Every source_key used in topics[].source_keys and artifacts[].source_keys MUST exist as a key in "sources"
 - All URLs in sources must be real Reddit URLs found in the input evidence_links
 - All content must be grounded in actual discussions — do not invent threads or claims
-- Write for a non-technical marketing audience who wants cultural intelligence about developers
+- Write for a non-technical marketing audience at GitKraken (makers of GitKraken Desktop, GitLens, Git Integration for Jira, and GitKraken Insights) who wants cultural intelligence about developers
+- All implications must be specific to GitKraken — reference relevant products by name where applicable
 
 Output only the JSON object. No markdown, no explanation, no code fences.
 """.strip()
@@ -176,13 +207,19 @@ def _wait_for_active(client: genai.Client, file_ref, logger: logging.Logger):
 
 
 def _generate(client: genai.Client, model_name: str, parts: list,
-              logger: logging.Logger) -> str:
+              logger: logging.Logger, thinking: bool = False) -> str:
     """Call generate_content with up to 3 retries on transient errors."""
+    config = None
+    if thinking:
+        config = types.GenerateContentConfig(
+            thinking_config=types.ThinkingConfig(thinking_budget=8000)
+        )
     for attempt in range(3):
         try:
             response = client.models.generate_content(
                 model=model_name,
                 contents=parts,
+                config=config,
             )
             return response.text
         except Exception as e:
@@ -282,24 +319,26 @@ def run_pipeline(run_dir: str, week_range: str, batch_size: int, model_name: str
     ]
     for batch_idx, snap_batch in enumerate(snapshot_batches):
         batch_num = batch_idx + 1
-        logger.info(f"  Summary {batch_num}/{len(snapshot_batches)}: synthesizing patterns...")
+        logger.info(f"  Summary {batch_num}/{len(snapshot_batches)}: synthesizing patterns (thinking)...")
         snap_text = json.dumps(snap_batch, indent=2, ensure_ascii=False)
         summary_text = _generate(
             client, model_name,
             [PROMPT_BATCH_SUMMARY + "\n\nSnapshots:\n" + snap_text],
             logger,
+            thinking=True,
         )
         _save(os.path.join(run_dir, f"batch_{batch_num}_summary.json"), summary_text)
         batch_summary_texts.append(summary_text)
 
     # ── Step 4: final dashboard dataset ──
-    logger.info("  Final step: generating dashboard dataset...")
+    logger.info("  Final step: generating dashboard dataset (thinking)...")
     all_summaries = "\n\n---\n\n".join(batch_summary_texts)
     final_prompt = PROMPT_DASHBOARD.format(week_range=week_range)
     dashboard_text = _generate(
         client, model_name,
         [final_prompt + "\n\nBatch summaries:\n" + all_summaries],
         logger,
+        thinking=True,
     )
 
     try:
