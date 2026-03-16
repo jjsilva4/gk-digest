@@ -326,13 +326,12 @@
     .source-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
     .source-sub {
       font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
-      background: var(--grad-core);
+      background: var(--grad-bright);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .source-label {
       display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: .07em; color: var(--subtle);
-      background: rgba(255,255,255,.06); border-radius: 20px; padding: 1px 7px;
+      letter-spacing: .07em; border-radius: 20px; padding: 1px 7px;
       width: fit-content;
     }
     .source-title { font-size: 12px; color: var(--muted); line-height: 1.4; flex: 1; }
@@ -1126,13 +1125,29 @@
     }
 
     // ── Source grid ──
-    document.getElementById("source-grid").innerHTML = Object.values(D.sources || {}).map(s => `
+    function labelColor(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+      const p = [
+        { bg: 'rgba(182,87,255,.18)',  border: 'rgba(182,87,255,.4)',  color: '#C97BFF' },
+        { bg: 'rgba(1,254,222,.12)',   border: 'rgba(1,254,222,.32)',  color: '#01FEE0' },
+        { bg: 'rgba(236,127,255,.16)', border: 'rgba(236,127,255,.38)', color: '#EC7FFF' },
+        { bg: 'rgba(51,139,239,.16)',  border: 'rgba(51,139,239,.38)', color: '#5FABFF' },
+        { bg: 'rgba(30,165,174,.16)',  border: 'rgba(30,165,174,.38)', color: '#2DC4CE' },
+        { bg: 'rgba(220,100,140,.16)', border: 'rgba(220,100,140,.38)', color: '#E07090' },
+      ];
+      return p[h % p.length];
+    }
+    document.getElementById("source-grid").innerHTML = Object.values(D.sources || {}).map(s => {
+      const lc = labelColor(s.label);
+      return `
       <a class="source-card" href="${escHtml(s.url)}" target="_blank" rel="noopener">
         <div class="source-sub">${escHtml(s.sub)}</div>
-        <div class="source-label">${escHtml(s.label)}</div>
+        <div class="source-label" style="background:${lc.bg};border:1px solid ${lc.border};color:${lc.color}">${escHtml(s.label)}</div>
         <div class="source-title">${escHtml(s.title)}</div>
         <div class="source-arrow">Open thread &#8599;</div>
-      </a>`).join("");
+      </a>`;
+    }).join("");
   }
 </script>
 </body>
