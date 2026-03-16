@@ -110,6 +110,17 @@
     .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
     .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
 
+    /* ─── KEY SIGNALS ─── */
+    .signal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--purple-200);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .signal-card-title { font-size: 14px; font-weight: 700; margin-bottom: 7px; line-height: 1.35; }
+    .signal-card-desc  { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
     /* ─── TOPIC CARDS ─── */
     .topic-card {
       background: var(--surface); border: 1px solid var(--border);
@@ -125,6 +136,41 @@
     .topic-card.active .topic-chevron { transform: rotate(180deg); color: var(--purple-200); }
     .topic-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.35; }
     .topic-card p  { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    /* signal strength */
+    .signal-strength {
+      display: flex; align-items: center; gap: 7px;
+      margin-top: 10px; margin-bottom: 2px;
+    }
+    .signal-strength-label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--subtle);
+    }
+    .signal-dots { display: flex; gap: 3px; align-items: center; }
+    .signal-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--border);
+    }
+    .signal-dot.on-high    { background: var(--negative); }
+    .signal-dot.on-medium  { background: var(--topaz); }
+    .signal-dot.on-low     { background: var(--subtle); }
+    .signal-strength-text {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .signal-strength-text.high    { color: var(--negative); }
+    .signal-strength-text.medium  { color: var(--topaz); }
+    .signal-strength-text.low     { color: var(--subtle); }
+
+    /* trend badge */
+    .trend-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 20px; margin-top: 6px;
+    }
+    .trend-rising   { background: rgba(30,165,174,.12);  color: var(--positive); border: 1px solid rgba(30,165,174,.3); }
+    .trend-stable   { background: rgba(255,255,255,.05); color: var(--subtle);   border: 1px solid rgba(255,255,255,.1); }
+    .trend-declining{ background: rgba(188,78,113,.1);   color: var(--negative); border: 1px solid rgba(188,78,113,.25); }
 
     .topic-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
     .topic-tag {
@@ -227,6 +273,48 @@
     .concern-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
     .concern-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
+    /* ─── CULTURAL CONNECTIONS ─── */
+    .connection-group {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 22px;
+    }
+    .connection-group-title {
+      font-size: 13px; font-weight: 700; margin-bottom: 14px;
+      color: var(--text);
+    }
+    .connection-nodes {
+      position: relative; padding-left: 18px;
+    }
+    .connection-nodes::before {
+      content: ""; position: absolute; left: 3px; top: 8px; bottom: 8px;
+      width: 2px; background: var(--border); border-radius: 2px;
+    }
+    .connection-node {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 6px 0; position: relative;
+    }
+    .connection-node-dot {
+      width: 8px; height: 8px; min-width: 8px; border-radius: 50%;
+      background: var(--purple-200); margin-left: -18px; margin-top: 5px;
+      position: relative; z-index: 1;
+    }
+    .connection-node-text { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+    /* ─── STRATEGIC IMPLICATIONS ─── */
+    .implication-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--aqua);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .implication-title {
+      font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.35;
+    }
+    .implication-text {
+      font-size: 13px; color: var(--muted); line-height: 1.65;
+    }
+
     /* ─── SOURCES ─── */
     .source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
     .source-card {
@@ -285,6 +373,16 @@
 
 <main class="page">
 
+  <!-- ─── EXECUTIVE SUMMARY / KEY SIGNALS (optional) ─── -->
+  <section id="key-signals-section" style="display:none">
+    <div class="section-header">
+      <div class="section-label">Executive Summary</div>
+      <h2>Key Signals This Week</h2>
+      <p>The most important patterns for marketing and product stakeholders.</p>
+    </div>
+    <div class="grid-3" id="key-signals-grid"></div>
+  </section>
+
   <!-- ─── SECTION 1: TOPICS ─── -->
   <section>
     <div class="section-header">
@@ -295,10 +393,30 @@
     <div class="grid-3" id="topics-grid"></div>
   </section>
 
-  <!-- ─── SECTION 2: LINGO ─── -->
+  <!-- ─── SECTION 2: CONCERNS ─── -->
   <section>
     <div class="section-header">
       <div class="section-label">Section 2</div>
+      <h2>What Matters Right Now</h2>
+      <p>The underlying concerns shaping this week's developer conversations.</p>
+    </div>
+    <div class="concern-list" id="concerns-list"></div>
+  </section>
+
+  <!-- ─── CULTURAL CONNECTIONS (optional) ─── -->
+  <section id="connections-section" style="display:none">
+    <div class="section-header">
+      <div class="section-label">Cultural Connections</div>
+      <h2>How These Themes Connect</h2>
+      <p>Relationships between beliefs and concerns across communities.</p>
+    </div>
+    <div class="grid-3" id="connections-grid"></div>
+  </section>
+
+  <!-- ─── SECTION 3: LINGO ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 3</div>
       <h2>Lingo This Week</h2>
       <p>Phrases appearing repeatedly across discussions. Hover a term for its full definition.</p>
     </div>
@@ -359,11 +477,22 @@
     <div class="source-grid" id="source-grid"></div>
   </section>
 
+  <!-- ─── METHODOLOGY ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Methodology</div>
+      <h2>How This Briefing Is Made</h2>
+    </div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:720px;">
+      Every Sunday, top posts from 30 developer subreddits are fetched via the Reddit API and packaged into PDFs. These are uploaded to Gemini for multi-step cultural analysis — extracting beliefs, artifacts, and language, then synthesizing patterns across communities. The final dataset is used to automatically rebuild and publish this dashboard to GitHub Pages.
+    </p>
+  </section>
+
 </main>
 
 <footer>
   <span id="footer-text">GK Developer Culture Briefing</span>
-  <span class="footer-brand">GitKraken Marketing</span>
+  <span class="footer-brand">GitKraken Research</span>
 </footer>
 
 <script>
