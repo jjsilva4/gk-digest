@@ -4,6 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GK Developer Culture Briefing</title>
+
+  <!-- Open Graph / link preview -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://jjsilva4.github.io/gk-digest/" />
+  <meta property="og:site_name"   content="GK Digest" />
+  <meta property="og:title"       content="GK Developer Culture Briefing — Mar 08-Mar 15, 2026" />
+  <meta property="og:description" content="Developers are torn between AI's productivity boosts and deep anxieties about job security and declining code quality." />
+  <meta property="og:image"       content="https://jjsilva4.github.io/gk-digest/og-image.png" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="GK Developer Culture Briefing — Mar 08-Mar 15, 2026" />
+  <meta name="twitter:description" content="Developers are torn between AI's productivity boosts and deep anxieties about job security and declining code quality." />
+  <meta name="twitter:image"      content="https://jjsilva4.github.io/gk-digest/og-image.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -98,6 +110,17 @@
     .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
     .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
 
+    /* ─── KEY SIGNALS ─── */
+    .signal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--purple-200);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .signal-card-title { font-size: 14px; font-weight: 700; margin-bottom: 7px; line-height: 1.35; }
+    .signal-card-desc  { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
     /* ─── TOPIC CARDS ─── */
     .topic-card {
       background: var(--surface); border: 1px solid var(--border);
@@ -113,6 +136,41 @@
     .topic-card.active .topic-chevron { transform: rotate(180deg); color: var(--purple-200); }
     .topic-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.35; }
     .topic-card p  { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    /* signal strength */
+    .signal-strength {
+      display: flex; align-items: center; gap: 7px;
+      margin-top: 10px; margin-bottom: 2px;
+    }
+    .signal-strength-label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--subtle);
+    }
+    .signal-dots { display: flex; gap: 3px; align-items: center; }
+    .signal-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--border);
+    }
+    .signal-dot.on-high    { background: var(--negative); }
+    .signal-dot.on-medium  { background: var(--topaz); }
+    .signal-dot.on-low     { background: var(--subtle); }
+    .signal-strength-text {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .signal-strength-text.high    { color: var(--negative); }
+    .signal-strength-text.medium  { color: var(--topaz); }
+    .signal-strength-text.low     { color: var(--subtle); }
+
+    /* trend badge */
+    .trend-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 20px; margin-top: 6px;
+    }
+    .trend-rising   { background: rgba(30,165,174,.12);  color: var(--positive); border: 1px solid rgba(30,165,174,.3); }
+    .trend-stable   { background: rgba(255,255,255,.05); color: var(--subtle);   border: 1px solid rgba(255,255,255,.1); }
+    .trend-declining{ background: rgba(188,78,113,.1);   color: var(--negative); border: 1px solid rgba(188,78,113,.25); }
 
     .topic-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
     .topic-tag {
@@ -215,6 +273,48 @@
     .concern-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
     .concern-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
+    /* ─── CULTURAL CONNECTIONS ─── */
+    .connection-group {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 22px;
+    }
+    .connection-group-title {
+      font-size: 13px; font-weight: 700; margin-bottom: 14px;
+      color: var(--text);
+    }
+    .connection-nodes {
+      position: relative; padding-left: 18px;
+    }
+    .connection-nodes::before {
+      content: ""; position: absolute; left: 3px; top: 8px; bottom: 8px;
+      width: 2px; background: var(--border); border-radius: 2px;
+    }
+    .connection-node {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 6px 0; position: relative;
+    }
+    .connection-node-dot {
+      width: 8px; height: 8px; min-width: 8px; border-radius: 50%;
+      background: var(--purple-200); margin-left: -18px; margin-top: 5px;
+      position: relative; z-index: 1;
+    }
+    .connection-node-text { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+    /* ─── STRATEGIC IMPLICATIONS ─── */
+    .implication-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--aqua);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .implication-title {
+      font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.35;
+    }
+    .implication-text {
+      font-size: 13px; color: var(--muted); line-height: 1.65;
+    }
+
     /* ─── SOURCES ─── */
     .source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
     .source-card {
@@ -273,6 +373,16 @@
 
 <main class="page">
 
+  <!-- ─── EXECUTIVE SUMMARY / KEY SIGNALS (optional) ─── -->
+  <section id="key-signals-section" style="display:none">
+    <div class="section-header">
+      <div class="section-label">Executive Summary</div>
+      <h2>Key Signals This Week</h2>
+      <p>The most important patterns for marketing and product stakeholders.</p>
+    </div>
+    <div class="grid-3" id="key-signals-grid"></div>
+  </section>
+
   <!-- ─── SECTION 1: TOPICS ─── -->
   <section>
     <div class="section-header">
@@ -283,10 +393,30 @@
     <div class="grid-3" id="topics-grid"></div>
   </section>
 
-  <!-- ─── SECTION 2: LINGO ─── -->
+  <!-- ─── SECTION 2: CONCERNS ─── -->
   <section>
     <div class="section-header">
       <div class="section-label">Section 2</div>
+      <h2>What Matters Right Now</h2>
+      <p>The underlying concerns shaping this week's developer conversations.</p>
+    </div>
+    <div class="concern-list" id="concerns-list"></div>
+  </section>
+
+  <!-- ─── CULTURAL CONNECTIONS (optional) ─── -->
+  <section id="connections-section" style="display:none">
+    <div class="section-header">
+      <div class="section-label">Cultural Connections</div>
+      <h2>How These Themes Connect</h2>
+      <p>Relationships between beliefs and concerns across communities.</p>
+    </div>
+    <div class="grid-3" id="connections-grid"></div>
+  </section>
+
+  <!-- ─── SECTION 3: LINGO ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 3</div>
       <h2>Lingo This Week</h2>
       <p>Phrases appearing repeatedly across discussions. Hover a term for its full definition.</p>
     </div>
@@ -304,37 +434,24 @@
     </div>
   </section>
 
-  <!-- ─── SECTION 3: ARTIFACTS ─── -->
+  <!-- ─── SECTION 4: ARTIFACTS ─── -->
   <section>
     <div class="section-header">
-      <div class="section-label">Section 3</div>
+      <div class="section-label">Section 4</div>
       <h2>What People Are Sharing</h2>
       <p>Tools, projects, and resources circulating in discussions this week. Click for source threads.</p>
     </div>
     <div class="grid-3" id="artifacts-grid"></div>
   </section>
 
-  <!-- ─── SECTION 4: CONCERNS ─── -->
-  <section>
+  <!-- ─── STRATEGIC IMPLICATIONS (optional) ─── -->
+  <section id="implications-section" style="display:none">
     <div class="section-header">
-      <div class="section-label">Section 4</div>
-      <h2>What Matters Right Now</h2>
-      <p>The underlying concerns shaping this week's developer conversations.</p>
+      <div class="section-label">Strategic Implications</div>
+      <h2>What This Means for GitKraken</h2>
+      <p>Translating cultural signals into actionable opportunities for GitKraken products and marketing.</p>
     </div>
-    <div class="concern-list" id="concerns-list"></div>
-  </section>
-
-  <!-- ─── METHODOLOGY ─── -->
-  <section>
-    <div class="section-header">
-      <div class="section-label">Methodology</div>
-      <h2>How This Briefing Is Made</h2>
-    </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;">
-      <p style="font-size:14px;color:var(--muted);line-height:1.8;max-width:820px;">
-        Every Sunday night, an automated Python script fetches the top posts from 30 developer subreddits via the Reddit API — collecting up to 50 posts per community, filtered to exclude mod posts, stickied announcements, and low-engagement threads (fewer than 5 comments). For each qualifying post, the top 20 comments and their replies are captured. The results are packaged into per-subreddit PDFs — one per community — which are then automatically uploaded to Gemini for cultural and ethnographic analysis using a multi-step pipeline: PDFs are analyzed in batches of 10, compressed into cultural snapshots, synthesized into cross-batch summaries, and finally distilled into a single dashboard dataset. Gemini identifies conversation clusters, recurring beliefs, shared artifacts, behavioral archetypes, and key lingo. That dataset is used to automatically regenerate this dashboard and push it to GitHub Pages — updated every week without any manual steps.
-      </p>
-    </div>
+    <div class="grid-3" id="implications-grid"></div>
   </section>
 
   <!-- ─── SOURCES ─── -->
@@ -347,6 +464,17 @@
     <div class="source-grid" id="source-grid"></div>
   </section>
 
+  <!-- ─── METHODOLOGY ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Methodology</div>
+      <h2>How This Briefing Is Made</h2>
+    </div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:720px;">
+      Every Sunday, top posts from 30 developer subreddits are fetched via the Reddit API and packaged into PDFs. These are uploaded to Gemini for multi-step cultural analysis — extracting beliefs, artifacts, and language, then synthesizing patterns across communities. The final dataset is used to automatically rebuild and publish this dashboard to GitHub Pages.
+    </p>
+  </section>
+
 </main>
 
 <footer>
@@ -356,290 +484,452 @@
 
 <script>
   const DIGEST_DATA = {
-  "topics": [
+  "key_signals": [
     {
       "icon": "🤖",
-      "title": "Developers Confront the Double-Edged Sword of AI",
-      "description": "Developers are intensely debating AI's role, viewing it as both a powerful productivity tool and a source of low-quality 'slop' code. This central conflict pits the allure of speed against the enduring value of human craftsmanship and deep expertise. The conversation spans from enthusiastic adoption in some communities to deep skepticism and career anxiety in others.",
+      "title": "Developers Grapple with AI's Double-Edged Sword",
+      "description": "Developers are torn between AI's productivity boosts and deep anxieties about job security and declining code quality."
+    },
+    {
+      "icon": "🤙",
+      "title": "'Vibe Coding' Emerges as a Controversial Trend",
+      "description": "A new term, 'vibe coding,' describes rapidly building AI-driven projects, sparking debate about its long-term viability and professional merit."
+    },
+    {
+      "icon": "🧱",
+      "title": "Renewed Focus on Engineering Fundamentals",
+      "description": "As a counter-reaction to AI hype, communities are emphasizing the timeless value of strong architecture, performance, and non-coding skills."
+    }
+  ],
+  "topics": [
+    {
+      "icon": "📉",
+      "title": "Developers Decry Rise of Low-Quality 'AI Slop'",
+      "description": "Across communities, there's a growing frustration with low-quality, AI-generated code, dubbed 'AI slop'. This is fueling concerns that over-reliance on AI is degrading software quality, creating maintenance nightmares, and devaluing fundamental programming skills.",
       "tags": [
         "r/devops",
-        "r/cscareerquestions",
-        "r/ExperiencedDevs"
-      ],
-      "source_keys": [
-        "aiRuinedDev",
-        "aiTakingJobs",
-        "concernedAboutAI"
-      ]
-    },
-    {
-      "icon": "🌊",
-      "title": "A New 'Vibe Coding' Trend Sparks Controversy",
-      "description": "A new term, 'vibe coding,' is gaining traction to describe a more intuitive, less structured approach to development, often heavily reliant on AI. While proponents see it as a faster way to build, experienced developers are raising alarms, linking it to failed projects and a lack of fundamental engineering discipline.",
-      "tags": [
         "r/ExperiencedDevs",
-        "r/ClaudeAI",
-        "r/vibecoding"
+        "r/cpp"
       ],
       "source_keys": [
-        "vibeCodingHammer",
-        "vibeCodedProjectsFail",
-        "vibeFounder"
-      ]
+        "devops-ai-ruined",
+        "exp-dev-vibe-hammer",
+        "cpp-ai-concern"
+      ],
+      "signal_strength": "high",
+      "trend": "rising"
     },
     {
-      "icon": "💪",
-      "title": "Fundamentals and Soft Skills Gain Renewed Importance",
-      "description": "In response to the AI hype, there is a strong counter-movement emphasizing timeless, human-centric skills. Discussions highlight that non-coding abilities like communication and strategic thinking are what truly elevate senior engineers. This trend suggests a belief that technology alone is not enough to build great products or careers.",
+      "icon": "🎢",
+      "title": "'Vibe Coding' Creates a New Developer Subculture",
+      "description": "A new trend called 'vibe coding' involves using AI to rapidly build and launch projects based on intuition rather than structured planning. While celebrated in communities like r/vibecoding, it is heavily criticized by experienced developers who see it as undisciplined and unsustainable, leading to project failures.",
       "tags": [
+        "r/vibecoding",
         "r/ExperiencedDevs",
-        "r/learnprogramming",
-        "r/softwaretesting"
+        "r/github",
+        "r/ClaudeAI"
       ],
       "source_keys": [
-        "nonCodingSkills",
-        "tutorialsVsFreezing",
-        "valuableQA"
-      ]
-    },
-    {
-      "icon": "🛡️",
-      "title": "Developers Champion Privacy, Security, and Openness",
-      "description": "There's a rising tide of concern over corporate control and data privacy, with calls to 'de-google' and 'de-microsoft' gaining traction. Conversations around open-source licenses, data breaches, and invasive age-verification bills show a community deeply invested in user freedom and building a more secure, transparent internet.",
-      "tags": [
-        "r/opensource",
-        "r/linux",
-        "r/docker"
+        "vibecoding-founder-saas",
+        "exp-dev-vibe-hammer",
+        "github-vibecoder-hate",
+        "claude-vibe-fail"
       ],
-      "source_keys": [
-        "degoogle",
-        "nyAgeVerification",
-        "dockerBreach"
-      ]
+      "signal_strength": "medium",
+      "trend": "rising"
     },
     {
-      "icon": "🚀",
-      "title": "The Community Remains Obsessed with Performance",
-      "description": "A constant theme across language and tool-specific communities is the relentless pursuit of performance and efficiency. Debates like 'Polars vs. Pandas' in the Python world or discussions on pushing Node.js to its limits show that speed and resourcefulness are key markers of quality and skill for developers.",
+      "icon": "⚡",
+      "title": "Performance and Efficiency Become Key Status Symbols",
+      "description": "In a pushback against software 'bloat,' often blamed on new AI features, developers are intensely focused on performance. This is seen in vigorous debates over the speed of data libraries like Polars vs. Pandas and praise for efficient, lightweight tools built with Rust.",
       "tags": [
         "r/Python",
         "r/node",
-        "r/rust"
+        "r/tauri",
+        "r/vscode"
       ],
       "source_keys": [
-        "polarsVsPandas",
-        "pushingNodeJS",
-        "redoxCO"
-      ]
+        "python-polars-pandas",
+        "node-push-process",
+        "tauri-api-client",
+        "vscode-ai-editor-ads"
+      ],
+      "signal_strength": "medium",
+      "trend": "stable"
+    },
+    {
+      "icon": "🦀",
+      "title": "Rust's Design Principles Influence Other Languages",
+      "description": "The Rust programming language is being discussed not just for its own merits but as an inspiration for better practices across the ecosystem. Developers are actively implementing Rust-like patterns, such as its robust error handling, in other languages like TypeScript to build more resilient applications.",
+      "tags": [
+        "r/rust",
+        "r/typescript",
+        "r/tauri"
+      ],
+      "source_keys": [
+        "ts-rust-error",
+        "rust-redox-cof",
+        "tauri-api-client"
+      ],
+      "signal_strength": "low",
+      "trend": "rising"
+    },
+    {
+      "icon": "🛡️",
+      "title": "Heightened Anxiety Around Security and User Privacy",
+      "description": "Recent breaches and controversial legislation are fueling developer conversations about security and privacy. Communities are sharing cautionary tales about vulnerabilities in common tools like Docker and debating the ethical imperative to protect user data from corporate and government overreach.",
+      "tags": [
+        "r/docker",
+        "r/linux",
+        "r/webdev"
+      ],
+      "source_keys": [
+        "docker-breach",
+        "linux-ny-age-bill",
+        "webdev-user-data"
+      ],
+      "signal_strength": "medium",
+      "trend": "stable"
     }
   ],
   "lingo": [
     {
       "term": "Vibe Coding",
-      "tooltip": "A controversial term for a style of software development that relies on intuition, rapid iteration, and heavy use of AI assistants, often without a formal plan or deep understanding of the underlying code. It's frequently criticized by experienced developers as a path to failed projects.",
-      "meaning": "Building software based on intuition and AI, not a plan.",
-      "origin": "r/ExperiencedDevs · r/ClaudeAI"
+      "tooltip": "A slang term for a style of software development that relies heavily on AI code generation and intuition ('vibes') rather than formal specifications, planning, or deep technical understanding. It prioritizes speed and rapid prototyping, but is often criticized for producing low-quality, unmaintainable code.",
+      "meaning": "Building projects quickly with AI, based on a gut feeling.",
+      "origin": "r/vibecoding · r/ExperiencedDevs"
     },
     {
       "term": "AI Slop",
-      "tooltip": "A derogatory term used to describe low-quality, buggy, or nonsensical code and content generated by AI tools. It reflects a widespread concern that the proliferation of AI is leading to a decline in software quality and polluting the web with useless information.",
-      "meaning": "Low-quality, AI-generated code or content.",
-      "origin": "r/devops · r/programming"
-    },
-    {
-      "term": "Rugpull",
-      "tooltip": "Originally from the cryptocurrency world, this term describes a situation where a company or project creator suddenly and unexpectedly abandons a project or discontinues a service, leaving its users or investors with something worthless. It reflects a general mistrust of corporate promises.",
-      "meaning": "When a company suddenly abandons a project or service.",
+      "tooltip": "A derogatory term for low-quality, buggy, or nonsensical code and content generated by AI. It's used to criticize the trend of blindly trusting AI outputs without proper human review, leading to a degradation of software and information quality.",
+      "meaning": "Low-quality, messy code generated by AI.",
       "origin": "r/devops · r/gamedev"
     },
     {
-      "term": "FOSS",
-      "tooltip": "An acronym for 'Free and Open Source Software.' It represents a core philosophy in the developer community centered on software that is free to use, modify, and distribute. This ethos values transparency, community collaboration, and freedom from corporate control.",
-      "meaning": "Free and Open Source Software.",
-      "origin": "r/opensource · r/linux"
+      "term": "Enshittification",
+      "tooltip": "A term describing the process by which online platforms and tools degrade over time. Initially, they are good to their users; then they abuse their users to make things better for their business customers; finally, they abuse their business customers to claw back all the value for themselves.",
+      "meaning": "When a good online service becomes terrible over time.",
+      "origin": "r/technology · r/vscode"
     },
     {
-      "term": "Enshittification",
-      "tooltip": "A popular term describing the process by which online platforms decay over time. They first offer a good service to attract users, then abuse those users to benefit business customers, and finally abuse the business customers to extract all remaining value for themselves.",
-      "meaning": "The process of digital platforms getting worse over time.",
-      "origin": "r/technology · r/webdev"
+      "term": "Rugpull",
+      "tooltip": "Originating in the crypto space, this term is used when a company or project abruptly withdraws support, funding, or a previously available service, leaving its users or investors with a worthless or non-functional product. It implies a deliberate and often deceptive action by the creators.",
+      "meaning": "When a company suddenly abandons a project or its users.",
+      "origin": "r/devops · r/vibecoding"
     },
     {
       "term": "Local-first",
-      "tooltip": "A software development philosophy that prioritizes running software on the user's own device, rather than relying on a central server. This approach enhances privacy, offline usability, and user ownership of data, running counter to the trend of cloud-centric applications.",
-      "meaning": "Software that works on your device without the cloud.",
-      "origin": "r/tauri · r/opensource"
+      "tooltip": "An architectural principle for software that prioritizes the use of data stored on a user's local device, rather than relying solely on a remote server. This approach enhances privacy, offline functionality, and performance, with cloud synchronization being a secondary feature.",
+      "meaning": "Software that works offline and keeps data on your device.",
+      "origin": "r/tauri · r/technology"
+    },
+    {
+      "term": "FOSS",
+      "tooltip": "An acronym for Free and Open Source Software. 'Free' refers to freedom (the freedom to run, copy, distribute, study, change and improve the software), not necessarily price. It's a foundational concept in communities that value user control and transparency.",
+      "meaning": "Free and Open Source Software.",
+      "origin": "r/linux · r/opensource"
+    },
+    {
+      "term": "Copyleft",
+      "tooltip": "A type of software license (like the GPL) that allows users to freely use, modify, and distribute a work, but requires that any derivative works must also be distributed under the same license. It uses copyright law to ensure that software remains free and open.",
+      "meaning": "A license ensuring software and its derivatives stay free.",
+      "origin": "r/rust · r/programming"
     }
   ],
   "artifacts": [
     {
-      "icon": "🦀",
-      "name": "Rust",
-      "description": "The Rust programming language is frequently cited as an ideal for modern software development due to its emphasis on safety, performance, and robust error handling. Other language communities are even adopting its patterns, showing its wide-ranging influence as a benchmark for quality and reliability.",
-      "examples_label": "Concepts mentioned",
+      "icon": "🤖",
+      "name": "AI Code Assistants",
+      "description": "AI assistants like ChatGPT, Claude, and GitHub Copilot are the most-discussed tools this week, but sentiment is deeply divided. They are seen as both powerful productivity enhancers for some tasks and the primary source of 'AI slop' and career anxiety for others.",
+      "examples_label": "Tools mentioned",
       "examples": [
-        "Redox OS",
-        "Rust-like error handling",
-        "Tauri framework"
+        "ChatGPT",
+        "Claude",
+        "GitHub Copilot"
       ],
       "source_keys": [
-        "redoxCO",
-        "rustErrorHandling",
-        "tauriAPIClient"
+        "cscareer-ai-pessimism",
+        "devops-ai-ruined",
+        "cpp-ai-concern"
       ]
     },
     {
-      "icon": "🤖",
-      "name": "AI Coding Assistants",
-      "description": "Tools like GitHub Copilot, Claude, and ChatGPT are at the center of the developer conversation. They are seen as indispensable for some tasks but are also heavily criticized for introducing subtle bugs, degrading IDE performance, and encouraging a superficial understanding of code.",
-      "examples_label": "Tools mentioned",
+      "icon": "🦀",
+      "name": "The Rust Ecosystem",
+      "description": "Projects built with Rust are being shared as exemplars of modern, high-performance software. The lightweight application framework Tauri and the experimental Redox OS are highlighted as examples of what's possible with a focus on memory safety and efficiency.",
+      "examples_label": "Projects mentioned",
       "examples": [
-        "GitHub Copilot",
-        "Claude",
-        "ChatGPT"
+        "Tauri",
+        "Redox OS",
+        "Rust Language"
       ],
       "source_keys": [
-        "vibeCodingHammer",
-        "aiRuinedDev",
-        "aiAdvertising"
+        "tauri-api-client",
+        "rust-redox-cof",
+        "ts-rust-error"
       ]
     },
     {
       "icon": "📊",
-      "name": "High-Performance Libraries",
-      "description": "The choice of data processing libraries is a key battleground for performance. The debate between Polars and Pandas in the Python community is a prime example of developers' willingness to adopt newer, faster tools to handle large datasets more efficiently, even if it means moving away from established standards.",
+      "name": "High-Performance Data Libraries",
+      "description": "A fierce debate in the Python community compares the performance of the newer Polars library against the incumbent Pandas. This discussion is a proxy for a wider trend: developers are actively seeking and promoting tools that prioritize raw speed and resource efficiency.",
       "examples_label": "Tools mentioned",
       "examples": [
         "Polars",
         "Pandas"
       ],
       "source_keys": [
-        "polarsVsPandas"
+        "python-polars-pandas"
       ]
     }
   ],
   "concerns": [
     {
-      "title": "AI is degrading code quality and devaluing human skills",
-      "description": "A pervasive fear across multiple communities is that over-reliance on AI is creating a generation of developers who can't code without assistance. This leads to an increase in low-quality 'slop' code, making software less reliable and maintenance more difficult."
+      "title": "AI is Degrading Code Quality and Threatening Jobs",
+      "description": "The dominant concern this week is that the proliferation of AI tools is flooding projects with low-quality 'slop', creating technical debt. This is coupled with significant anxiety, particularly among junior developers, that AI will devalue their skills and make it harder to enter or stay in the profession."
     },
     {
-      "title": "The job market feels increasingly precarious and frustrating",
-      "description": "Discussions in career-focused subreddits reveal high anxiety about the current job market. Developers are concerned about AI's potential to eliminate jobs, the effectiveness of platforms like LinkedIn, and the overall difficulty of navigating a competitive landscape."
+      "title": "Corporate Control Compromises Privacy and Tool Quality",
+      "description": "There is a strong undercurrent of distrust towards large tech corporations. Developers express frustration over forced AI integration in tools like VS Code, which they see as advertising and bloat, and are concerned about legislative bills and corporate policies that threaten user privacy."
     },
     {
-      "title": "Corporate influence threatens user privacy and developer freedom",
-      "description": "There is a strong undercurrent of skepticism towards big tech. Developers are worried about monopolistic practices, the security of user data on corporate platforms, and government overreach, fueling a desire for open-source and local-first alternatives."
+      "title": "The Developer Job Market is Overly Difficult",
+      "description": "Discussions in career-focused subreddits reveal high levels of frustration with the current job market. Developers are struggling to get responses from applications on platforms like LinkedIn and are questioning how to remain valuable as AI and market saturation change the landscape."
+    }
+  ],
+  "connections": [
+    {
+      "title": "The Cross-Community AI Quality Debate",
+      "nodes": [
+        {
+          "community": "r/ExperiencedDevs",
+          "insight": "This community is highly skeptical, viewing AI-driven 'vibe coding' as a recipe for unmaintainable products."
+        },
+        {
+          "community": "r/devops",
+          "insight": "Devops professionals are pragmatically concerned about 'AI slop' entering production and increasing system fragility."
+        },
+        {
+          "community": "r/cscareerquestions",
+          "insight": "Aspiring developers fear that AI will automate entry-level tasks, making it impossible to gain foundational experience."
+        },
+        {
+          "community": "r/gamedev",
+          "insight": "Game developers worry about the legal risks and lack of creative control associated with using AI-generated assets."
+        }
+      ]
+    },
+    {
+      "title": "Performance and Efficiency as a Shared Virtue",
+      "nodes": [
+        {
+          "community": "r/node",
+          "insight": "Developers here are focused on pushing the limits of the runtime, sharing tips on maximizing a single process's performance."
+        },
+        {
+          "community": "r/Python",
+          "insight": "The community is intensely debating data libraries, with many championing Polars for its superior speed over Pandas."
+        },
+        {
+          "community": "r/tauri",
+          "insight": "This community celebrates the creation of lean, fast desktop apps by leveraging Rust's performance."
+        },
+        {
+          "community": "r/vscode",
+          "insight": "Users are complaining that new AI features are causing editor 'bloat' and degrading the core user experience."
+        }
+      ]
+    },
+    {
+      "title": "Defining Modern Developer Professionalism",
+      "nodes": [
+        {
+          "community": "r/ExperiencedDevs",
+          "insight": "This group argues that crucial non-coding skills like communication and business acumen are what truly define a senior engineer."
+        },
+        {
+          "community": "r/golang",
+          "insight": "Professionalism is defined by creating robust, maintainable systems through well-defined project architecture and stability."
+        },
+        {
+          "community": "r/learnprogramming",
+          "insight": "Newcomers are trying to bridge the professional gap between following tutorials and being able to build projects from scratch."
+        },
+        {
+          "community": "r/softwaretesting",
+          "insight": "Testers are discussing how to provide more value by moving beyond simple automation and adopting a broader quality engineering mindset."
+        }
+      ]
+    }
+  ],
+  "implications": [
+    {
+      "title": "Position GitKraken as the Human-in-the-Loop AI Partner",
+      "implication": "Messaging should frame GitKraken tools (especially GitLens) as essential for reviewing, understanding, and validating AI-generated code. This counters the 'AI slop' narrative by empowering developers with human oversight and quality control, making AI a safer tool to adopt."
+    },
+    {
+      "title": "Market GitKraken Desktop for 'Vibe Coding' Chaos",
+      "implication": "Create content showing how the visual graph in GitKraken Desktop helps teams make sense of the messy, non-linear commit histories often produced by rapid, AI-assisted development. This positions the product as the essential tool for bringing order and understanding to chaotic, experimental projects."
+    },
+    {
+      "title": "Champion Engineering Fundamentals to Counter 'Slop'",
+      "implication": "Align marketing with the 'back to basics' trend by emphasizing how GitKraken products enforce core developer workflows like atomic commits and structured code reviews. This shows GitKraken is an ally in maintaining high standards, directly appealing to developers frustrated with AI-driven quality decline."
+    },
+    {
+      "title": "Use GitKraken Insights to Measure AI's True Impact",
+      "implication": "Position GitKraken Insights as a vital tool for managers to analyze how AI coding assistants are affecting their teams. It can help answer critical questions by tracking metrics like code churn and PR sizes, providing data to validate or debunk the productivity claims of AI tools."
     }
   ],
   "sources": {
-    "vibeCodingHammer": {
+    "exp-dev-vibe-hammer": {
       "sub": "r/ExperiencedDevs",
-      "label": "Career Development",
-      "title": "We just got hit with the “Vibecoding” hammer.",
+      "label": "Industry Trend",
+      "title": "We just got hit with the 'vibecoding' hammer.",
       "url": "https://www.reddit.com/r/ExperiencedDevs/comments/1rqt03s/we_just_got_hit_with_the_vibecoding_hammer/"
     },
-    "aiTakingJobs": {
-      "sub": "r/cscareerquestions",
-      "label": "Career Anxiety",
-      "title": "I was very pessimistic about AI taking jobs. Then I played with Devin.",
-      "url": "https://www.reddit.com/r/cscareerquestions/comments/1rteomh/i_was_very_pessimistic_about_ai_taking_jobs_then/"
+    "ask-prog-too-late": {
+      "sub": "r/AskProgramming",
+      "label": "Career Advice",
+      "title": "Am I too late to start programming at 38 with AI getting so good?",
+      "url": "https://www.reddit.com/r/AskProgramming/comments/1ru3of0/am_i_too_late_to_start_programming_at_38_with_ai/"
     },
-    "aiRuinedDev": {
-      "sub": "r/devops",
-      "label": "Industry Trends",
-      "title": "Has AI ruined software development?",
-      "url": "https://www.reddit.com/r/devops/comments/1rsf8eo/has_ai_ruined_software_development/"
-    },
-    "concernedAboutAI": {
-      "sub": "r/cpp",
-      "label": "Tooling Discussion",
-      "title": "I feel concerned about my AI usage",
-      "url": "https://www.reddit.com/r/cpp/comments/1rrrh3e/i_feel_concerned_about_my_ai_usage/"
-    },
-    "vibeCodedProjectsFail": {
+    "claude-vibe-fail": {
       "sub": "r/ClaudeAI",
-      "label": "AI Development",
+      "label": "AI Discussion",
       "title": "Why the majority of vibe coded projects fail",
       "url": "https://www.reddit.com/r/ClaudeAI/comments/1rt31th/why_the_majority_of_vibe_coded_projects_fail/"
     },
-    "vibeFounder": {
-      "sub": "r/vibecoding",
-      "label": "Entrepreneurship",
-      "title": "A founder vibecoded his entire SaaS with AI and is now making $15k MRR",
-      "url": "https://www.reddit.com/r/vibecoding/comments/1rt4r7z/a_founder_vibecoded_his_entire_saas_with_ai/"
-    },
-    "nonCodingSkills": {
+    "exp-dev-non-coding": {
       "sub": "r/ExperiencedDevs",
-      "label": "Career Growth",
+      "label": "Career Development",
       "title": "Senior engineers, what non-coding skill made the biggest impact on your career?",
       "url": "https://www.reddit.com/r/ExperiencedDevs/comments/1rpo0gt/senior_engineers_what_noncoding_skill_made_the/"
     },
-    "tutorialsVsFreezing": {
-      "sub": "r/learnprogramming",
-      "label": "Learning to Code",
-      "title": "Can anyone else follow tutorials fine, but freeze when trying to do something on their own?",
-      "url": "https://www.reddit.com/r/learnprogramming/comments/1rol74a/can_anyone_else_follow_tutorials_fine_but_freeze/"
+    "cscareer-ai-pessimism": {
+      "sub": "r/cscareerquestions",
+      "label": "Career Anxiety",
+      "title": "I was very pessimistic about AI taking jobs. Then I actually started using it for a personal project.",
+      "url": "https://www.reddit.com/r/cscareerquestions/comments/1rteomh/i_was_very_pessimistic_about_ai_taking_jobs_then/"
     },
-    "valuableQA": {
-      "sub": "r/softwaretesting",
-      "label": "Quality Assurance",
-      "title": "How to become a more valuable QA engineer?",
-      "url": "https://www.reddit.com/r/softwaretesting/comments/1ru14uq/how_to_become_a_more_valuable_qa_engineer/"
+    "devops-ai-ruined": {
+      "sub": "r/devops",
+      "label": "Tooling Critique",
+      "title": "Has AI ruined software development?",
+      "url": "https://www.reddit.com/r/devops/comments/1rsf8eo/has_ai_ruined_software_development/"
     },
-    "degoogle": {
-      "sub": "r/opensource",
-      "label": "Open Source",
-      "title": "Degoogle and demicrosoft",
-      "url": "https://www.reddit.com/r/opensource/comments/1rpd1el/degoogle_and_demicrosoft/"
+    "python-polars-pandas": {
+      "sub": "r/Python",
+      "label": "Library Debate",
+      "title": "Polars vs Pandas",
+      "url": "https://www.reddit.com/r/Python/comments/1rojz8u/polars_vs_pandas/"
     },
-    "nyAgeVerification": {
-      "sub": "r/linux",
-      "label": "Privacy & Politics",
-      "title": "New York age verification bill requires scanning your face to browse the web",
-      "url": "https://www.reddit.com/r/linux/comments/1rphvoa/new_york_age_verification_bill_requires/"
-    },
-    "dockerBreach": {
+    "docker-breach": {
       "sub": "r/docker",
       "label": "Security Incident",
       "title": "We just got breached because of vulnerabilities in our base images",
       "url": "https://www.reddit.com/r/docker/comments/1ru2xsk/we_just_got_breached_because_of_vulnerabilities/"
     },
-    "polarsVsPandas": {
-      "sub": "r/Python",
-      "label": "Library Comparison",
-      "title": "Polars vs Pandas",
-      "url": "https://www.reddit.com/r/Python/comments/1rojz8u/polars_vs_pandas/"
+    "cpp-ai-concern": {
+      "sub": "r/cpp",
+      "label": "Personal Reflection",
+      "title": "I feel concerned about my AI usage.",
+      "url": "https://www.reddit.com/r/cpp/comments/1rrrh3e/i_feel_concerned_about_my_ai_usage/"
     },
-    "pushingNodeJS": {
+    "gamedev-ai-assets": {
+      "sub": "r/gamedev",
+      "label": "AI Ethics",
+      "title": "Why even risk using AI assets when there are so many good non-AI options?",
+      "url": "https://www.reddit.com/r/gamedev/comments/1rpj2d4/why_even_risk_using_ai_assets_when_there_are_so/"
+    },
+    "github-vibecoder-hate": {
+      "sub": "r/github",
+      "label": "Community Conflict",
+      "title": "Vibecoders sending me hate for rejecting their low-quality AI PRs",
+      "url": "https://www.reddit.com/r/github/comments/1rqyq0y/vibecoders_sending_me_hate_for_rejecting_their/"
+    },
+    "learn-prog-tutorial-freeze": {
+      "sub": "r/learnprogramming",
+      "label": "Learning Challenge",
+      "title": "Can anyone else follow tutorials fine but freeze when trying to do a project from scratch?",
+      "url": "https://www.reddit.com/r/learnprogramming/comments/1rol74a/can_anyone_else_follow_tutorials_fine_but_freeze/"
+    },
+    "golang-folder-structure": {
+      "sub": "r/golang",
+      "label": "Best Practices",
+      "title": "Is this a good folder structure for a production Go app?",
+      "url": "https://www.reddit.com/r/golang/comments/1rpqjlz/is_this_a_good_folder_structure_for_a_production/"
+    },
+    "linux-ny-age-bill": {
+      "sub": "r/linux",
+      "label": "Privacy & Politics",
+      "title": "New York age verification bill requires digital ID for all internet access",
+      "url": "https://www.reddit.com/r/linux/comments/1rphvoa/new_york_age_verification_bill_requires/"
+    },
+    "node-push-process": {
       "sub": "r/node",
       "label": "Performance Tuning",
-      "title": "How far have you pushed a single nodejs process?",
+      "title": "How far have you pushed a single NodeJS process?",
       "url": "https://www.reddit.com/r/node/comments/1rsrh3e/how_far_have_you_pushed_a_single_nodejs_process/"
     },
-    "redoxCO": {
+    "rust-redox-cof": {
       "sub": "r/rust",
-      "label": "Operating Systems",
+      "label": "Project News",
       "title": "Redox OS has adopted a Certificate of Origin",
       "url": "https://www.reddit.com/r/rust/comments/1rp584k/redox_os_has_adopted_a_certificate_of_origin/"
     },
-    "rustErrorHandling": {
-      "sub": "r/typescript",
-      "label": "Programming Patterns",
-      "title": "Rust-like error handling in Typescript",
-      "url": "https://www.reddit.com/r/typescript/comments/1rp2b5b/rustlike_error_handling_in_typescript/"
+    "tech-hate-ai": {
+      "sub": "r/technology",
+      "label": "Social Commentary",
+      "title": "'People really hate artificial intelligence': Is the tide turning on AI?",
+      "url": "https://www.reddit.com/r/technology/comments/1rp8zxg/people_really_hate_artificial_intelligence/"
     },
-    "tauriAPIClient": {
+    "tauri-api-client": {
       "sub": "r/tauri",
-      "label": "Project Showcase",
-      "title": "I built an open source api client in Tauri + Rust",
+      "label": "Showcase",
+      "title": "[Showoff] I built an open source API client in Tauri + Rust",
       "url": "https://www.reddit.com/r/tauri/comments/1rt3jvq/i_built_an_open_source_api_client_in_tauri_rust/"
     },
-    "aiAdvertising": {
+    "ts-rust-error": {
+      "sub": "r/typescript",
+      "label": "Programming Patterns",
+      "title": "Rust-like error handling in TypeScript",
+      "url": "https://www.reddit.com/r/typescript/comments/1rp2b5b/rustlike_error_handling_in_typescript/"
+    },
+    "unreal-player-code": {
+      "sub": "r/unrealengine",
+      "label": "Architecture Advice",
+      "title": "Is it normal to have this much code in the Player Controller?",
+      "url": "https://www.reddit.com/r/unrealengine/comments/1rpzbv1/is_it_normal_to_have_this_much_code_in_the_player/"
+    },
+    "sw-testing-qa-value": {
+      "sub": "r/softwaretesting",
+      "label": "Career Strategy",
+      "title": "How to become a more valuable QA engineer?",
+      "url": "https://www.reddit.com/r/softwaretesting/comments/1ru14uq/how_to_become_a_more_valuable_qa_engineer/"
+    },
+    "vibecoding-founder-saas": {
+      "sub": "r/vibecoding",
+      "label": "Case Study",
+      "title": "A founder vibecoded his entire SaaS with AI and it’s actually making money",
+      "url": "https://www.reddit.com/r/vibecoding/comments/1rt4r7z/a_founder_vibecoded_his_entire_saas_with_ai/"
+    },
+    "vscode-ai-editor-ads": {
       "sub": "r/vscode",
-      "label": "Editor Tools",
-      "title": "The amount of advertising vscode as \"AI editor\" is getting ridiculous",
+      "label": "Tool Complaint",
+      "title": "The amount of advertising vscode as 'AI editor'",
       "url": "https://www.reddit.com/r/vscode/comments/1rr03lf/the_amount_of_advertising_vscode_as_ai_editor/"
+    },
+    "webdev-user-data": {
+      "sub": "r/webdev",
+      "label": "Ethical Discussion",
+      "title": "Your user's data is not yours.",
+      "url": "https://www.reddit.com/r/webdev/comments/1rsvqls/your_users_data_is_not_yours/"
+    },
+    "webdev-linkedin-job": {
+      "sub": "r/webdev",
+      "label": "Job Market",
+      "title": "Anyone ever got a job from LinkedIn?",
+      "url": "https://www.reddit.com/r/webdev/comments/1rtvhy5/anyone_ever_got_a_job_from_linkedin/"
     }
   },
   "week_range": "Mar 08-Mar 15, 2026"
@@ -669,6 +959,34 @@
     return links ? `<div class="expand-label">Related discussions</div>${links}` : "";
   }
 
+  function signalStrengthHTML(strength) {
+    if (!strength) return "";
+    const levels = { high: 3, medium: 2, low: 1 };
+    const filled = levels[strength] || 0;
+    if (!filled) return "";
+    const dots = [1, 2, 3].map(n =>
+      `<span class="signal-dot${n <= filled ? ` on-${strength}` : ""}"></span>`
+    ).join("");
+    const label = strength.charAt(0).toUpperCase() + strength.slice(1);
+    return `<div class="signal-strength">
+      <span class="signal-strength-label">Signal</span>
+      <div class="signal-dots">${dots}</div>
+      <span class="signal-strength-text ${strength}">${label}</span>
+    </div>`;
+  }
+
+  function trendHTML(trend) {
+    if (!trend) return "";
+    const map = {
+      rising:   { arrow: "&#8593;", label: "Rising",   cls: "trend-rising" },
+      stable:   { arrow: "&#8594;", label: "Stable",   cls: "trend-stable" },
+      declining:{ arrow: "&#8595;", label: "Declining", cls: "trend-declining" },
+    };
+    const t = map[trend];
+    if (!t) return "";
+    return `<span class="trend-badge ${t.cls}">${t.arrow} ${t.label}</span>`;
+  }
+
   const D = DIGEST_DATA;
   if (!D) { console.error("No DIGEST_DATA found"); }
   else {
@@ -696,6 +1014,16 @@
     document.getElementById("sources-count").textContent =
       `${sourceCount} original thread${sourceCount !== 1 ? "s" : ""} this briefing is based on.`;
 
+    // ── Key Signals (optional) ──
+    if (D.key_signals && D.key_signals.length) {
+      document.getElementById("key-signals-section").style.display = "";
+      document.getElementById("key-signals-grid").innerHTML = D.key_signals.map(s => `
+        <div class="signal-card">
+          <div class="signal-card-title">${escHtml(s.title)}</div>
+          <div class="signal-card-desc">${escHtml(s.description)}</div>
+        </div>`).join("");
+    }
+
     // ── Topics ──
     const TOPIC_BG = [
       "rgba(188,78,113,.15)",
@@ -713,7 +1041,11 @@
         </div>
         <h3>${escHtml(t.title)}</h3>
         <p>${escHtml(t.description)}</p>
-        <div class="topic-tags">${(t.tags || []).map(tag => `<span class="topic-tag">${escHtml(tag)}</span>`).join("")}</div>
+        ${signalStrengthHTML(t.signal_strength)}
+        <div class="topic-tags">
+          ${(t.tags || []).map(tag => `<span class="topic-tag">${escHtml(tag)}</span>`).join("")}
+          ${trendHTML(t.trend)}
+        </div>
         <div class="topic-expand"></div>
       </div>`).join("");
 
@@ -726,6 +1058,32 @@
         if (!was) card.classList.add("active");
       });
     });
+
+    // ── Concerns ──
+    document.getElementById("concerns-list").innerHTML = D.concerns.map((c, i) => `
+      <div class="concern-item">
+        <div class="concern-num">${i + 1}</div>
+        <div>
+          <div class="concern-title">${escHtml(c.title)}</div>
+          <div class="concern-desc">${escHtml(c.description)}</div>
+        </div>
+      </div>`).join("");
+
+    // ── Cultural Connections (optional) ──
+    if (D.connections && D.connections.length) {
+      document.getElementById("connections-section").style.display = "";
+      document.getElementById("connections-grid").innerHTML = D.connections.map(group => `
+        <div class="connection-group">
+          <div class="connection-group-title">${escHtml(group.title)}</div>
+          <div class="connection-nodes">
+            ${(group.nodes || []).map(node => `
+              <div class="connection-node">
+                <span class="connection-node-dot"></span>
+                <span class="connection-node-text"><strong>${escHtml(node.community)}</strong> — ${escHtml(node.insight)}</span>
+              </div>`).join("")}
+          </div>
+        </div>`).join("");
+    }
 
     // ── Lingo ──
     document.getElementById("lingo-tbody").innerHTML = D.lingo.map(l => `
@@ -757,15 +1115,15 @@
       });
     });
 
-    // ── Concerns ──
-    document.getElementById("concerns-list").innerHTML = D.concerns.map((c, i) => `
-      <div class="concern-item">
-        <div class="concern-num">${i + 1}</div>
-        <div>
-          <div class="concern-title">${escHtml(c.title)}</div>
-          <div class="concern-desc">${escHtml(c.description)}</div>
-        </div>
-      </div>`).join("");
+    // ── Strategic Implications (optional) ──
+    if (D.implications && D.implications.length) {
+      document.getElementById("implications-section").style.display = "";
+      document.getElementById("implications-grid").innerHTML = D.implications.map(imp => `
+        <div class="implication-card">
+          <div class="implication-title">${escHtml(imp.title)}</div>
+          <div class="implication-text">${escHtml(imp.implication)}</div>
+        </div>`).join("");
+    }
 
     // ── Source grid ──
     document.getElementById("source-grid").innerHTML = Object.values(D.sources || {}).map(s => `

@@ -60,7 +60,7 @@ class DigestPDF(FPDF):
         self.ln(6)
         self.set_font("Arial", "I", 10)
         self.set_text_color(150, 150, 150)
-        self.cell(0, 8, "GK Digest  —  GitKraken Marketing", align="C")
+        self.cell(0, 8, "GK Digest  —  GitKraken Research", align="C")
         self.set_text_color(0, 0, 0)
 
     def add_post(self, post: dict, index: int):
