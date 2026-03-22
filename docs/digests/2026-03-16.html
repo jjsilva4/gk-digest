@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GK Developer Culture Briefing</title>
+
+  <!-- Open Graph / link preview -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://jjsilva4.github.io/gk-digest/" />
+  <meta property="og:site_name"   content="GK Digest" />
+  <meta property="og:title"       content="GK Developer Culture Briefing — Mar 08-Mar 15, 2026" />
+  <meta property="og:description" content="Developers are torn between AI's productivity boosts and deep anxieties about job security and declining code quality." />
+  <meta property="og:image"       content="https://jjsilva4.github.io/gk-digest/og-image.png" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="GK Developer Culture Briefing — Mar 08-Mar 15, 2026" />
+  <meta name="twitter:description" content="Developers are torn between AI's productivity boosts and deep anxieties about job security and declining code quality." />
+  <meta name="twitter:image"      content="https://jjsilva4.github.io/gk-digest/og-image.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #1C1C1C;
+      --surface:    #272727;
+      --border:     #3E3E3E;
+      --text:       #FFFFFF;
+      --muted:      #C9C9C9;
+      --subtle:     #8a8a8a;
+      --purple-600: #7900C9;
+      --purple-200: #B657FF;
+      --blue-300:   #196FFF;
+      --topaz:      #338BEF;
+      --aqua:       #01FEE0;
+      --pink:       #EC7FFF;
+      --positive:   #1EA5AE;
+      --negative:   #BC4E71;
+      --grad-core:  linear-gradient(135deg, #7900C9, #196FFF);
+      --grad-bright:linear-gradient(135deg, #01FEE0, #EC7FFF);
+      --radius:     12px;
+      --radius-sm:  8px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(150deg, #160030 0%, #001440 50%, #1C1C1C 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 40px 36px;
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 10% 50%, rgba(121,0,201,.2) 0%, transparent 60%),
+                  radial-gradient(ellipse at 90% 20%, rgba(25,111,255,.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+
+    .week-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
+    }
+    .week-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--aqua);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    .hero h1 { font-size: clamp(22px, 3.5vw, 36px); font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
+    .hero h1 .grad {
+      background: var(--grad-bright);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero .sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+
+    .hero-controls {
+      display: flex; flex-wrap: wrap; align-items: end; gap: 14px;
+      margin-bottom: 26px;
+    }
+    .digest-switcher {
+      min-width: min(100%, 320px);
+      max-width: 420px;
+      flex: 1 1 320px;
+    }
+    .digest-switcher-label {
+      display: block;
+      font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--subtle);
+      margin-bottom: 7px;
+    }
+    .digest-switcher-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius);
+    }
+    .digest-select {
+      width: 100%;
+      appearance: none;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+      line-height: 1.3;
+      outline: none;
+      cursor: pointer;
+    }
+    .digest-select option {
+      background: #1C1C1C;
+      color: var(--text);
+    }
+    .digest-switcher-chevron {
+      color: var(--subtle);
+      font-size: 11px;
+      pointer-events: none;
+    }
+    .digest-switcher-note {
+      margin-top: 7px;
+      font-size: 11px;
+      color: var(--subtle);
+    }
+
+    .stats { display: flex; gap: 12px; flex-wrap: wrap; }
+    .stat-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 20px; padding: 6px 14px; font-size: 13px;
+    }
+    .stat-pill strong {
+      background: var(--grad-bright);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      font-weight: 800; font-size: 15px;
+    }
+    .stat-pill span { color: var(--muted); }
+
+    /* ─── LAYOUT ─── */
+    .page { max-width: 1080px; margin: 0 auto; padding: 44px 40px 0; }
+    section { margin-bottom: 52px; }
+
+    .section-header { margin-bottom: 20px; }
+    .section-label { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--subtle); margin-bottom: 4px; }
+    .section-header h2 { font-size: 20px; font-weight: 800; }
+    .section-header p  { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+
+    /* ─── KEY SIGNALS ─── */
+    .signal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--purple-200);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .signal-card-title { font-size: 14px; font-weight: 700; margin-bottom: 7px; line-height: 1.35; }
+    .signal-card-desc  { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    /* ─── TOPIC CARDS ─── */
+    .topic-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+      cursor: pointer; transition: border-color .2s, transform .15s; user-select: none;
+    }
+    .topic-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
+    .topic-card.active { border-color: var(--purple-200); }
+
+    .topic-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .topic-icon { width: 34px; height: 34px; min-width: 34px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 17px; }
+    .topic-chevron { color: var(--subtle); font-size: 11px; transition: transform .2s; margin-top: 3px; }
+    .topic-card.active .topic-chevron { transform: rotate(180deg); color: var(--purple-200); }
+    .topic-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.35; }
+    .topic-card p  { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    /* signal strength */
+    .signal-strength {
+      display: flex; align-items: center; gap: 7px;
+      margin-top: 10px; margin-bottom: 2px;
+    }
+    .signal-strength-label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--subtle);
+    }
+    .signal-dots { display: flex; gap: 3px; align-items: center; }
+    .signal-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--border);
+    }
+    .signal-dot.on-high    { background: var(--negative); }
+    .signal-dot.on-medium  { background: var(--topaz); }
+    .signal-dot.on-low     { background: var(--subtle); }
+    .signal-strength-text {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .signal-strength-text.high    { color: var(--negative); }
+    .signal-strength-text.medium  { color: var(--topaz); }
+    .signal-strength-text.low     { color: var(--subtle); }
+
+    /* trend badge */
+    .trend-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 20px; margin-top: 6px;
+    }
+    .trend-rising   { background: rgba(30,165,174,.12);  color: var(--positive); border: 1px solid rgba(30,165,174,.3); }
+    .trend-stable   { background: rgba(255,255,255,.05); color: var(--subtle);   border: 1px solid rgba(255,255,255,.1); }
+    .trend-declining{ background: rgba(188,78,113,.1);   color: var(--negative); border: 1px solid rgba(188,78,113,.25); }
+
+    .topic-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .topic-tag {
+      background: rgba(182,87,255,.1); border: 1px solid rgba(182,87,255,.25);
+      color: var(--purple-200); font-size: 10px; font-weight: 600;
+      padding: 2px 8px; border-radius: 20px;
+    }
+
+    .topic-expand { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .topic-card.active .topic-expand { display: block; }
+
+    .expand-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--subtle); margin-bottom: 8px; }
+    .expand-link {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 8px 10px; border-radius: var(--radius-sm);
+      background: rgba(255,255,255,.04); text-decoration: none;
+      transition: background .15s; margin-bottom: 5px;
+    }
+    .expand-link:hover { background: rgba(1,254,222,.06); }
+    .expand-link-sub { font-size: 10px; font-weight: 700; color: var(--aqua); white-space: nowrap; padding-top: 1px; }
+    .expand-link-meta { display: flex; flex-direction: column; gap: 1px; }
+    .expand-link-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--subtle); }
+    .expand-link-title { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    /* ─── LINGO TABLE ─── */
+    .lingo-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 24px; }
+    .lingo-table { width: 100%; border-collapse: collapse; }
+    .lingo-table thead th {
+      font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--subtle); padding: 0 0 10px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .lingo-table thead th:last-child { text-align: right; }
+    .lingo-table tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    .lingo-table tbody tr:last-child { border-bottom: none; }
+    .lingo-table tbody tr:hover { background: rgba(255,255,255,.03); }
+    .lingo-table td { padding: 13px 0; vertical-align: top; }
+    .lingo-table td:last-child { text-align: right; }
+
+    .lingo-phrase {
+      font-size: 14px; font-weight: 700; color: var(--aqua);
+      position: relative; display: inline-block; cursor: default;
+    }
+    .lingo-phrase::after {
+      content: attr(data-tip);
+      position: absolute; bottom: calc(100% + 8px); left: 0;
+      background: #0a0a0a; border: 1px solid var(--purple-200);
+      color: var(--text); font-size: 12px; font-weight: 400; line-height: 1.5;
+      padding: 8px 12px; border-radius: var(--radius-sm);
+      width: 260px; white-space: normal;
+      opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 10;
+    }
+    .lingo-phrase:hover::after { opacity: 1; }
+    .lingo-meaning { font-size: 13px; color: var(--muted); padding-left: 24px; }
+    .lingo-origin {
+      font-size: 11px; background: rgba(182,87,255,.1); border: 1px solid rgba(182,87,255,.2);
+      color: var(--purple-200); padding: 2px 8px; border-radius: 20px;
+      white-space: nowrap; display: inline-block;
+    }
+
+    /* ─── ARTIFACT CARDS ─── */
+    .artifact-card {
+      background: var(--surface); border: 1px solid var(--border); border-top: 3px solid;
+      border-radius: var(--radius); padding: 20px;
+      cursor: pointer; transition: border-color .2s, transform .15s;
+    }
+    .artifact-card:hover { transform: translateY(-2px); }
+
+    .art-0 { border-top-color: var(--negative); }
+    .art-0:hover, .art-0.active { border-color: var(--negative); }
+    .art-1 { border-top-color: var(--blue-300); }
+    .art-1:hover, .art-1.active { border-color: var(--blue-300); }
+    .art-2 { border-top-color: var(--aqua); }
+    .art-2:hover, .art-2.active { border-color: var(--aqua); }
+    .art-3 { border-top-color: var(--purple-200); }
+    .art-3:hover, .art-3.active { border-color: var(--purple-200); }
+    .art-4 { border-top-color: var(--positive); }
+    .art-4:hover, .art-4.active { border-color: var(--positive); }
+
+    .art-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .art-why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--subtle); margin-bottom: 5px; margin-top: 12px; }
+    .art-why { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .art-examples { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .art-example { background: rgba(255,255,255,.07); color: var(--text); font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px; }
+    .artifact-expand { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .artifact-card.active .artifact-expand { display: block; }
+
+    /* ─── CONCERNS ─── */
+    .concern-list { display: flex; flex-direction: column; gap: 12px; }
+    .concern-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px;
+      display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start;
+    }
+    .concern-num {
+      width: 28px; height: 28px; min-width: 28px; border-radius: 50%;
+      background: var(--grad-core); font-size: 12px; font-weight: 800; color: #fff;
+      display: flex; align-items: center; justify-content: center; margin-top: 2px;
+    }
+    .concern-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .concern-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ─── CULTURAL CONNECTIONS ─── */
+    .connection-group {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 22px;
+    }
+    .connection-group-title {
+      font-size: 13px; font-weight: 700; margin-bottom: 14px;
+      color: var(--text);
+    }
+    .connection-nodes {
+      position: relative; padding-left: 18px;
+    }
+    .connection-nodes::before {
+      content: ""; position: absolute; left: 3px; top: 8px; bottom: 8px;
+      width: 2px; background: var(--border); border-radius: 2px;
+    }
+    .connection-node {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 6px 0; position: relative;
+    }
+    .connection-node-dot {
+      width: 8px; height: 8px; min-width: 8px; border-radius: 50%;
+      background: var(--purple-200); margin-left: -18px; margin-top: 5px;
+      position: relative; z-index: 1;
+    }
+    .connection-node-text { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+    /* ─── STRATEGIC IMPLICATIONS ─── */
+    .implication-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--aqua);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .implication-title {
+      font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.35;
+    }
+    .implication-text {
+      font-size: 13px; color: var(--muted); line-height: 1.65;
+    }
+
+    /* ─── SOURCES ─── */
+    .source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .source-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px 18px; text-decoration: none; color: var(--text);
+      display: flex; flex-direction: column; gap: 5px;
+      transition: border-color .2s, transform .15s;
+    }
+    .source-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
+    .source-sub {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      background: var(--grad-bright);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .source-label {
+      display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .07em; border-radius: 20px; padding: 1px 7px;
+      width: fit-content;
+    }
+    .source-title { font-size: 12px; color: var(--muted); line-height: 1.4; flex: 1; }
+    .source-arrow { font-size: 11px; color: var(--subtle); padding-top: 4px; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      max-width: 1080px; margin: 48px auto 0; padding: 24px 40px 0;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    footer span { font-size: 12px; color: var(--subtle); }
+    .footer-brand {
+      font-size: 12px; font-weight: 700;
+      background: var(--grad-bright);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 32px 20px 28px; }
+      .page { padding: 32px 20px 0; }
+      footer { padding: 20px 20px 0; }
+      .lingo-meaning { padding-left: 0; padding-top: 4px; }
+    }
+
+    /* ─── PDF BUTTON ─── */
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+      color: var(--muted); font-size: 12px; font-weight: 600;
+      padding: 6px 16px; border-radius: 20px; margin-top: 20px;
+      cursor: pointer; transition: background .15s, border-color .15s, color .15s;
+      font-family: inherit;
+    }
+    .pdf-btn:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.3); color: var(--text); }
+
+    /* ─── PRINT ─── */
+    @media print {
+      /* Reset theme tokens */
+      :root {
+        --bg: #fff; --surface: #f5f5f5; --border: #ddd;
+        --text: #111; --muted: #444; --subtle: #777;
+      }
+
+      body { background: #fff !important; color: #111 !important; padding-bottom: 0; }
+
+      /* Hero */
+      .hero { background: #fff !important; border-bottom: 1px solid #ddd !important; padding: 24px 40px 20px !important; }
+      .hero::after { display: none; }
+
+      /* Fix gradient-clipped text — invisible in print */
+      .hero h1 .grad, .stat-pill strong, .footer-brand {
+        background: none !important; -webkit-text-fill-color: #7900C9 !important; color: #7900C9 !important;
+      }
+      .source-sub {
+        background: none !important; -webkit-text-fill-color: #7900C9 !important; color: #7900C9 !important;
+      }
+
+      /* Hide non-content / interactive elements */
+      .pdf-btn, .week-badge .dot, .topic-chevron, .source-arrow,
+      .expand-link, .lingo-phrase::after { display: none !important; }
+
+      /* Show expand sections so all content is visible */
+      .topic-expand, .artifact-expand { display: block !important; }
+
+      /* Cards */
+      .topic-card, .artifact-card, .source-card, .concern-item,
+      .connection-group, .implication-card, .signal-card, .lingo-wrap {
+        background: #f5f5f5 !important; border-color: #ddd !important;
+        break-inside: avoid; box-shadow: none !important; transform: none !important;
+      }
+
+      /* Preserve colored badges */
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+      /* Layout */
+      .page { padding: 24px 40px 0 !important; }
+      section { break-inside: avoid; margin-bottom: 32px; }
+      .grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+      .source-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+      footer { border-top-color: #ddd !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── HERO ─── -->
+<header class="hero">
+  <div class="hero-inner">
+    <img src="Reddit_Icon_FullColor.svg" alt="Reddit" width="44" height="44" style="position:absolute;top:0;right:0;opacity:.9;" />
+    <div class="week-badge"><span class="dot"></span> <span id="week-text">Loading...</span></div>
+    <h1>Developer Culture <span class="grad">Briefing</span></h1>
+    <p class="sub">What the developer community is talking about this week, across 30 subreddits.</p>
+    <div class="hero-controls">
+      <div class="digest-switcher">
+        <label class="digest-switcher-label" for="digest-select">Browse Digests</label>
+        <div class="digest-switcher-row">
+          <select id="digest-select" class="digest-select" aria-label="Select a past digest"></select>
+          <span class="digest-switcher-chevron">&#9662;</span>
+        </div>
+        <p class="digest-switcher-note" id="digest-switcher-note">Archive scaffold ready for future weekly digests.</p>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <button class="pdf-btn" onclick="window.print()"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M6.5 1v7M3.5 5.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.5 10.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Download as PDF</button>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- ─── EXECUTIVE SUMMARY / KEY SIGNALS (optional) ─── -->
+  <section id="key-signals-section" style="display:none">
+    <div class="section-header">
+      <div class="section-label">Executive Summary</div>
+      <h2>Key Signals This Week</h2>
+      <p>The most important patterns for marketing and product stakeholders.</p>
+    </div>
+    <div class="grid-3" id="key-signals-grid"></div>
+  </section>
+
+  <!-- ─── SECTION 1: TOPICS ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 1</div>
+      <h2>What Are People Talking About?</h2>
+      <p>Click a topic to see the source discussions behind it.</p>
+    </div>
+    <div class="grid-3" id="topics-grid"></div>
+  </section>
+
+  <!-- ─── SECTION 2: CONCERNS ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 2</div>
+      <h2>What Matters Right Now</h2>
+      <p>The underlying concerns shaping this week's developer conversations.</p>
+    </div>
+    <div class="concern-list" id="concerns-list"></div>
+  </section>
+
+  <!-- ─── CULTURAL CONNECTIONS (optional) ─── -->
+  <section id="connections-section" style="display:none">
+    <div class="section-header">
+      <div class="section-label">Cultural Connections</div>
+      <h2>How These Themes Connect</h2>
+      <p>Relationships between beliefs and concerns across communities.</p>
+    </div>
+    <div class="grid-3" id="connections-grid"></div>
+  </section>
+
+  <!-- ─── SECTION 3: LINGO ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 3</div>
+      <h2>Lingo This Week</h2>
+      <p>Phrases appearing repeatedly across discussions. Hover a term for its full definition.</p>
+    </div>
+    <div class="lingo-wrap">
+      <table class="lingo-table">
+        <thead>
+          <tr>
+            <th style="width:220px">Phrase</th>
+            <th>What it means</th>
+            <th>Seen in</th>
+          </tr>
+        </thead>
+        <tbody id="lingo-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 4: ARTIFACTS ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 4</div>
+      <h2>What People Are Sharing</h2>
+      <p>Tools, projects, and resources circulating in discussions this week. Click for source threads.</p>
+    </div>
+    <div class="grid-3" id="artifacts-grid"></div>
+  </section>
+
+  <!-- ─── STRATEGIC IMPLICATIONS (optional) ─── -->
+  <section id="implications-section" style="display:none">
+    <div class="section-header">
+      <div class="section-label">Strategic Implications</div>
+      <h2>What This Means for GitKraken</h2>
+      <p>Translating cultural signals into actionable opportunities for GitKraken products and marketing.</p>
+    </div>
+    <div class="grid-3" id="implications-grid"></div>
+  </section>
+
+  <!-- ─── SOURCES ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Sources</div>
+      <h2>Source Discussions</h2>
+      <p id="sources-count">Original threads this briefing is based on.</p>
+    </div>
+    <div class="source-grid" id="source-grid"></div>
+  </section>
+
+  <!-- ─── METHODOLOGY ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Methodology</div>
+      <h2>How This Briefing Is Made</h2>
+    </div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:720px;">
+      Every Sunday, top posts from 30 developer subreddits are fetched via the Reddit API and packaged into PDFs. These are uploaded to Gemini for multi-step cultural analysis, extracting beliefs, artifacts, and language, then synthesizing patterns across communities. The final dataset is used to automatically rebuild and publish this dashboard to GitHub Pages.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <span id="footer-text">GK Developer Culture Briefing</span>
+  <span class="footer-brand">GitKraken Research</span>
+</footer>
+
+<script>
+  const DIGEST_DATA = {
+  "key_signals": [
+    {
+      "icon": "🤖",
+      "title": "Developers Grapple with AI's Double-Edged Sword",
+      "description": "Developers are torn between AI's productivity boosts and deep anxieties about job security and declining code quality."
+    },
+    {
+      "icon": "🤙",
+      "title": "'Vibe Coding' Emerges as a Controversial Trend",
+      "description": "A new term, 'vibe coding,' describes rapidly building AI-driven projects, sparking debate about its long-term viability and professional merit."
+    },
+    {
+      "icon": "🧱",
+      "title": "Renewed Focus on Engineering Fundamentals",
+      "description": "As a counter-reaction to AI hype, communities are emphasizing the timeless value of strong architecture, performance, and non-coding skills."
+    }
+  ],
+  "topics": [
+    {
+      "icon": "📉",
+      "title": "Developers Decry Rise of Low-Quality 'AI Slop'",
+      "description": "Across communities, there's a growing frustration with low-quality, AI-generated code, dubbed 'AI slop'. This is fueling concerns that over-reliance on AI is degrading software quality, creating maintenance nightmares, and devaluing fundamental programming skills.",
+      "tags": [
+        "r/devops",
+        "r/ExperiencedDevs",
+        "r/cpp"
+      ],
+      "source_keys": [
+        "devops-ai-ruined",
+        "exp-dev-vibe-hammer",
+        "cpp-ai-concern"
+      ],
+      "signal_strength": "high",
+      "trend": "rising"
+    },
+    {
+      "icon": "🎢",
+      "title": "'Vibe Coding' Creates a New Developer Subculture",
+      "description": "A new trend called 'vibe coding' involves using AI to rapidly build and launch projects based on intuition rather than structured planning. While celebrated in communities like r/vibecoding, it is heavily criticized by experienced developers who see it as undisciplined and unsustainable, leading to project failures.",
+      "tags": [
+        "r/vibecoding",
+        "r/ExperiencedDevs",
+        "r/github",
+        "r/ClaudeAI"
+      ],
+      "source_keys": [
+        "vibecoding-founder-saas",
+        "exp-dev-vibe-hammer",
+        "github-vibecoder-hate",
+        "claude-vibe-fail"
+      ],
+      "signal_strength": "medium",
+      "trend": "rising"
+    },
+    {
+      "icon": "⚡",
+      "title": "Performance and Efficiency Become Key Status Symbols",
+      "description": "In a pushback against software 'bloat,' often blamed on new AI features, developers are intensely focused on performance. This is seen in vigorous debates over the speed of data libraries like Polars vs. Pandas and praise for efficient, lightweight tools built with Rust.",
+      "tags": [
+        "r/Python",
+        "r/node",
+        "r/tauri",
+        "r/vscode"
+      ],
+      "source_keys": [
+        "python-polars-pandas",
+        "node-push-process",
+        "tauri-api-client",
+        "vscode-ai-editor-ads"
+      ],
+      "signal_strength": "medium",
+      "trend": "stable"
+    },
+    {
+      "icon": "🦀",
+      "title": "Rust's Design Principles Influence Other Languages",
+      "description": "The Rust programming language is being discussed not just for its own merits but as an inspiration for better practices across the ecosystem. Developers are actively implementing Rust-like patterns, such as its robust error handling, in other languages like TypeScript to build more resilient applications.",
+      "tags": [
+        "r/rust",
+        "r/typescript",
+        "r/tauri"
+      ],
+      "source_keys": [
+        "ts-rust-error",
+        "rust-redox-cof",
+        "tauri-api-client"
+      ],
+      "signal_strength": "low",
+      "trend": "rising"
+    },
+    {
+      "icon": "🛡️",
+      "title": "Heightened Anxiety Around Security and User Privacy",
+      "description": "Recent breaches and controversial legislation are fueling developer conversations about security and privacy. Communities are sharing cautionary tales about vulnerabilities in common tools like Docker and debating the ethical imperative to protect user data from corporate and government overreach.",
+      "tags": [
+        "r/docker",
+        "r/linux",
+        "r/webdev"
+      ],
+      "source_keys": [
+        "docker-breach",
+        "linux-ny-age-bill",
+        "webdev-user-data"
+      ],
+      "signal_strength": "medium",
+      "trend": "stable"
+    }
+  ],
+  "lingo": [
+    {
+      "term": "Vibe Coding",
+      "tooltip": "A slang term for a style of software development that relies heavily on AI code generation and intuition ('vibes') rather than formal specifications, planning, or deep technical understanding. It prioritizes speed and rapid prototyping, but is often criticized for producing low-quality, unmaintainable code.",
+      "meaning": "Building projects quickly with AI, based on a gut feeling.",
+      "origin": "r/vibecoding · r/ExperiencedDevs"
+    },
+    {
+      "term": "AI Slop",
+      "tooltip": "A derogatory term for low-quality, buggy, or nonsensical code and content generated by AI. It's used to criticize the trend of blindly trusting AI outputs without proper human review, leading to a degradation of software and information quality.",
+      "meaning": "Low-quality, messy code generated by AI.",
+      "origin": "r/devops · r/gamedev"
+    },
+    {
+      "term": "Enshittification",
+      "tooltip": "A term describing the process by which online platforms and tools degrade over time. Initially, they are good to their users; then they abuse their users to make things better for their business customers; finally, they abuse their business customers to claw back all the value for themselves.",
+      "meaning": "When a good online service becomes terrible over time.",
+      "origin": "r/technology · r/vscode"
+    },
+    {
+      "term": "Rugpull",
+      "tooltip": "Originating in the crypto space, this term is used when a company or project abruptly withdraws support, funding, or a previously available service, leaving its users or investors with a worthless or non-functional product. It implies a deliberate and often deceptive action by the creators.",
+      "meaning": "When a company suddenly abandons a project or its users.",
+      "origin": "r/devops · r/vibecoding"
+    },
+    {
+      "term": "Local-first",
+      "tooltip": "An architectural principle for software that prioritizes the use of data stored on a user's local device, rather than relying solely on a remote server. This approach enhances privacy, offline functionality, and performance, with cloud synchronization being a secondary feature.",
+      "meaning": "Software that works offline and keeps data on your device.",
+      "origin": "r/tauri · r/technology"
+    },
+    {
+      "term": "FOSS",
+      "tooltip": "An acronym for Free and Open Source Software. 'Free' refers to freedom (the freedom to run, copy, distribute, study, change and improve the software), not necessarily price. It's a foundational concept in communities that value user control and transparency.",
+      "meaning": "Free and Open Source Software.",
+      "origin": "r/linux · r/opensource"
+    },
+    {
+      "term": "Copyleft",
+      "tooltip": "A type of software license (like the GPL) that allows users to freely use, modify, and distribute a work, but requires that any derivative works must also be distributed under the same license. It uses copyright law to ensure that software remains free and open.",
+      "meaning": "A license ensuring software and its derivatives stay free.",
+      "origin": "r/rust · r/programming"
+    }
+  ],
+  "artifacts": [
+    {
+      "icon": "🤖",
+      "name": "AI Code Assistants",
+      "description": "AI assistants like ChatGPT, Claude, and GitHub Copilot are the most-discussed tools this week, but sentiment is deeply divided. They are seen as both powerful productivity enhancers for some tasks and the primary source of 'AI slop' and career anxiety for others.",
+      "examples_label": "Tools mentioned",
+      "examples": [
+        "ChatGPT",
+        "Claude",
+        "GitHub Copilot"
+      ],
+      "source_keys": [
+        "cscareer-ai-pessimism",
+        "devops-ai-ruined",
+        "cpp-ai-concern"
+      ]
+    },
+    {
+      "icon": "🦀",
+      "name": "The Rust Ecosystem",
+      "description": "Projects built with Rust are being shared as exemplars of modern, high-performance software. The lightweight application framework Tauri and the experimental Redox OS are highlighted as examples of what's possible with a focus on memory safety and efficiency.",
+      "examples_label": "Projects mentioned",
+      "examples": [
+        "Tauri",
+        "Redox OS",
+        "Rust Language"
+      ],
+      "source_keys": [
+        "tauri-api-client",
+        "rust-redox-cof",
+        "ts-rust-error"
+      ]
+    },
+    {
+      "icon": "📊",
+      "name": "High-Performance Data Libraries",
+      "description": "A fierce debate in the Python community compares the performance of the newer Polars library against the incumbent Pandas. This discussion is a proxy for a wider trend: developers are actively seeking and promoting tools that prioritize raw speed and resource efficiency.",
+      "examples_label": "Tools mentioned",
+      "examples": [
+        "Polars",
+        "Pandas"
+      ],
+      "source_keys": [
+        "python-polars-pandas"
+      ]
+    }
+  ],
+  "concerns": [
+    {
+      "title": "AI is Degrading Code Quality and Threatening Jobs",
+      "description": "The dominant concern this week is that the proliferation of AI tools is flooding projects with low-quality 'slop', creating technical debt. This is coupled with significant anxiety, particularly among junior developers, that AI will devalue their skills and make it harder to enter or stay in the profession."
+    },
+    {
+      "title": "Corporate Control Compromises Privacy and Tool Quality",
+      "description": "There is a strong undercurrent of distrust towards large tech corporations. Developers express frustration over forced AI integration in tools like VS Code, which they see as advertising and bloat, and are concerned about legislative bills and corporate policies that threaten user privacy."
+    },
+    {
+      "title": "The Developer Job Market is Overly Difficult",
+      "description": "Discussions in career-focused subreddits reveal high levels of frustration with the current job market. Developers are struggling to get responses from applications on platforms like LinkedIn and are questioning how to remain valuable as AI and market saturation change the landscape."
+    }
+  ],
+  "connections": [
+    {
+      "title": "The Cross-Community AI Quality Debate",
+      "nodes": [
+        {
+          "community": "r/ExperiencedDevs",
+          "insight": "This community is highly skeptical, viewing AI-driven 'vibe coding' as a recipe for unmaintainable products."
+        },
+        {
+          "community": "r/devops",
+          "insight": "Devops professionals are pragmatically concerned about 'AI slop' entering production and increasing system fragility."
+        },
+        {
+          "community": "r/cscareerquestions",
+          "insight": "Aspiring developers fear that AI will automate entry-level tasks, making it impossible to gain foundational experience."
+        },
+        {
+          "community": "r/gamedev",
+          "insight": "Game developers worry about the legal risks and lack of creative control associated with using AI-generated assets."
+        }
+      ]
+    },
+    {
+      "title": "Performance and Efficiency as a Shared Virtue",
+      "nodes": [
+        {
+          "community": "r/node",
+          "insight": "Developers here are focused on pushing the limits of the runtime, sharing tips on maximizing a single process's performance."
+        },
+        {
+          "community": "r/Python",
+          "insight": "The community is intensely debating data libraries, with many championing Polars for its superior speed over Pandas."
+        },
+        {
+          "community": "r/tauri",
+          "insight": "This community celebrates the creation of lean, fast desktop apps by leveraging Rust's performance."
+        },
+        {
+          "community": "r/vscode",
+          "insight": "Users are complaining that new AI features are causing editor 'bloat' and degrading the core user experience."
+        }
+      ]
+    },
+    {
+      "title": "Defining Modern Developer Professionalism",
+      "nodes": [
+        {
+          "community": "r/ExperiencedDevs",
+          "insight": "This group argues that crucial non-coding skills like communication and business acumen are what truly define a senior engineer."
+        },
+        {
+          "community": "r/golang",
+          "insight": "Professionalism is defined by creating robust, maintainable systems through well-defined project architecture and stability."
+        },
+        {
+          "community": "r/learnprogramming",
+          "insight": "Newcomers are trying to bridge the professional gap between following tutorials and being able to build projects from scratch."
+        },
+        {
+          "community": "r/softwaretesting",
+          "insight": "Testers are discussing how to provide more value by moving beyond simple automation and adopting a broader quality engineering mindset."
+        }
+      ]
+    }
+  ],
+  "implications": [
+    {
+      "title": "Position GitKraken as the Human-in-the-Loop AI Partner",
+      "implication": "Messaging should frame GitKraken tools (especially GitLens) as essential for reviewing, understanding, and validating AI-generated code. This counters the 'AI slop' narrative by empowering developers with human oversight and quality control, making AI a safer tool to adopt."
+    },
+    {
+      "title": "Market GitKraken Desktop for 'Vibe Coding' Chaos",
+      "implication": "Create content showing how the visual graph in GitKraken Desktop helps teams make sense of the messy, non-linear commit histories often produced by rapid, AI-assisted development. This positions the product as the essential tool for bringing order and understanding to chaotic, experimental projects."
+    },
+    {
+      "title": "Champion Engineering Fundamentals to Counter 'Slop'",
+      "implication": "Align marketing with the 'back to basics' trend by emphasizing how GitKraken products enforce core developer workflows like atomic commits and structured code reviews. This shows GitKraken is an ally in maintaining high standards, directly appealing to developers frustrated with AI-driven quality decline."
+    },
+    {
+      "title": "Use GitKraken Insights to Measure AI's True Impact",
+      "implication": "Position GitKraken Insights as a vital tool for managers to analyze how AI coding assistants are affecting their teams. It can help answer critical questions by tracking metrics like code churn and PR sizes, providing data to validate or debunk the productivity claims of AI tools."
+    }
+  ],
+  "sources": {
+    "exp-dev-vibe-hammer": {
+      "sub": "r/ExperiencedDevs",
+      "label": "Industry Trend",
+      "title": "We just got hit with the 'vibecoding' hammer.",
+      "url": "https://www.reddit.com/r/ExperiencedDevs/comments/1rqt03s/we_just_got_hit_with_the_vibecoding_hammer/"
+    },
+    "ask-prog-too-late": {
+      "sub": "r/AskProgramming",
+      "label": "Career Advice",
+      "title": "Am I too late to start programming at 38 with AI getting so good?",
+      "url": "https://www.reddit.com/r/AskProgramming/comments/1ru3of0/am_i_too_late_to_start_programming_at_38_with_ai/"
+    },
+    "claude-vibe-fail": {
+      "sub": "r/ClaudeAI",
+      "label": "AI Discussion",
+      "title": "Why the majority of vibe coded projects fail",
+      "url": "https://www.reddit.com/r/ClaudeAI/comments/1rt31th/why_the_majority_of_vibe_coded_projects_fail/"
+    },
+    "exp-dev-non-coding": {
+      "sub": "r/ExperiencedDevs",
+      "label": "Career Development",
+      "title": "Senior engineers, what non-coding skill made the biggest impact on your career?",
+      "url": "https://www.reddit.com/r/ExperiencedDevs/comments/1rpo0gt/senior_engineers_what_noncoding_skill_made_the/"
+    },
+    "cscareer-ai-pessimism": {
+      "sub": "r/cscareerquestions",
+      "label": "Career Anxiety",
+      "title": "I was very pessimistic about AI taking jobs. Then I actually started using it for a personal project.",
+      "url": "https://www.reddit.com/r/cscareerquestions/comments/1rteomh/i_was_very_pessimistic_about_ai_taking_jobs_then/"
+    },
+    "devops-ai-ruined": {
+      "sub": "r/devops",
+      "label": "Tooling Critique",
+      "title": "Has AI ruined software development?",
+      "url": "https://www.reddit.com/r/devops/comments/1rsf8eo/has_ai_ruined_software_development/"
+    },
+    "python-polars-pandas": {
+      "sub": "r/Python",
+      "label": "Library Debate",
+      "title": "Polars vs Pandas",
+      "url": "https://www.reddit.com/r/Python/comments/1rojz8u/polars_vs_pandas/"
+    },
+    "docker-breach": {
+      "sub": "r/docker",
+      "label": "Security Incident",
+      "title": "We just got breached because of vulnerabilities in our base images",
+      "url": "https://www.reddit.com/r/docker/comments/1ru2xsk/we_just_got_breached_because_of_vulnerabilities/"
+    },
+    "cpp-ai-concern": {
+      "sub": "r/cpp",
+      "label": "Personal Reflection",
+      "title": "I feel concerned about my AI usage.",
+      "url": "https://www.reddit.com/r/cpp/comments/1rrrh3e/i_feel_concerned_about_my_ai_usage/"
+    },
+    "gamedev-ai-assets": {
+      "sub": "r/gamedev",
+      "label": "AI Ethics",
+      "title": "Why even risk using AI assets when there are so many good non-AI options?",
+      "url": "https://www.reddit.com/r/gamedev/comments/1rpj2d4/why_even_risk_using_ai_assets_when_there_are_so/"
+    },
+    "github-vibecoder-hate": {
+      "sub": "r/github",
+      "label": "Community Conflict",
+      "title": "Vibecoders sending me hate for rejecting their low-quality AI PRs",
+      "url": "https://www.reddit.com/r/github/comments/1rqyq0y/vibecoders_sending_me_hate_for_rejecting_their/"
+    },
+    "learn-prog-tutorial-freeze": {
+      "sub": "r/learnprogramming",
+      "label": "Learning Challenge",
+      "title": "Can anyone else follow tutorials fine but freeze when trying to do a project from scratch?",
+      "url": "https://www.reddit.com/r/learnprogramming/comments/1rol74a/can_anyone_else_follow_tutorials_fine_but_freeze/"
+    },
+    "golang-folder-structure": {
+      "sub": "r/golang",
+      "label": "Best Practices",
+      "title": "Is this a good folder structure for a production Go app?",
+      "url": "https://www.reddit.com/r/golang/comments/1rpqjlz/is_this_a_good_folder_structure_for_a_production/"
+    },
+    "linux-ny-age-bill": {
+      "sub": "r/linux",
+      "label": "Privacy & Politics",
+      "title": "New York age verification bill requires digital ID for all internet access",
+      "url": "https://www.reddit.com/r/linux/comments/1rphvoa/new_york_age_verification_bill_requires/"
+    },
+    "node-push-process": {
+      "sub": "r/node",
+      "label": "Performance Tuning",
+      "title": "How far have you pushed a single NodeJS process?",
+      "url": "https://www.reddit.com/r/node/comments/1rsrh3e/how_far_have_you_pushed_a_single_nodejs_process/"
+    },
+    "rust-redox-cof": {
+      "sub": "r/rust",
+      "label": "Project News",
+      "title": "Redox OS has adopted a Certificate of Origin",
+      "url": "https://www.reddit.com/r/rust/comments/1rp584k/redox_os_has_adopted_a_certificate_of_origin/"
+    },
+    "tech-hate-ai": {
+      "sub": "r/technology",
+      "label": "Social Commentary",
+      "title": "'People really hate artificial intelligence': Is the tide turning on AI?",
+      "url": "https://www.reddit.com/r/technology/comments/1rp8zxg/people_really_hate_artificial_intelligence/"
+    },
+    "tauri-api-client": {
+      "sub": "r/tauri",
+      "label": "Showcase",
+      "title": "[Showoff] I built an open source API client in Tauri + Rust",
+      "url": "https://www.reddit.com/r/tauri/comments/1rt3jvq/i_built_an_open_source_api_client_in_tauri_rust/"
+    },
+    "ts-rust-error": {
+      "sub": "r/typescript",
+      "label": "Programming Patterns",
+      "title": "Rust-like error handling in TypeScript",
+      "url": "https://www.reddit.com/r/typescript/comments/1rp2b5b/rustlike_error_handling_in_typescript/"
+    },
+    "unreal-player-code": {
+      "sub": "r/unrealengine",
+      "label": "Architecture Advice",
+      "title": "Is it normal to have this much code in the Player Controller?",
+      "url": "https://www.reddit.com/r/unrealengine/comments/1rpzbv1/is_it_normal_to_have_this_much_code_in_the_player/"
+    },
+    "sw-testing-qa-value": {
+      "sub": "r/softwaretesting",
+      "label": "Career Strategy",
+      "title": "How to become a more valuable QA engineer?",
+      "url": "https://www.reddit.com/r/softwaretesting/comments/1ru14uq/how_to_become_a_more_valuable_qa_engineer/"
+    },
+    "vibecoding-founder-saas": {
+      "sub": "r/vibecoding",
+      "label": "Case Study",
+      "title": "A founder vibecoded his entire SaaS with AI and it’s actually making money",
+      "url": "https://www.reddit.com/r/vibecoding/comments/1rt4r7z/a_founder_vibecoded_his_entire_saas_with_ai/"
+    },
+    "vscode-ai-editor-ads": {
+      "sub": "r/vscode",
+      "label": "Tool Complaint",
+      "title": "The amount of advertising vscode as 'AI editor'",
+      "url": "https://www.reddit.com/r/vscode/comments/1rr03lf/the_amount_of_advertising_vscode_as_ai_editor/"
+    },
+    "webdev-user-data": {
+      "sub": "r/webdev",
+      "label": "Ethical Discussion",
+      "title": "Your user's data is not yours.",
+      "url": "https://www.reddit.com/r/webdev/comments/1rsvqls/your_users_data_is_not_yours/"
+    },
+    "webdev-linkedin-job": {
+      "sub": "r/webdev",
+      "label": "Job Market",
+      "title": "Anyone ever got a job from LinkedIn?",
+      "url": "https://www.reddit.com/r/webdev/comments/1rtvhy5/anyone_ever_got_a_job_from_linkedin/"
+    }
+  },
+  "week_range": "Mar 08-Mar 15, 2026",
+  "archive_options": [
+    {
+      "label": "Week of Mar 08-Mar 15, 2026",
+      "url": "index.html",
+      "current": false
+    },
+    {
+      "label": "Week of Mar 15-Mar 22, 2026",
+      "url": "digests/2026-03-16.html",
+      "current": true
+    }
+  ]
+};
+  const DEFAULT_DIGEST_ARCHIVE = [];
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function expandHTML(keys) {
+    const srcs = DIGEST_DATA.sources || {};
+    const links = keys
+      .map(k => srcs[k])
+      .filter(Boolean)
+      .map(s => `<a class="expand-link" href="${escHtml(s.url)}" target="_blank" rel="noopener">
+        <span class="expand-link-sub">${escHtml(s.sub)}</span>
+        <span class="expand-link-meta">
+          <span class="expand-link-label">${escHtml(s.label)}</span>
+          <span class="expand-link-title">${escHtml(s.title)}</span>
+        </span>
+      </a>`)
+      .join("");
+    return links ? `<div class="expand-label">Related discussions</div>${links}` : "";
+  }
+
+  function signalStrengthHTML(strength) {
+    if (!strength) return "";
+    const levels = { high: 3, medium: 2, low: 1 };
+    const filled = levels[strength] || 0;
+    if (!filled) return "";
+    const dots = [1, 2, 3].map(n =>
+      `<span class="signal-dot${n <= filled ? ` on-${strength}` : ""}"></span>`
+    ).join("");
+    const label = strength.charAt(0).toUpperCase() + strength.slice(1);
+    return `<div class="signal-strength">
+      <span class="signal-strength-label">Signal</span>
+      <div class="signal-dots">${dots}</div>
+      <span class="signal-strength-text ${strength}">${label}</span>
+    </div>`;
+  }
+
+  function trendHTML(trend) {
+    if (!trend) return "";
+    const map = {
+      rising:   { arrow: "&#8593;", label: "Rising",   cls: "trend-rising" },
+      stable:   { arrow: "&#8594;", label: "Stable",   cls: "trend-stable" },
+      declining:{ arrow: "&#8595;", label: "Declining", cls: "trend-declining" },
+    };
+    const t = map[trend];
+    if (!t) return "";
+    return `<span class="trend-badge ${t.cls}">${t.arrow} ${t.label}</span>`;
+  }
+
+  function normalizeArchiveEntries(data) {
+    const currentUrl = window.location.pathname.split("/").pop() || "index.html";
+    const configured = (window.DIGEST_ARCHIVE || data.archive_options || DEFAULT_DIGEST_ARCHIVE || [])
+      .filter(Boolean)
+      .map((entry, idx) => ({
+        label: entry.label || entry.week_range || `Digest ${idx + 1}`,
+        url: entry.url || currentUrl,
+        current: Boolean(entry.current),
+      }));
+
+    if (!configured.length) {
+      return [{
+        label: data.week_range ? `Week of ${data.week_range}` : "Current digest",
+        url: currentUrl,
+        current: true,
+      }];
+    }
+
+    const hasCurrent = configured.some(entry => entry.current);
+    if (!hasCurrent) {
+      const currentMatch = configured.find(entry => entry.label.includes(data.week_range));
+      if (currentMatch) currentMatch.current = true;
+      else configured[0].current = true;
+    }
+
+    return configured;
+  }
+
+  function initDigestSwitcher(data) {
+    const select = document.getElementById("digest-select");
+    const note = document.getElementById("digest-switcher-note");
+    if (!select || !note) return;
+
+    const entries = normalizeArchiveEntries(data);
+    select.innerHTML = entries.map(entry => `
+      <option value="${escHtml(entry.url)}"${entry.current ? " selected" : ""}>
+        ${escHtml(entry.label)}
+      </option>
+    `).join("");
+
+    select.disabled = entries.length < 2;
+    note.textContent = entries.length < 2
+      ? "Archive scaffold ready. Add more digest pages to enable switching."
+      : "Select any published weekly digest to jump to that briefing.";
+
+    select.addEventListener("change", (event) => {
+      const nextUrl = event.target.value;
+      if (nextUrl) window.location.href = nextUrl;
+    });
+  }
+
+  const D = DIGEST_DATA;
+  if (!D) { console.error("No DIGEST_DATA found"); }
+  else {
+    // ── Page title + hero badge ──
+    document.title = `GK Developer Culture Briefing \u2014 ${D.week_range}`;
+    document.getElementById("week-text").textContent = `Week of ${D.week_range}`;
+    initDigestSwitcher(D);
+
+    // ── Stats pills ──
+    const sourceCount = Object.keys(D.sources || {}).length;
+    document.getElementById("stats").innerHTML = [
+      [D.topics.length,    "Topics"],
+      [D.lingo.length,     "Lingo Terms"],
+      [D.artifacts.length, "Things Being Shared"],
+      [D.concerns.length,  "Major Concerns"],
+      [sourceCount,        "Source Threads"],
+    ].map(([n, label]) =>
+      `<div class="stat-pill"><strong>${n}</strong> <span>${escHtml(label)}</span></div>`
+    ).join("");
+
+    // ── Footer ──
+    document.getElementById("footer-text").textContent =
+      `GK Developer Culture Briefing \u00b7 Week of ${D.week_range}`;
+
+    // ── Sources count subheading ──
+    document.getElementById("sources-count").textContent =
+      `${sourceCount} original thread${sourceCount !== 1 ? "s" : ""} this briefing is based on.`;
+
+    // ── Key Signals (optional) ──
+    if (D.key_signals && D.key_signals.length) {
+      document.getElementById("key-signals-section").style.display = "";
+      document.getElementById("key-signals-grid").innerHTML = D.key_signals.map(s => `
+        <div class="signal-card">
+          <div class="signal-card-title">${escHtml(s.title)}</div>
+          <div class="signal-card-desc">${escHtml(s.description)}</div>
+        </div>`).join("");
+    }
+
+    // ── Topics ──
+    const TOPIC_BG = [
+      "rgba(188,78,113,.15)",
+      "rgba(188,78,113,.15)",
+      "rgba(25,111,255,.15)",
+      "rgba(1,254,222,.1)",
+      "rgba(182,87,255,.15)",
+      "rgba(1,254,222,.1)",
+    ];
+    document.getElementById("topics-grid").innerHTML = D.topics.map((t, i) => `
+      <div class="topic-card" data-idx="${i}">
+        <div class="topic-card-top">
+          <div class="topic-icon" style="background:${TOPIC_BG[i % TOPIC_BG.length]}">${t.icon}</div>
+          <div class="topic-chevron">&#9660;</div>
+        </div>
+        <h3>${escHtml(t.title)}</h3>
+        <p>${escHtml(t.description)}</p>
+        ${signalStrengthHTML(t.signal_strength)}
+        <div class="topic-tags">
+          ${(t.tags || []).map(tag => `<span class="topic-tag">${escHtml(tag)}</span>`).join("")}
+          ${trendHTML(t.trend)}
+        </div>
+        <div class="topic-expand"></div>
+      </div>`).join("");
+
+    document.querySelectorAll(".topic-card").forEach(card => {
+      const idx = +card.dataset.idx;
+      card.querySelector(".topic-expand").innerHTML = expandHTML(D.topics[idx].source_keys || []);
+      card.addEventListener("click", () => {
+        const was = card.classList.contains("active");
+        document.querySelectorAll(".topic-card").forEach(c => c.classList.remove("active"));
+        if (!was) card.classList.add("active");
+      });
+    });
+
+    // ── Concerns ──
+    document.getElementById("concerns-list").innerHTML = D.concerns.map((c, i) => `
+      <div class="concern-item">
+        <div class="concern-num">${i + 1}</div>
+        <div>
+          <div class="concern-title">${escHtml(c.title)}</div>
+          <div class="concern-desc">${escHtml(c.description)}</div>
+        </div>
+      </div>`).join("");
+
+    // ── Cultural Connections (optional) ──
+    if (D.connections && D.connections.length) {
+      document.getElementById("connections-section").style.display = "";
+      document.getElementById("connections-grid").innerHTML = D.connections.map(group => `
+        <div class="connection-group">
+          <div class="connection-group-title">${escHtml(group.title)}</div>
+          <div class="connection-nodes">
+            ${(group.nodes || []).map(node => `
+              <div class="connection-node">
+                <span class="connection-node-dot"></span>
+                <span class="connection-node-text"><strong>${escHtml(node.community)}</strong> — ${escHtml(node.insight)}</span>
+              </div>`).join("")}
+          </div>
+        </div>`).join("");
+    }
+
+    // ── Lingo ──
+    document.getElementById("lingo-tbody").innerHTML = D.lingo.map(l => `
+      <tr>
+        <td><span class="lingo-phrase" data-tip="${escHtml(l.tooltip)}">${escHtml(l.term)}</span></td>
+        <td class="lingo-meaning">${escHtml(l.meaning)}</td>
+        <td><span class="lingo-origin">${escHtml(l.origin)}</span></td>
+      </tr>`).join("");
+
+    // ── Artifacts ──
+    const ART_CLASSES = ["art-0", "art-1", "art-2", "art-3", "art-4"];
+    document.getElementById("artifacts-grid").innerHTML = D.artifacts.map((a, i) => `
+      <div class="artifact-card ${ART_CLASSES[i % ART_CLASSES.length]}" data-idx="${i}">
+        <div class="art-name">${a.icon} ${escHtml(a.name)}</div>
+        <div class="art-why-label">Why it's being discussed</div>
+        <div class="art-why">${escHtml(a.description)}</div>
+        <div class="art-why-label" style="margin-top:14px">${escHtml(a.examples_label || "Mentioned")}</div>
+        <div class="art-examples">${(a.examples || []).map(e => `<span class="art-example">${escHtml(e)}</span>`).join("")}</div>
+        <div class="artifact-expand"></div>
+      </div>`).join("");
+
+    document.querySelectorAll(".artifact-card").forEach(card => {
+      const idx = +card.dataset.idx;
+      card.querySelector(".artifact-expand").innerHTML = expandHTML(D.artifacts[idx].source_keys || []);
+      card.addEventListener("click", () => {
+        const was = card.classList.contains("active");
+        document.querySelectorAll(".artifact-card").forEach(c => c.classList.remove("active"));
+        if (!was) card.classList.add("active");
+      });
+    });
+
+    // ── Strategic Implications (optional) ──
+    if (D.implications && D.implications.length) {
+      document.getElementById("implications-section").style.display = "";
+      document.getElementById("implications-grid").innerHTML = D.implications.map(imp => `
+        <div class="implication-card">
+          <div class="implication-title">${escHtml(imp.title)}</div>
+          <div class="implication-text">${escHtml(imp.implication)}</div>
+        </div>`).join("");
+    }
+
+    // ── Source grid ──
+    function labelColor(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+      const p = [
+        { bg: 'rgba(182,87,255,.18)',  border: 'rgba(182,87,255,.4)',  color: '#C97BFF' },
+        { bg: 'rgba(1,254,222,.12)',   border: 'rgba(1,254,222,.32)',  color: '#01FEE0' },
+        { bg: 'rgba(236,127,255,.16)', border: 'rgba(236,127,255,.38)', color: '#EC7FFF' },
+        { bg: 'rgba(51,139,239,.16)',  border: 'rgba(51,139,239,.38)', color: '#5FABFF' },
+        { bg: 'rgba(30,165,174,.16)',  border: 'rgba(30,165,174,.38)', color: '#2DC4CE' },
+        { bg: 'rgba(220,100,140,.16)', border: 'rgba(220,100,140,.38)', color: '#E07090' },
+      ];
+      return p[h % p.length];
+    }
+    document.getElementById("source-grid").innerHTML = Object.values(D.sources || {}).map(s => {
+      const lc = labelColor(s.label);
+      return `
+      <a class="source-card" href="${escHtml(s.url)}" target="_blank" rel="noopener">
+        <div class="source-sub">${escHtml(s.sub)}</div>
+        <div class="source-label" style="background:${lc.bg};border:1px solid ${lc.border};color:${lc.color}">${escHtml(s.label)}</div>
+        <div class="source-title">${escHtml(s.title)}</div>
+        <div class="source-arrow">Open thread &#8599;</div>
+      </a>`;
+    }).join("");
+  }
+</script>
+</body>
+</html>

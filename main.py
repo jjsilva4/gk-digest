@@ -18,7 +18,7 @@ def load_config(path: str = "config.yaml") -> dict:
 
 def output_folder_date() -> str:
     """Returns the date string for the output folder (next Monday from today's perspective)."""
-    today = datetime.now(tz=timezone.utc)
+    today = pipeline_now()
     # If running Sunday (weekday=6), next day is Monday
     days_until_monday = (7 - today.weekday()) % 7
     if days_until_monday == 0:
@@ -28,10 +28,25 @@ def output_folder_date() -> str:
 
 
 def week_range_label() -> str:
-    today = datetime.now(tz=timezone.utc)
+    today = pipeline_now()
     week_start = today - timedelta(days=today.weekday() + 1)  # last Monday
     week_end = today
     return f"{week_start.strftime('%b %d')}-{week_end.strftime('%b %d, %Y')}"
+
+
+def pipeline_now() -> datetime:
+    """
+    Allow forcing a run date via GK_DIGEST_NOW_UTC for backfills or reproducible reruns.
+    Accepted examples: 2026-03-22 or 2026-03-22T19:00:00+00:00
+    """
+    raw = os.getenv("GK_DIGEST_NOW_UTC")
+    if not raw:
+        return datetime.now(tz=timezone.utc)
+
+    parsed = datetime.fromisoformat(raw)
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
 
 
 def setup_logging(log_path: str) -> logging.Logger:
@@ -122,9 +137,40 @@ def main():
     # ── Dashboard rebuild ─────────────────────────────────────────────────────
     if analysis_path:
         try:
-            from src.dashboard_builder import build
+            from src.dashboard_builder import build, discover_archive_entries
             docs_path = os.path.join(os.path.dirname(__file__), "docs", "index.html")
-            build(analysis_path=analysis_path, output_path=docs_path)
+            docs_dir = os.path.dirname(docs_path)
+            archive_entries = discover_archive_entries(output_base, docs_dir)
+            latest_run_key = os.path.basename(run_dir)
+            archive_options = [
+                {
+                    "label": entry["label"],
+                    "url": entry["archive_url"] if entry["run_key"] != latest_run_key else "index.html",
+                    "current": entry["run_key"] == latest_run_key,
+                }
+                for entry in reversed(archive_entries)
+            ]
+
+            for entry in archive_entries:
+                page_archive_options = [
+                    {
+                        "label": option["label"],
+                        "url": "index.html" if candidate["run_key"] == latest_run_key else candidate["archive_url"],
+                        "current": candidate["run_key"] == entry["run_key"],
+                    }
+                    for option, candidate in zip(reversed(archive_options), reversed(archive_entries))
+                ]
+                build(
+                    analysis_path=entry["analysis_path"],
+                    output_path=entry["archive_output_path"],
+                    archive_options=page_archive_options,
+                )
+
+            build(
+                analysis_path=analysis_path,
+                output_path=docs_path,
+                archive_options=archive_options,
+            )
             logger.info(f"Dashboard rebuilt → {docs_path}")
         except Exception as e:
             logger.error(f"Dashboard build FAILED — {e}")

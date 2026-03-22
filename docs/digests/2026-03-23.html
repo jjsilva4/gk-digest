@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GK Developer Culture Briefing</title>
+
+  <!-- Open Graph / link preview -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://jjsilva4.github.io/gk-digest/" />
+  <meta property="og:site_name"   content="GK Digest" />
+  <meta property="og:title"       content="GK Developer Culture Briefing — Mar 15-Mar 22, 2026" />
+  <meta property="og:description" content="A widespread backlash is forming against 'AI slop,' with developers concerned that generative AI is degrading code quality, increasing maintenance burdens, and threatening project integrity." />
+  <meta property="og:image"       content="https://jjsilva4.github.io/gk-digest/og-image.png" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="GK Developer Culture Briefing — Mar 15-Mar 22, 2026" />
+  <meta name="twitter:description" content="A widespread backlash is forming against 'AI slop,' with developers concerned that generative AI is degrading code quality, increasing maintenance burdens, and threatening project integrity." />
+  <meta name="twitter:image"      content="https://jjsilva4.github.io/gk-digest/og-image.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #1C1C1C;
+      --surface:    #272727;
+      --border:     #3E3E3E;
+      --text:       #FFFFFF;
+      --muted:      #C9C9C9;
+      --subtle:     #8a8a8a;
+      --purple-600: #7900C9;
+      --purple-200: #B657FF;
+      --blue-300:   #196FFF;
+      --topaz:      #338BEF;
+      --aqua:       #01FEE0;
+      --pink:       #EC7FFF;
+      --positive:   #1EA5AE;
+      --negative:   #BC4E71;
+      --grad-core:  linear-gradient(135deg, #7900C9, #196FFF);
+      --grad-bright:linear-gradient(135deg, #01FEE0, #EC7FFF);
+      --radius:     12px;
+      --radius-sm:  8px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(150deg, #160030 0%, #001440 50%, #1C1C1C 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 40px 36px;
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 10% 50%, rgba(121,0,201,.2) 0%, transparent 60%),
+                  radial-gradient(ellipse at 90% 20%, rgba(25,111,255,.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+
+    .week-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
+    }
+    .week-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--aqua);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    .hero h1 { font-size: clamp(22px, 3.5vw, 36px); font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
+    .hero h1 .grad {
+      background: var(--grad-bright);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero .sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+
+    .hero-controls {
+      display: flex; flex-wrap: wrap; align-items: end; gap: 14px;
+      margin-bottom: 26px;
+    }
+    .digest-switcher {
+      min-width: min(100%, 320px);
+      max-width: 420px;
+      flex: 1 1 320px;
+    }
+    .digest-switcher-label {
+      display: block;
+      font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--subtle);
+      margin-bottom: 7px;
+    }
+    .digest-switcher-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius);
+    }
+    .digest-select {
+      width: 100%;
+      appearance: none;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+      line-height: 1.3;
+      outline: none;
+      cursor: pointer;
+    }
+    .digest-select option {
+      background: #1C1C1C;
+      color: var(--text);
+    }
+    .digest-switcher-chevron {
+      color: var(--subtle);
+      font-size: 11px;
+      pointer-events: none;
+    }
+    .digest-switcher-note {
+      margin-top: 7px;
+      font-size: 11px;
+      color: var(--subtle);
+    }
+
+    .stats { display: flex; gap: 12px; flex-wrap: wrap; }
+    .stat-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 20px; padding: 6px 14px; font-size: 13px;
+    }
+    .stat-pill strong {
+      background: var(--grad-bright);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      font-weight: 800; font-size: 15px;
+    }
+    .stat-pill span { color: var(--muted); }
+
+    /* ─── LAYOUT ─── */
+    .page { max-width: 1080px; margin: 0 auto; padding: 44px 40px 0; }
+    section { margin-bottom: 52px; }
+
+    .section-header { margin-bottom: 20px; }
+    .section-label { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--subtle); margin-bottom: 4px; }
+    .section-header h2 { font-size: 20px; font-weight: 800; }
+    .section-header p  { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+
+    /* ─── KEY SIGNALS ─── */
+    .signal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--purple-200);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .signal-card-title { font-size: 14px; font-weight: 700; margin-bottom: 7px; line-height: 1.35; }
+    .signal-card-desc  { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    /* ─── TOPIC CARDS ─── */
+    .topic-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+      cursor: pointer; transition: border-color .2s, transform .15s; user-select: none;
+    }
+    .topic-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
+    .topic-card.active { border-color: var(--purple-200); }
+
+    .topic-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .topic-icon { width: 34px; height: 34px; min-width: 34px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 17px; }
+    .topic-chevron { color: var(--subtle); font-size: 11px; transition: transform .2s; margin-top: 3px; }
+    .topic-card.active .topic-chevron { transform: rotate(180deg); color: var(--purple-200); }
+    .topic-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.35; }
+    .topic-card p  { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    /* signal strength */
+    .signal-strength {
+      display: flex; align-items: center; gap: 7px;
+      margin-top: 10px; margin-bottom: 2px;
+    }
+    .signal-strength-label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--subtle);
+    }
+    .signal-dots { display: flex; gap: 3px; align-items: center; }
+    .signal-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--border);
+    }
+    .signal-dot.on-high    { background: var(--negative); }
+    .signal-dot.on-medium  { background: var(--topaz); }
+    .signal-dot.on-low     { background: var(--subtle); }
+    .signal-strength-text {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .signal-strength-text.high    { color: var(--negative); }
+    .signal-strength-text.medium  { color: var(--topaz); }
+    .signal-strength-text.low     { color: var(--subtle); }
+
+    /* trend badge */
+    .trend-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 20px; margin-top: 6px;
+    }
+    .trend-rising   { background: rgba(30,165,174,.12);  color: var(--positive); border: 1px solid rgba(30,165,174,.3); }
+    .trend-stable   { background: rgba(255,255,255,.05); color: var(--subtle);   border: 1px solid rgba(255,255,255,.1); }
+    .trend-declining{ background: rgba(188,78,113,.1);   color: var(--negative); border: 1px solid rgba(188,78,113,.25); }
+
+    .topic-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .topic-tag {
+      background: rgba(182,87,255,.1); border: 1px solid rgba(182,87,255,.25);
+      color: var(--purple-200); font-size: 10px; font-weight: 600;
+      padding: 2px 8px; border-radius: 20px;
+    }
+
+    .topic-expand { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .topic-card.active .topic-expand { display: block; }
+
+    .expand-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--subtle); margin-bottom: 8px; }
+    .expand-link {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 8px 10px; border-radius: var(--radius-sm);
+      background: rgba(255,255,255,.04); text-decoration: none;
+      transition: background .15s; margin-bottom: 5px;
+    }
+    .expand-link:hover { background: rgba(1,254,222,.06); }
+    .expand-link-sub { font-size: 10px; font-weight: 700; color: var(--aqua); white-space: nowrap; padding-top: 1px; }
+    .expand-link-meta { display: flex; flex-direction: column; gap: 1px; }
+    .expand-link-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--subtle); }
+    .expand-link-title { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    /* ─── LINGO TABLE ─── */
+    .lingo-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 24px; }
+    .lingo-table { width: 100%; border-collapse: collapse; }
+    .lingo-table thead th {
+      font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--subtle); padding: 0 0 10px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .lingo-table thead th:last-child { text-align: right; }
+    .lingo-table tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    .lingo-table tbody tr:last-child { border-bottom: none; }
+    .lingo-table tbody tr:hover { background: rgba(255,255,255,.03); }
+    .lingo-table td { padding: 13px 0; vertical-align: top; }
+    .lingo-table td:last-child { text-align: right; }
+
+    .lingo-phrase {
+      font-size: 14px; font-weight: 700; color: var(--aqua);
+      position: relative; display: inline-block; cursor: default;
+    }
+    .lingo-phrase::after {
+      content: attr(data-tip);
+      position: absolute; bottom: calc(100% + 8px); left: 0;
+      background: #0a0a0a; border: 1px solid var(--purple-200);
+      color: var(--text); font-size: 12px; font-weight: 400; line-height: 1.5;
+      padding: 8px 12px; border-radius: var(--radius-sm);
+      width: 260px; white-space: normal;
+      opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 10;
+    }
+    .lingo-phrase:hover::after { opacity: 1; }
+    .lingo-meaning { font-size: 13px; color: var(--muted); padding-left: 24px; }
+    .lingo-origin {
+      font-size: 11px; background: rgba(182,87,255,.1); border: 1px solid rgba(182,87,255,.2);
+      color: var(--purple-200); padding: 2px 8px; border-radius: 20px;
+      white-space: nowrap; display: inline-block;
+    }
+
+    /* ─── ARTIFACT CARDS ─── */
+    .artifact-card {
+      background: var(--surface); border: 1px solid var(--border); border-top: 3px solid;
+      border-radius: var(--radius); padding: 20px;
+      cursor: pointer; transition: border-color .2s, transform .15s;
+    }
+    .artifact-card:hover { transform: translateY(-2px); }
+
+    .art-0 { border-top-color: var(--negative); }
+    .art-0:hover, .art-0.active { border-color: var(--negative); }
+    .art-1 { border-top-color: var(--blue-300); }
+    .art-1:hover, .art-1.active { border-color: var(--blue-300); }
+    .art-2 { border-top-color: var(--aqua); }
+    .art-2:hover, .art-2.active { border-color: var(--aqua); }
+    .art-3 { border-top-color: var(--purple-200); }
+    .art-3:hover, .art-3.active { border-color: var(--purple-200); }
+    .art-4 { border-top-color: var(--positive); }
+    .art-4:hover, .art-4.active { border-color: var(--positive); }
+
+    .art-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .art-why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--subtle); margin-bottom: 5px; margin-top: 12px; }
+    .art-why { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .art-examples { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .art-example { background: rgba(255,255,255,.07); color: var(--text); font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px; }
+    .artifact-expand { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .artifact-card.active .artifact-expand { display: block; }
+
+    /* ─── CONCERNS ─── */
+    .concern-list { display: flex; flex-direction: column; gap: 12px; }
+    .concern-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px;
+      display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start;
+    }
+    .concern-num {
+      width: 28px; height: 28px; min-width: 28px; border-radius: 50%;
+      background: var(--grad-core); font-size: 12px; font-weight: 800; color: #fff;
+      display: flex; align-items: center; justify-content: center; margin-top: 2px;
+    }
+    .concern-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .concern-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ─── CULTURAL CONNECTIONS ─── */
+    .connection-group {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 22px;
+    }
+    .connection-group-title {
+      font-size: 13px; font-weight: 700; margin-bottom: 14px;
+      color: var(--text);
+    }
+    .connection-nodes {
+      position: relative; padding-left: 18px;
+    }
+    .connection-nodes::before {
+      content: ""; position: absolute; left: 3px; top: 8px; bottom: 8px;
+      width: 2px; background: var(--border); border-radius: 2px;
+    }
+    .connection-node {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 6px 0; position: relative;
+    }
+    .connection-node-dot {
+      width: 8px; height: 8px; min-width: 8px; border-radius: 50%;
+      background: var(--purple-200); margin-left: -18px; margin-top: 5px;
+      position: relative; z-index: 1;
+    }
+    .connection-node-text { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+    /* ─── STRATEGIC IMPLICATIONS ─── */
+    .implication-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--aqua);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .implication-title {
+      font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.35;
+    }
+    .implication-text {
+      font-size: 13px; color: var(--muted); line-height: 1.65;
+    }
+
+    /* ─── SOURCES ─── */
+    .source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .source-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px 18px; text-decoration: none; color: var(--text);
+      display: flex; flex-direction: column; gap: 5px;
+      transition: border-color .2s, transform .15s;
+    }
+    .source-card:hover { border-color: var(--purple-200); transform: translateY(-2px); }
+    .source-sub {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      background: var(--grad-bright);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .source-label {
+      display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .07em; border-radius: 20px; padding: 1px 7px;
+      width: fit-content;
+    }
+    .source-title { font-size: 12px; color: var(--muted); line-height: 1.4; flex: 1; }
+    .source-arrow { font-size: 11px; color: var(--subtle); padding-top: 4px; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      max-width: 1080px; margin: 48px auto 0; padding: 24px 40px 0;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    footer span { font-size: 12px; color: var(--subtle); }
+    .footer-brand {
+      font-size: 12px; font-weight: 700;
+      background: var(--grad-bright);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 32px 20px 28px; }
+      .page { padding: 32px 20px 0; }
+      footer { padding: 20px 20px 0; }
+      .lingo-meaning { padding-left: 0; padding-top: 4px; }
+    }
+
+    /* ─── PDF BUTTON ─── */
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+      color: var(--muted); font-size: 12px; font-weight: 600;
+      padding: 6px 16px; border-radius: 20px; margin-top: 20px;
+      cursor: pointer; transition: background .15s, border-color .15s, color .15s;
+      font-family: inherit;
+    }
+    .pdf-btn:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.3); color: var(--text); }
+
+    /* ─── PRINT ─── */
+    @media print {
+      /* Reset theme tokens */
+      :root {
+        --bg: #fff; --surface: #f5f5f5; --border: #ddd;
+        --text: #111; --muted: #444; --subtle: #777;
+      }
+
+      body { background: #fff !important; color: #111 !important; padding-bottom: 0; }
+
+      /* Hero */
+      .hero { background: #fff !important; border-bottom: 1px solid #ddd !important; padding: 24px 40px 20px !important; }
+      .hero::after { display: none; }
+
+      /* Fix gradient-clipped text — invisible in print */
+      .hero h1 .grad, .stat-pill strong, .footer-brand {
+        background: none !important; -webkit-text-fill-color: #7900C9 !important; color: #7900C9 !important;
+      }
+      .source-sub {
+        background: none !important; -webkit-text-fill-color: #7900C9 !important; color: #7900C9 !important;
+      }
+
+      /* Hide non-content / interactive elements */
+      .pdf-btn, .week-badge .dot, .topic-chevron, .source-arrow,
+      .expand-link, .lingo-phrase::after { display: none !important; }
+
+      /* Show expand sections so all content is visible */
+      .topic-expand, .artifact-expand { display: block !important; }
+
+      /* Cards */
+      .topic-card, .artifact-card, .source-card, .concern-item,
+      .connection-group, .implication-card, .signal-card, .lingo-wrap {
+        background: #f5f5f5 !important; border-color: #ddd !important;
+        break-inside: avoid; box-shadow: none !important; transform: none !important;
+      }
+
+      /* Preserve colored badges */
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+      /* Layout */
+      .page { padding: 24px 40px 0 !important; }
+      section { break-inside: avoid; margin-bottom: 32px; }
+      .grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+      .source-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+      footer { border-top-color: #ddd !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── HERO ─── -->
+<header class="hero">
+  <div class="hero-inner">
+    <img src="Reddit_Icon_FullColor.svg" alt="Reddit" width="44" height="44" style="position:absolute;top:0;right:0;opacity:.9;" />
+    <div class="week-badge"><span class="dot"></span> <span id="week-text">Loading...</span></div>
+    <h1>Developer Culture <span class="grad">Briefing</span></h1>
+    <p class="sub">What the developer community is talking about this week, across 30 subreddits.</p>
+    <div class="hero-controls">
+      <div class="digest-switcher">
+        <label class="digest-switcher-label" for="digest-select">Browse Digests</label>
+        <div class="digest-switcher-row">
+          <select id="digest-select" class="digest-select" aria-label="Select a past digest"></select>
+          <span class="digest-switcher-chevron">&#9662;</span>
+        </div>
+        <p class="digest-switcher-note" id="digest-switcher-note">Archive scaffold ready for future weekly digests.</p>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <button class="pdf-btn" onclick="window.print()"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M6.5 1v7M3.5 5.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.5 10.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Download as PDF</button>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- ─── EXECUTIVE SUMMARY / KEY SIGNALS (optional) ─── -->
+  <section id="key-signals-section" style="display:none">
+    <div class="section-header">
+      <div class="section-label">Executive Summary</div>
+      <h2>Key Signals This Week</h2>
+      <p>The most important patterns for marketing and product stakeholders.</p>
+    </div>
+    <div class="grid-3" id="key-signals-grid"></div>
+  </section>
+
+  <!-- ─── SECTION 1: TOPICS ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 1</div>
+      <h2>What Are People Talking About?</h2>
+      <p>Click a topic to see the source discussions behind it.</p>
+    </div>
+    <div class="grid-3" id="topics-grid"></div>
+  </section>
+
+  <!-- ─── SECTION 2: CONCERNS ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 2</div>
+      <h2>What Matters Right Now</h2>
+      <p>The underlying concerns shaping this week's developer conversations.</p>
+    </div>
+    <div class="concern-list" id="concerns-list"></div>
+  </section>
+
+  <!-- ─── CULTURAL CONNECTIONS (optional) ─── -->
+  <section id="connections-section" style="display:none">
+    <div class="section-header">
+      <div class="section-label">Cultural Connections</div>
+      <h2>How These Themes Connect</h2>
+      <p>Relationships between beliefs and concerns across communities.</p>
+    </div>
+    <div class="grid-3" id="connections-grid"></div>
+  </section>
+
+  <!-- ─── SECTION 3: LINGO ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 3</div>
+      <h2>Lingo This Week</h2>
+      <p>Phrases appearing repeatedly across discussions. Hover a term for its full definition.</p>
+    </div>
+    <div class="lingo-wrap">
+      <table class="lingo-table">
+        <thead>
+          <tr>
+            <th style="width:220px">Phrase</th>
+            <th>What it means</th>
+            <th>Seen in</th>
+          </tr>
+        </thead>
+        <tbody id="lingo-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 4: ARTIFACTS ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Section 4</div>
+      <h2>What People Are Sharing</h2>
+      <p>Tools, projects, and resources circulating in discussions this week. Click for source threads.</p>
+    </div>
+    <div class="grid-3" id="artifacts-grid"></div>
+  </section>
+
+  <!-- ─── STRATEGIC IMPLICATIONS (optional) ─── -->
+  <section id="implications-section" style="display:none">
+    <div class="section-header">
+      <div class="section-label">Strategic Implications</div>
+      <h2>What This Means for GitKraken</h2>
+      <p>Translating cultural signals into actionable opportunities for GitKraken products and marketing.</p>
+    </div>
+    <div class="grid-3" id="implications-grid"></div>
+  </section>
+
+  <!-- ─── SOURCES ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Sources</div>
+      <h2>Source Discussions</h2>
+      <p id="sources-count">Original threads this briefing is based on.</p>
+    </div>
+    <div class="source-grid" id="source-grid"></div>
+  </section>
+
+  <!-- ─── METHODOLOGY ─── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Methodology</div>
+      <h2>How This Briefing Is Made</h2>
+    </div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:720px;">
+      Every Sunday, top posts from 30 developer subreddits are fetched via the Reddit API and packaged into PDFs. These are uploaded to Gemini for multi-step cultural analysis, extracting beliefs, artifacts, and language, then synthesizing patterns across communities. The final dataset is used to automatically rebuild and publish this dashboard to GitHub Pages.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <span id="footer-text">GK Developer Culture Briefing</span>
+  <span class="footer-brand">GitKraken Research</span>
+</footer>
+
+<script>
+  const DIGEST_DATA = {
+  "key_signals": [
+    {
+      "icon": "🤖",
+      "title": "Developers Are Skeptical of AI-Generated Code Quality",
+      "description": "A widespread backlash is forming against 'AI slop,' with developers concerned that generative AI is degrading code quality, increasing maintenance burdens, and threatening project integrity."
+    },
+    {
+      "icon": "🛡️",
+      "title": "Control and Privacy Drive Shift to Local AI",
+      "description": "In response to corporate control and privacy concerns, a significant segment of developers is moving away from cloud-based AI services to run open-source models on their own hardware."
+    },
+    {
+      "icon": "💨",
+      "title": "Craving for Simplicity in a Bloated Tooling Landscape",
+      "description": "Developers are expressing frustration with slow, feature-heavy tools, fueling a strong preference for simple, performant, and zero-dependency solutions."
+    },
+    {
+      "icon": "⛓️",
+      "title": "Software Supply Chain Security Remains a Top Concern",
+      "description": "High-profile attacks and vulnerabilities are keeping security top-of-mind, with a focus on protecting projects from malicious third-party code and dependencies."
+    }
+  ],
+  "topics": [
+    {
+      "icon": "📉",
+      "title": "Developers coin the term 'AI slop' to describe low-quality generated code",
+      "description": "There is a growing, vocal backlash against the perceived flood of low-quality, AI-generated content. Developers are concerned this 'slop' is making its way into codebases, leading to 'comprehension debt' and long-term maintenance issues, with some communities petitioning to ban AI contributions from core projects.",
+      "tags": [
+        "r/Python",
+        "r/javascript",
+        "r/rust",
+        "r/webdev"
+      ],
+      "source_keys": [
+        "py_slop_mods",
+        "js_no_ai_petition",
+        "rust_is_it_slop",
+        "webdev_comprehension_debt"
+      ],
+      "signal_strength": "high",
+      "trend": "rising"
+    },
+    {
+      "icon": "🏠",
+      "title": "Developers build local, open-source AI setups to escape corporate ecosystems",
+      "description": "Driven by distrust of large tech companies, privacy concerns, and a desire for more control, developers are opting out of services like ClaudeAI. They are instead building and sharing workflows that run powerful language models entirely on their local machines, championing open-source alternatives.",
+      "tags": [
+        "r/LocalLLaMA",
+        "r/ClaudeAI",
+        "r/opensource"
+      ],
+      "source_keys": [
+        "claude_run_local",
+        "localllama_qwen",
+        "opensource_ytdlp_gui"
+      ],
+      "signal_strength": "medium",
+      "trend": "rising"
+    },
+    {
+      "icon": "⛓️",
+      "title": "Constant vigilance required against software supply chain attacks",
+      "description": "Security remains a major source of anxiety, with developers actively sharing news and warnings about threats. Recent discussions focus on sophisticated attacks like invisible code injection in GitHub repositories and vulnerabilities discovered in widely-used tools like Trivy.",
+      "tags": [
+        "r/github",
+        "r/devops"
+      ],
+      "source_keys": [
+        "github_supplychain_attack",
+        "devops_trivy_attack"
+      ],
+      "signal_strength": "high",
+      "trend": "stable"
+    },
+    {
+      "icon": "🐌",
+      "title": "Frustration grows over tool bloat and performance degradation",
+      "description": "Developers feel their essential tools are getting slower and more complex, a phenomenon sometimes called 'enshittification'. This sentiment is clear in complaints about VS Code's performance, creating a strong cultural appreciation for software that is simple, fast, and has minimal dependencies.",
+      "tags": [
+        "r/vscode",
+        "r/golang",
+        "r/docker"
+      ],
+      "source_keys": [
+        "vscode_is_it_slower",
+        "golang_gpdf_zero_dep",
+        "docker_nomad_vs_k8s"
+      ],
+      "signal_strength": "medium",
+      "trend": "stable"
+    },
+    {
+      "icon": "✨",
+      "title": "Personal project showcases remain a core community ritual",
+      "description": "Across many subreddits, developers continue to share their personal projects as a way to gain feedback, demonstrate skills, and contribute to the community. These 'show-and-tell' posts are a positive and highly-valued tradition, highlighting creativity and practical problem-solving.",
+      "tags": [
+        "r/csharp",
+        "r/golang",
+        "r/tauri"
+      ],
+      "source_keys": [
+        "csharp_wpf_tool",
+        "golang_gpdf_zero_dep",
+        "tauri_db_client"
+      ],
+      "signal_strength": "high",
+      "trend": "stable"
+    }
+  ],
+  "lingo": [
+    {
+      "term": "AI slop",
+      "tooltip": "A pejorative term for low-quality, generic, or incorrect content generated by AI. It's often used to describe code, text, or images that lack originality and human insight, contributing to a perceived decline in online content quality.",
+      "meaning": "Low-quality, AI-generated content.",
+      "origin": "r/Python · r/rust · r/MachineLearning"
+    },
+    {
+      "term": "Vibe coding",
+      "tooltip": "An intuitive and less formally structured approach to software development, often augmented by AI coding assistants. It prioritizes rapid iteration and a 'feel' for the code over strict adherence to predefined plans or patterns.",
+      "meaning": "Intuitive, AI-assisted programming.",
+      "origin": "r/vibecoding"
+    },
+    {
+      "term": "Comprehension Debt",
+      "tooltip": "A term describing the future cost of maintaining code that is easy to generate with AI but difficult for humans to understand, debug, or modify. It is a specific form of technical debt created by an over-reliance on generative tools.",
+      "meaning": "Future difficulty in maintaining hard-to-understand AI code.",
+      "origin": "r/webdev"
+    },
+    {
+      "term": "GPT wrapper",
+      "tooltip": "A derogatory term for a software application that provides minimal new functionality and primarily serves as a thin interface (a 'wrapper') around a powerful underlying AI model like GPT. These are often seen as low-effort cash grabs.",
+      "meaning": "A simple app with little value beyond its use of an AI API.",
+      "origin": "r/cscareerquestions"
+    },
+    {
+      "term": "Enshittification",
+      "tooltip": "A term describing the process by which online platforms and software tools degrade over time. The process typically involves the platform first prioritizing users, then business customers, and finally extracting all value for itself, often at the expense of user experience.",
+      "meaning": "The gradual worsening of a digital product or platform.",
+      "origin": "r/vscode"
+    },
+    {
+      "term": "WASM",
+      "tooltip": "WebAssembly, a binary instruction format for a stack-based virtual machine. It's designed as a portable compilation target for programming languages, enabling deployment on the web for client and server applications at near-native speed.",
+      "meaning": "WebAssembly, a high-performance code format for the web.",
+      "origin": "r/typescript · r/tauri"
+    },
+    {
+      "term": "Zero-dependency",
+      "tooltip": "Describes a piece of software or a library that does not rely on any external packages or modules to function. This is highly valued as it simplifies deployment, reduces security risks, and avoids potential version conflicts.",
+      "meaning": "Software that requires no external libraries to run.",
+      "origin": "r/golang"
+    },
+    {
+      "term": "FOSS",
+      "tooltip": "An acronym for Free and Open-Source Software. It refers to software that is both free to use ('free as in speech,' not necessarily 'free as in beer') and has its source code openly available for anyone to inspect, modify, and enhance.",
+      "meaning": "Free and Open-Source Software.",
+      "origin": "r/opensource"
+    }
+  ],
+  "artifacts": [
+    {
+      "icon": "🤖",
+      "name": "AI Development Tools",
+      "description": "Generative AI tools are the most discussed and debated artifacts this week. While some developers embrace them for rapid prototyping, many view them with deep skepticism, criticizing their output as 'slop' and a source of future technical debt.",
+      "examples_label": "Tools mentioned",
+      "examples": [
+        "ClaudeAI",
+        "Nvidia DLSS 5",
+        "Copilot"
+      ],
+      "source_keys": [
+        "claude_run_local",
+        "unreal_dlss_5",
+        "webdev_comprehension_debt"
+      ]
+    },
+    {
+      "icon": "✨",
+      "name": "Showcase Projects",
+      "description": "Developers are proudly sharing a variety of personal projects for community feedback. This week's highlights include practical desktop utilities, high-performance libraries, and open-source tools that solve specific problems, reflecting a vibrant culture of building and sharing.",
+      "examples_label": "Projects mentioned",
+      "examples": [
+        "gPDF (Go PDF Library)",
+        "WPF Monitor-Disabling Tool",
+        "Tauri Database Client",
+        "YT-DLP GUI"
+      ],
+      "source_keys": [
+        "golang_gpdf_zero_dep",
+        "csharp_wpf_tool",
+        "tauri_db_client",
+        "opensource_ytdlp_gui"
+      ]
+    },
+    {
+      "icon": "🚀",
+      "name": "WebAssembly (WASM)",
+      "description": "WASM is being shared as a key technology for achieving significant performance gains in web and desktop applications. Its ability to run code at near-native speed is a powerful answer to the community's frustration with slow, bloated software.",
+      "examples_label": "Concepts mentioned",
+      "examples": [
+        "numpy-ts performance boost",
+        "Tauri application architecture"
+      ],
+      "source_keys": [
+        "ts_numpy_wasm",
+        "tauri_db_client"
+      ]
+    }
+  ],
+  "concerns": [
+    {
+      "title": "AI is degrading code quality and integrity",
+      "description": "A primary concern across multiple communities is that the proliferation of AI-generated code will lead to a decline in software quality. Developers fear that this 'AI slop' is often buggy, difficult to maintain ('comprehension debt'), and could even threaten the integrity of scientific research."
+    },
+    {
+      "title": "Software supply chain remains dangerously insecure",
+      "description": "The risk of malicious code being injected into projects via third-party dependencies is a significant and persistent fear. Discussions in communities like r/github and r/devops highlight the constant threat and the need for robust security practices to protect the entire ecosystem."
+    },
+    {
+      "title": "Corporate control threatens open and private technology",
+      "description": "There is a strong undercurrent of distrust towards corporate-controlled technology, from AI services to social media platforms. This concern fuels the adoption of open-source alternatives, self-hosting, and a general preference for tools and platforms that are controlled by users, not corporations."
+    }
+  ],
+  "connections": [
+    {
+      "title": "Defining AI's Role in Modern Development",
+      "nodes": [
+        {
+          "community": "r/ExperiencedDevs",
+          "insight": "This community views over-reliance on AI as a red flag, fearing it creates skill gaps in junior developers."
+        },
+        {
+          "community": "r/javascript",
+          "insight": "Members are actively petitioning to keep AI-assisted code out of the core NodeJS project to maintain quality."
+        },
+        {
+          "community": "r/vibecoding",
+          "insight": "This niche community embraces AI as a tool for rapid, intuitive solo development, celebrating its empowering capabilities."
+        },
+        {
+          "community": "r/MachineLearning",
+          "insight": "Academic integrity is paramount, leading a major conference to reject papers from reviewers who used LLMs in their assessment."
+        }
+      ]
+    },
+    {
+      "title": "The Enduring Pursuit of Simplicity and Performance",
+      "nodes": [
+        {
+          "community": "r/golang",
+          "insight": "The community celebrates a new 'zero-dependency' PDF library, embodying the ideal of minimal, self-contained software."
+        },
+        {
+          "community": "r/vscode",
+          "insight": "Users are complaining that the editor feels bloated and slow, sparking discussions about performance degradation in essential tools."
+        },
+        {
+          "community": "r/docker",
+          "insight": "Developers are debating the heavy complexity of Kubernetes against simpler orchestration alternatives like Nomad."
+        },
+        {
+          "community": "r/typescript",
+          "insight": "A developer shares how using WebAssembly (WASM) made their library 8-10x faster, highlighting the value of high-performance tech."
+        }
+      ]
+    },
+    {
+      "title": "Distrust of Corporate Platforms is Fueling Open Alternatives",
+      "nodes": [
+        {
+          "community": "r/ClaudeAI",
+          "insight": "Users are abandoning the proprietary service in favor of running open-source LLMs on their own hardware for privacy and control."
+        },
+        {
+          "community": "r/Python",
+          "insight": "OpenAI's acquisition of Astral, a key player in the Python tooling ecosystem, is met with community concern over corporate influence."
+        },
+        {
+          "community": "r/linux",
+          "insight": "Proposed age-gating on the internet is viewed not as a safety measure but as a corporate tactic for control and data collection."
+        },
+        {
+          "community": "r/opensource",
+          "insight": "Developers debate new software licenses designed to force companies that use open-source code to contribute back to the community."
+        }
+      ]
+    }
+  ],
+  "implications": [
+    {
+      "title": "Position GitKraken as the Human-in-the-Loop Tool",
+      "implication": "Amidst AI skepticism, market GitKraken Desktop and GitLens as tools that enhance human expertise, not replace it. Frame them as essential for reviewing, understanding, and validating all code, especially potentially low-quality AI suggestions. Messaging should focus on empowering developers to maintain high standards and control their codebase."
+    },
+    {
+      "title": "Lean into Performance and Simplicity in Messaging",
+      "implication": "Address the community's fatigue with tool bloat by emphasizing the speed and responsiveness of GitKraken's products. Marketing for GitKraken Desktop should highlight its performance, while GitLens can be positioned as a powerful yet unobtrusive integration. This messaging directly counters a major developer pain point."
+    },
+    {
+      "title": "Provide Auditing and Quality Gates for a Messy AI World",
+      "implication": "The fear of 'AI slop' degrading codebases is a direct opportunity for GitKraken Insights. Market Insights as a dashboard for engineering managers to enforce quality standards and identify problematic patterns, whether they originate from AI assistants or junior developers. This provides a tangible solution to a growing industry concern."
+    },
+    {
+      "title": "Embrace and Integrate with Open, Self-Hosted Workflows",
+      "implication": "The trend towards local LLMs and open source reflects a desire for control and privacy. GitKraken should explore and promote integrations with self-hosted Git servers and open-source tools. Highlighting support for these workflows in marketing will resonate with the segment of developers who are actively moving away from proprietary, cloud-only ecosystems."
+    }
+  ],
+  "sources": {
+    "askprog_patterns": {
+      "sub": "r/AskProgramming",
+      "label": "General Discussion",
+      "title": "What abstraction or pattern have you learned most from?",
+      "url": "https://www.reddit.com/r/AskProgramming/comments/1rx6hgw/what_abstraction_or_pattern_have_you_learned_most/"
+    },
+    "claude_run_local": {
+      "sub": "r/ClaudeAI",
+      "label": "AI Community",
+      "title": "I stopped using claude.ai entirely. I run my entire AI workflow locally. It gives me much more control and is nearly free.",
+      "url": "https://www.reddit.com/r/ClaudeAI/comments/1rwmj25/i_stopped_using_claudeai_entirely_i_run_my_entire/"
+    },
+    "expdev_ai_redflag": {
+      "sub": "r/ExperiencedDevs",
+      "label": "Professional Development",
+      "title": "AI usage red flag?",
+      "url": "https://www.reddit.com/r/ExperiencedDevs/comments/1rxia7l/ai_usage_red_flag/"
+    },
+    "localllama_qwen": {
+      "sub": "r/LocalLLaMA",
+      "label": "AI Community",
+      "title": "QWEN wants you to know",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rzeonn/qwen_wants_you_to_know/"
+    },
+    "ml_icml_rejects": {
+      "sub": "r/MachineLearning",
+      "label": "AI Community",
+      "title": "[D] ICML rejects papers of reviewers who used LLMs to review papers",
+      "url": "https://www.reddit.com/r/MachineLearning/comments/1rx201a/d_icml_rejects_papers_of_reviewers_who_used_llms/"
+    },
+    "py_slop_mods": {
+      "sub": "r/Python",
+      "label": "Language Hub",
+      "title": "Mods have a couple of months to stop AI slop or this sub will be useless",
+      "url": "https://www.reddit.com/r/Python/comments/1rwoq79/mods_have_a_couple_of_months_to_stop_ai_slop/"
+    },
+    "cs_career_ai_investment": {
+      "sub": "r/cscareerquestions",
+      "label": "Career Advice",
+      "title": "Massive investment in AI contributed basically nothing but GPT wrappers to society",
+      "url": "https://www.reddit.com/r/cscareerquestions/comments/1ry3i3t/massive_investment_in_ai_contributed_basically/"
+    },
+    "cpp_c26_meeting": {
+      "sub": "r/cpp",
+      "label": "Language Hub",
+      "title": "Last C++26 meeting in Croydon is about to begin",
+      "url": "https://www.reddit.com/r/cpp/comments/1rzjovp/last_c26_meeting_in_croydon_is_about_to_begin/"
+    },
+    "csharp_wpf_tool": {
+      "sub": "r/csharp",
+      "label": "Language Hub",
+      "title": "I built a WPF tool to selectively turn off monitors. It's my first ever 'real' C# project. What do you guys think?",
+      "url": "https://www.reddit.com/r/csharp/comments/1rxph08/i_built_a_wpf_tool_to_selectively_turn_off/"
+    },
+    "devops_trivy_attack": {
+      "sub": "r/devops",
+      "label": "DevOps & SRE",
+      "title": "Trivy Supply Chain Attack",
+      "url": "https://www.reddit.com/r/devops/comments/1rz98r2/trivy_supply_chain_attack/"
+    },
+    "py_openai_astral": {
+      "sub": "r/Python",
+      "label": "Language Hub",
+      "title": "OpenAI to acquire Astral",
+      "url": "https://www.reddit.com/r/Python/comments/1rxzy4d/openai_to_acquire_astral/"
+    },
+    "github_supplychain_attack": {
+      "sub": "r/github",
+      "label": "Tooling & Platforms",
+      "title": "Supply-chain attack using invisible code hits GitHub",
+      "url": "https://www.reddit.com/r/github/comments/1rx2iku/supplychain_attack_using_invisible_code_hits/"
+    },
+    "js_no_ai_petition": {
+      "sub": "r/javascript",
+      "label": "Language Hub",
+      "title": "Petition: No AI Code in Node.js Core",
+      "url": "https://www.reddit.com/r/javascript/comments/1rz2pc6/petition_no_ai_code_in_nodejs_core/"
+    },
+    "golang_gpdf_zero_dep": {
+      "sub": "r/golang",
+      "label": "Language Hub",
+      "title": "gPDF - Zero-dependency PDF generation library for Go",
+      "url": "https://www.reddit.com/r/golang/comments/1rzuwaz/gpdf_zerodependency_pdf_generation_library_for_go/"
+    },
+    "docker_nomad_vs_k8s": {
+      "sub": "r/docker",
+      "label": "Tooling & Platforms",
+      "title": "Nomad vs Kubernetes",
+      "url": "https://www.reddit.com/r/docker/comments/1rx0zw8/nomad_vs_kubernetes/"
+    },
+    "gamedev_is_it_easy": {
+      "sub": "r/gamedev",
+      "label": "Game Development",
+      "title": "Why does everyone think making a game is just 'a couple of clicks'?",
+      "url": "https://www.reddit.com/r/gamedev/comments/1rur2t5/why_does_everyone_think_making_a_game_is_just/"
+    },
+    "learnprog_behind": {
+      "sub": "r/learnprogramming",
+      "label": "Learning & Support",
+      "title": "I'm a CS student, and I feel like I'm way behind everyone else.",
+      "url": "https://www.reddit.com/r/learnprogramming/comments/1rvmt8i/im_a_cs_student_and_i_feel_like_im_way_behind/"
+    },
+    "linux_agegating": {
+      "sub": "r/linux",
+      "label": "Operating Systems",
+      "title": "Age-gating isn't about kids. It's about control.",
+      "url": "https://www.reddit.com/r/linux/comments/1ryuor7/agegating_isnt_about_kids_its_about_control/"
+    },
+    "node_petition_llm": {
+      "sub": "r/node",
+      "label": "Language Hub",
+      "title": "A petition to disallow acceptance of LLM assisted Patches",
+      "url": "https://www.reddit.com/r/node/comments/1rx8jsq/a_petition_to_disallow_acceptance_of_llm_assisted/"
+    },
+    "opensource_viral_license": {
+      "sub": "r/opensource",
+      "label": "Open Source",
+      "title": "Why isn't there a viral license which forces any company which uses it to open source all of their code?",
+      "url": "https://www.reddit.com/r/opensource/comments/1s0kvdc/why_isnt_there_a_viral_license_which_forces_any/"
+    },
+    "opensource_ytdlp_gui": {
+      "sub": "r/opensource",
+      "label": "Open Source",
+      "title": "I built an open source YT-DLP GUI that bundles everything you need!",
+      "url": "https://www.reddit.com/r/opensource/comments/1rxwewx/i_built_an_open_source_ytdlp_gui_that_bundles/"
+    },
+    "rust_is_it_slop": {
+      "sub": "r/rust",
+      "label": "Language Hub",
+      "title": "Is every project AI slop?",
+      "url": "https://www.reddit.com/r/rust/comments/1rzv09q/is_every_project_ai_slop/"
+    },
+    "sw_testing_career": {
+      "sub": "r/softwaretesting",
+      "label": "Career Advice",
+      "title": "Just hit 9 year mark in my testing career and it's starting to get to me...",
+      "url": "https://www.reddit.com/r/softwaretesting/comments/1s008s5/just_hit_9_year_mark_in_my_testing_career_and_its/"
+    },
+    "tauri_db_client": {
+      "sub": "r/tauri",
+      "label": "Frameworks & Libraries",
+      "title": "Building a blazing-fast database client with Tauri and Rust",
+      "url": "https://www.reddit.com/r/tauri/comments/1rzw8es/building_a_blazingfast_database_client_with_tauri/"
+    },
+    "ts_numpy_wasm": {
+      "sub": "r/typescript",
+      "label": "Language Hub",
+      "title": "numpy.ts is now 8-10x faster with WASM",
+      "url": "https://www.reddit.com/r/typescript/comments/1rz5pj7/numpyts_is_now_810x_faster_with_wasm/"
+    },
+    "unreal_dlss_5": {
+      "sub": "r/unrealengine",
+      "label": "Game Development",
+      "title": "Nvidia's DLSS 5 Revealed But Critics Call It A 'Sloptimisation' Feature",
+      "url": "https://www.reddit.com/r/unrealengine/comments/1rvqpzf/nvidias_dlss_5_revealed_but_critics_call_it_a/"
+    },
+    "webdev_comprehension_debt": {
+      "sub": "r/webdev",
+      "label": "Web Development",
+      "title": "'Comprehension Debt': The Silent Time Bomb a Lot of Us Are Creating With AI",
+      "url": "https://www.reddit.com/r/webdev/comments/1rxznlw/comprehension_debt_the_silent_time_bomb_a_lot_of/"
+    },
+    "vscode_is_it_slower": {
+      "sub": "r/vscode",
+      "label": "Tooling & Platforms",
+      "title": "Is it me or is VSCode becoming slower and slower?",
+      "url": "https://www.reddit.com/r/vscode/comments/1rw9dmn/is_it_me_or_is_vscode_becoming_slower_and_slower/"
+    }
+  },
+  "week_range": "Mar 15-Mar 22, 2026",
+  "archive_options": [
+    {
+      "label": "Week of Mar 08-Mar 15, 2026",
+      "url": "index.html",
+      "current": true
+    },
+    {
+      "label": "Week of Mar 15-Mar 22, 2026",
+      "url": "digests/2026-03-16.html",
+      "current": false
+    }
+  ]
+};
+  const DEFAULT_DIGEST_ARCHIVE = [];
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function expandHTML(keys) {
+    const srcs = DIGEST_DATA.sources || {};
+    const links = keys
+      .map(k => srcs[k])
+      .filter(Boolean)
+      .map(s => `<a class="expand-link" href="${escHtml(s.url)}" target="_blank" rel="noopener">
+        <span class="expand-link-sub">${escHtml(s.sub)}</span>
+        <span class="expand-link-meta">
+          <span class="expand-link-label">${escHtml(s.label)}</span>
+          <span class="expand-link-title">${escHtml(s.title)}</span>
+        </span>
+      </a>`)
+      .join("");
+    return links ? `<div class="expand-label">Related discussions</div>${links}` : "";
+  }
+
+  function signalStrengthHTML(strength) {
+    if (!strength) return "";
+    const levels = { high: 3, medium: 2, low: 1 };
+    const filled = levels[strength] || 0;
+    if (!filled) return "";
+    const dots = [1, 2, 3].map(n =>
+      `<span class="signal-dot${n <= filled ? ` on-${strength}` : ""}"></span>`
+    ).join("");
+    const label = strength.charAt(0).toUpperCase() + strength.slice(1);
+    return `<div class="signal-strength">
+      <span class="signal-strength-label">Signal</span>
+      <div class="signal-dots">${dots}</div>
+      <span class="signal-strength-text ${strength}">${label}</span>
+    </div>`;
+  }
+
+  function trendHTML(trend) {
+    if (!trend) return "";
+    const map = {
+      rising:   { arrow: "&#8593;", label: "Rising",   cls: "trend-rising" },
+      stable:   { arrow: "&#8594;", label: "Stable",   cls: "trend-stable" },
+      declining:{ arrow: "&#8595;", label: "Declining", cls: "trend-declining" },
+    };
+    const t = map[trend];
+    if (!t) return "";
+    return `<span class="trend-badge ${t.cls}">${t.arrow} ${t.label}</span>`;
+  }
+
+  function normalizeArchiveEntries(data) {
+    const currentUrl = window.location.pathname.split("/").pop() || "index.html";
+    const configured = (window.DIGEST_ARCHIVE || data.archive_options || DEFAULT_DIGEST_ARCHIVE || [])
+      .filter(Boolean)
+      .map((entry, idx) => ({
+        label: entry.label || entry.week_range || `Digest ${idx + 1}`,
+        url: entry.url || currentUrl,
+        current: Boolean(entry.current),
+      }));
+
+    if (!configured.length) {
+      return [{
+        label: data.week_range ? `Week of ${data.week_range}` : "Current digest",
+        url: currentUrl,
+        current: true,
+      }];
+    }
+
+    const hasCurrent = configured.some(entry => entry.current);
+    if (!hasCurrent) {
+      const currentMatch = configured.find(entry => entry.label.includes(data.week_range));
+      if (currentMatch) currentMatch.current = true;
+      else configured[0].current = true;
+    }
+
+    return configured;
+  }
+
+  function initDigestSwitcher(data) {
+    const select = document.getElementById("digest-select");
+    const note = document.getElementById("digest-switcher-note");
+    if (!select || !note) return;
+
+    const entries = normalizeArchiveEntries(data);
+    select.innerHTML = entries.map(entry => `
+      <option value="${escHtml(entry.url)}"${entry.current ? " selected" : ""}>
+        ${escHtml(entry.label)}
+      </option>
+    `).join("");
+
+    select.disabled = entries.length < 2;
+    note.textContent = entries.length < 2
+      ? "Archive scaffold ready. Add more digest pages to enable switching."
+      : "Select any published weekly digest to jump to that briefing.";
+
+    select.addEventListener("change", (event) => {
+      const nextUrl = event.target.value;
+      if (nextUrl) window.location.href = nextUrl;
+    });
+  }
+
+  const D = DIGEST_DATA;
+  if (!D) { console.error("No DIGEST_DATA found"); }
+  else {
+    // ── Page title + hero badge ──
+    document.title = `GK Developer Culture Briefing \u2014 ${D.week_range}`;
+    document.getElementById("week-text").textContent = `Week of ${D.week_range}`;
+    initDigestSwitcher(D);
+
+    // ── Stats pills ──
+    const sourceCount = Object.keys(D.sources || {}).length;
+    document.getElementById("stats").innerHTML = [
+      [D.topics.length,    "Topics"],
+      [D.lingo.length,     "Lingo Terms"],
+      [D.artifacts.length, "Things Being Shared"],
+      [D.concerns.length,  "Major Concerns"],
+      [sourceCount,        "Source Threads"],
+    ].map(([n, label]) =>
+      `<div class="stat-pill"><strong>${n}</strong> <span>${escHtml(label)}</span></div>`
+    ).join("");
+
+    // ── Footer ──
+    document.getElementById("footer-text").textContent =
+      `GK Developer Culture Briefing \u00b7 Week of ${D.week_range}`;
+
+    // ── Sources count subheading ──
+    document.getElementById("sources-count").textContent =
+      `${sourceCount} original thread${sourceCount !== 1 ? "s" : ""} this briefing is based on.`;
+
+    // ── Key Signals (optional) ──
+    if (D.key_signals && D.key_signals.length) {
+      document.getElementById("key-signals-section").style.display = "";
+      document.getElementById("key-signals-grid").innerHTML = D.key_signals.map(s => `
+        <div class="signal-card">
+          <div class="signal-card-title">${escHtml(s.title)}</div>
+          <div class="signal-card-desc">${escHtml(s.description)}</div>
+        </div>`).join("");
+    }
+
+    // ── Topics ──
+    const TOPIC_BG = [
+      "rgba(188,78,113,.15)",
+      "rgba(188,78,113,.15)",
+      "rgba(25,111,255,.15)",
+      "rgba(1,254,222,.1)",
+      "rgba(182,87,255,.15)",
+      "rgba(1,254,222,.1)",
+    ];
+    document.getElementById("topics-grid").innerHTML = D.topics.map((t, i) => `
+      <div class="topic-card" data-idx="${i}">
+        <div class="topic-card-top">
+          <div class="topic-icon" style="background:${TOPIC_BG[i % TOPIC_BG.length]}">${t.icon}</div>
+          <div class="topic-chevron">&#9660;</div>
+        </div>
+        <h3>${escHtml(t.title)}</h3>
+        <p>${escHtml(t.description)}</p>
+        ${signalStrengthHTML(t.signal_strength)}
+        <div class="topic-tags">
+          ${(t.tags || []).map(tag => `<span class="topic-tag">${escHtml(tag)}</span>`).join("")}
+          ${trendHTML(t.trend)}
+        </div>
+        <div class="topic-expand"></div>
+      </div>`).join("");
+
+    document.querySelectorAll(".topic-card").forEach(card => {
+      const idx = +card.dataset.idx;
+      card.querySelector(".topic-expand").innerHTML = expandHTML(D.topics[idx].source_keys || []);
+      card.addEventListener("click", () => {
+        const was = card.classList.contains("active");
+        document.querySelectorAll(".topic-card").forEach(c => c.classList.remove("active"));
+        if (!was) card.classList.add("active");
+      });
+    });
+
+    // ── Concerns ──
+    document.getElementById("concerns-list").innerHTML = D.concerns.map((c, i) => `
+      <div class="concern-item">
+        <div class="concern-num">${i + 1}</div>
+        <div>
+          <div class="concern-title">${escHtml(c.title)}</div>
+          <div class="concern-desc">${escHtml(c.description)}</div>
+        </div>
+      </div>`).join("");
+
+    // ── Cultural Connections (optional) ──
+    if (D.connections && D.connections.length) {
+      document.getElementById("connections-section").style.display = "";
+      document.getElementById("connections-grid").innerHTML = D.connections.map(group => `
+        <div class="connection-group">
+          <div class="connection-group-title">${escHtml(group.title)}</div>
+          <div class="connection-nodes">
+            ${(group.nodes || []).map(node => `
+              <div class="connection-node">
+                <span class="connection-node-dot"></span>
+                <span class="connection-node-text"><strong>${escHtml(node.community)}</strong> — ${escHtml(node.insight)}</span>
+              </div>`).join("")}
+          </div>
+        </div>`).join("");
+    }
+
+    // ── Lingo ──
+    document.getElementById("lingo-tbody").innerHTML = D.lingo.map(l => `
+      <tr>
+        <td><span class="lingo-phrase" data-tip="${escHtml(l.tooltip)}">${escHtml(l.term)}</span></td>
+        <td class="lingo-meaning">${escHtml(l.meaning)}</td>
+        <td><span class="lingo-origin">${escHtml(l.origin)}</span></td>
+      </tr>`).join("");
+
+    // ── Artifacts ──
+    const ART_CLASSES = ["art-0", "art-1", "art-2", "art-3", "art-4"];
+    document.getElementById("artifacts-grid").innerHTML = D.artifacts.map((a, i) => `
+      <div class="artifact-card ${ART_CLASSES[i % ART_CLASSES.length]}" data-idx="${i}">
+        <div class="art-name">${a.icon} ${escHtml(a.name)}</div>
+        <div class="art-why-label">Why it's being discussed</div>
+        <div class="art-why">${escHtml(a.description)}</div>
+        <div class="art-why-label" style="margin-top:14px">${escHtml(a.examples_label || "Mentioned")}</div>
+        <div class="art-examples">${(a.examples || []).map(e => `<span class="art-example">${escHtml(e)}</span>`).join("")}</div>
+        <div class="artifact-expand"></div>
+      </div>`).join("");
+
+    document.querySelectorAll(".artifact-card").forEach(card => {
+      const idx = +card.dataset.idx;
+      card.querySelector(".artifact-expand").innerHTML = expandHTML(D.artifacts[idx].source_keys || []);
+      card.addEventListener("click", () => {
+        const was = card.classList.contains("active");
+        document.querySelectorAll(".artifact-card").forEach(c => c.classList.remove("active"));
+        if (!was) card.classList.add("active");
+      });
+    });
+
+    // ── Strategic Implications (optional) ──
+    if (D.implications && D.implications.length) {
+      document.getElementById("implications-section").style.display = "";
+      document.getElementById("implications-grid").innerHTML = D.implications.map(imp => `
+        <div class="implication-card">
+          <div class="implication-title">${escHtml(imp.title)}</div>
+          <div class="implication-text">${escHtml(imp.implication)}</div>
+        </div>`).join("");
+    }
+
+    // ── Source grid ──
+    function labelColor(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+      const p = [
+        { bg: 'rgba(182,87,255,.18)',  border: 'rgba(182,87,255,.4)',  color: '#C97BFF' },
+        { bg: 'rgba(1,254,222,.12)',   border: 'rgba(1,254,222,.32)',  color: '#01FEE0' },
+        { bg: 'rgba(236,127,255,.16)', border: 'rgba(236,127,255,.38)', color: '#EC7FFF' },
+        { bg: 'rgba(51,139,239,.16)',  border: 'rgba(51,139,239,.38)', color: '#5FABFF' },
+        { bg: 'rgba(30,165,174,.16)',  border: 'rgba(30,165,174,.38)', color: '#2DC4CE' },
+        { bg: 'rgba(220,100,140,.16)', border: 'rgba(220,100,140,.38)', color: '#E07090' },
+      ];
+      return p[h % p.length];
+    }
+    document.getElementById("source-grid").innerHTML = Object.values(D.sources || {}).map(s => {
+      const lc = labelColor(s.label);
+      return `
+      <a class="source-card" href="${escHtml(s.url)}" target="_blank" rel="noopener">
+        <div class="source-sub">${escHtml(s.sub)}</div>
+        <div class="source-label" style="background:${lc.bg};border:1px solid ${lc.border};color:${lc.color}">${escHtml(s.label)}</div>
+        <div class="source-title">${escHtml(s.title)}</div>
+        <div class="source-arrow">Open thread &#8599;</div>
+      </a>`;
+    }).join("");
+  }
+</script>
+</body>
+</html>

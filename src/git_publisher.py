@@ -4,7 +4,7 @@ import subprocess
 
 def publish(week_range: str, repo_dir: str, logger: logging.Logger) -> None:
     """
-    Stage docs/index.html, commit with a weekly label, and push to origin.
+    Stage dashboard pages, commit with a weekly label, and push to origin.
     """
     def run(cmd: list[str]):
         result = subprocess.run(
@@ -18,8 +18,8 @@ def publish(week_range: str, repo_dir: str, logger: logging.Logger) -> None:
             )
         return result.stdout.strip()
 
-    logger.info("Git: staging docs/index.html...")
-    run(["git", "add", "docs/index.html"])
+    logger.info("Git: staging dashboard pages...")
+    run(["git", "add", "docs/index.html", "docs/digests"])
 
     commit_msg = f"Weekly digest \u2014 {week_range}"
     logger.info(f"Git: committing '{commit_msg}'...")
