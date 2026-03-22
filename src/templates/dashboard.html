@@ -85,6 +85,55 @@
     }
     .hero .sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
 
+    .hero-controls {
+      display: flex; flex-wrap: wrap; align-items: end; gap: 14px;
+      margin-bottom: 26px;
+    }
+    .digest-switcher {
+      min-width: min(100%, 320px);
+      max-width: 420px;
+      flex: 1 1 320px;
+    }
+    .digest-switcher-label {
+      display: block;
+      font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--subtle);
+      margin-bottom: 7px;
+    }
+    .digest-switcher-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius);
+    }
+    .digest-select {
+      width: 100%;
+      appearance: none;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+      line-height: 1.3;
+      outline: none;
+      cursor: pointer;
+    }
+    .digest-select option {
+      background: #1C1C1C;
+      color: var(--text);
+    }
+    .digest-switcher-chevron {
+      color: var(--subtle);
+      font-size: 11px;
+      pointer-events: none;
+    }
+    .digest-switcher-note {
+      margin-top: 7px;
+      font-size: 11px;
+      color: var(--subtle);
+    }
+
     .stats { display: flex; gap: 12px; flex-wrap: wrap; }
     .stat-pill {
       display: flex; align-items: center; gap: 8px;
@@ -426,6 +475,16 @@
     <div class="week-badge"><span class="dot"></span> <span id="week-text">Loading...</span></div>
     <h1>Developer Culture <span class="grad">Briefing</span></h1>
     <p class="sub">What the developer community is talking about this week, across 30 subreddits.</p>
+    <div class="hero-controls">
+      <div class="digest-switcher">
+        <label class="digest-switcher-label" for="digest-select">Browse Digests</label>
+        <div class="digest-switcher-row">
+          <select id="digest-select" class="digest-select" aria-label="Select a past digest"></select>
+          <span class="digest-switcher-chevron">&#9662;</span>
+        </div>
+        <p class="digest-switcher-note" id="digest-switcher-note">Archive scaffold ready for future weekly digests.</p>
+      </div>
+    </div>
     <div class="stats" id="stats"></div>
     <button class="pdf-btn" onclick="window.print()"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M6.5 1v7M3.5 5.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.5 10.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Download as PDF</button>
   </div>
@@ -544,6 +603,7 @@
 
 <script>
   const DIGEST_DATA = null; // __DIGEST_DATA_INJECT__
+  const DEFAULT_DIGEST_ARCHIVE = [];
 
   function escHtml(s) {
     return String(s)
@@ -597,12 +657,64 @@
     return `<span class="trend-badge ${t.cls}">${t.arrow} ${t.label}</span>`;
   }
 
+  function normalizeArchiveEntries(data) {
+    const currentUrl = window.location.pathname.split("/").pop() || "index.html";
+    const configured = (window.DIGEST_ARCHIVE || data.archive_options || DEFAULT_DIGEST_ARCHIVE || [])
+      .filter(Boolean)
+      .map((entry, idx) => ({
+        label: entry.label || entry.week_range || `Digest ${idx + 1}`,
+        url: entry.url || currentUrl,
+        current: Boolean(entry.current),
+      }));
+
+    if (!configured.length) {
+      return [{
+        label: data.week_range ? `Week of ${data.week_range}` : "Current digest",
+        url: currentUrl,
+        current: true,
+      }];
+    }
+
+    const hasCurrent = configured.some(entry => entry.current);
+    if (!hasCurrent) {
+      const currentMatch = configured.find(entry => entry.label.includes(data.week_range));
+      if (currentMatch) currentMatch.current = true;
+      else configured[0].current = true;
+    }
+
+    return configured;
+  }
+
+  function initDigestSwitcher(data) {
+    const select = document.getElementById("digest-select");
+    const note = document.getElementById("digest-switcher-note");
+    if (!select || !note) return;
+
+    const entries = normalizeArchiveEntries(data);
+    select.innerHTML = entries.map(entry => `
+      <option value="${escHtml(entry.url)}"${entry.current ? " selected" : ""}>
+        ${escHtml(entry.label)}
+      </option>
+    `).join("");
+
+    select.disabled = entries.length < 2;
+    note.textContent = entries.length < 2
+      ? "Archive scaffold ready. Add more digest pages to enable switching."
+      : "Select any published weekly digest to jump to that briefing.";
+
+    select.addEventListener("change", (event) => {
+      const nextUrl = event.target.value;
+      if (nextUrl) window.location.href = nextUrl;
+    });
+  }
+
   const D = DIGEST_DATA;
   if (!D) { console.error("No DIGEST_DATA found"); }
   else {
     // ── Page title + hero badge ──
     document.title = `GK Developer Culture Briefing \u2014 ${D.week_range}`;
     document.getElementById("week-text").textContent = `Week of ${D.week_range}`;
+    initDigestSwitcher(D);
 
     // ── Stats pills ──
     const sourceCount = Object.keys(D.sources || {}).length;
