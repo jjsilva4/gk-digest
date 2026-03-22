@@ -65,6 +65,31 @@ def setup_logging(log_path: str) -> logging.Logger:
     return logger
 
 
+def archive_options_for_page(
+    archive_entries: list[dict],
+    latest_run_key: str,
+    docs_path: str,
+    current_output_path: str,
+    current_run_key: str,
+) -> list[dict]:
+    current_dir = os.path.dirname(os.path.abspath(current_output_path))
+    latest_output_path = os.path.abspath(docs_path)
+
+    options = []
+    for entry in reversed(archive_entries):
+        target_path = latest_output_path
+        if entry["run_key"] != latest_run_key:
+            target_path = os.path.abspath(entry["archive_output_path"])
+
+        options.append({
+            "label": entry["label"],
+            "url": os.path.relpath(target_path, start=current_dir),
+            "current": entry["run_key"] == current_run_key,
+        })
+
+    return options
+
+
 def main():
     config = load_config()
     settings = config["settings"]
@@ -142,34 +167,30 @@ def main():
             docs_dir = os.path.dirname(docs_path)
             archive_entries = discover_archive_entries(output_base, docs_dir)
             latest_run_key = os.path.basename(run_dir)
-            archive_options = [
-                {
-                    "label": entry["label"],
-                    "url": entry["archive_url"] if entry["run_key"] != latest_run_key else "index.html",
-                    "current": entry["run_key"] == latest_run_key,
-                }
-                for entry in reversed(archive_entries)
-            ]
 
             for entry in archive_entries:
-                page_archive_options = [
-                    {
-                        "label": option["label"],
-                        "url": "index.html" if candidate["run_key"] == latest_run_key else candidate["archive_url"],
-                        "current": candidate["run_key"] == entry["run_key"],
-                    }
-                    for option, candidate in zip(reversed(archive_options), reversed(archive_entries))
-                ]
                 build(
                     analysis_path=entry["analysis_path"],
                     output_path=entry["archive_output_path"],
-                    archive_options=page_archive_options,
+                    archive_options=archive_options_for_page(
+                        archive_entries=archive_entries,
+                        latest_run_key=latest_run_key,
+                        docs_path=docs_path,
+                        current_output_path=entry["archive_output_path"],
+                        current_run_key=entry["run_key"],
+                    ),
                 )
 
             build(
                 analysis_path=analysis_path,
                 output_path=docs_path,
-                archive_options=archive_options,
+                archive_options=archive_options_for_page(
+                    archive_entries=archive_entries,
+                    latest_run_key=latest_run_key,
+                    docs_path=docs_path,
+                    current_output_path=docs_path,
+                    current_run_key=latest_run_key,
+                ),
             )
             logger.info(f"Dashboard rebuilt → {docs_path}")
         except Exception as e:
